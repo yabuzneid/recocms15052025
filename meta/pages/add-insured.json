@@ -1,0 +1,1556 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "allowCollapse": false,
+                      "components": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "RegistrantID",
+                                  "name": "RegistrantIDLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Registrant",
+                                  "type": "label",
+                                  "visible": "${Globals.generalsettings.ApplicationName != \"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col48",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-7",
+                              "components": [
+                                {
+                                  "allowClear": true,
+                                  "allowFilteringByAllStringColumns": true,
+                                  "columns": [
+                                    {
+                                      "property": "Name",
+                                      "title": "Name"
+                                    },
+                                    {
+                                      "property": "RegistrantNo",
+                                      "title": "Registrant No"
+                                    },
+                                    {
+                                      "property": "Address",
+                                      "title": "Address"
+                                    }
+                                  ],
+                                  "count": "",
+                                  "data": "${getRegistrantsResult}",
+                                  "events": {
+                                    "change": [
+                                      {
+                                        "name": "RegistrantIDChange",
+                                        "schema": {
+                                          "$ref": "#/definitions/Task",
+                                          "dotnetType": "System.Threading.Tasks.Task"
+                                        },
+                                        "type": "invoke-method"
+                                      }
+                                    ]
+                                  },
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "itemType": "RecoCms6.Models.RecoDb.Registrant",
+                                  "name": "RegistrantID",
+                                  "pageSize": 10,
+                                  "responsive": true,
+                                  "style": {
+                                    "display": "block",
+                                    "width": "100%"
+                                  },
+                                  "textProperty": "Name",
+                                  "type": "dropdown-datagrid",
+                                  "value": "${insured.RegistrantID}",
+                                  "valueProperty": "RegistrantID",
+                                  "valueType": "int",
+                                  "visible": "${Globals.generalsettings.ApplicationName != \"REIX CMS\"}"
+                                },
+                                {
+                                  "component": "RegistrantID",
+                                  "defaultValue": "0",
+                                  "name": "RegistrantIDRequiredValidator",
+                                  "style": {
+                                    "position": "absolute"
+                                  },
+                                  "text": "Registrant is required",
+                                  "type": "required-validator",
+                                  "visible": false
+                                }
+                              ],
+                              "name": "col49",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "disabled": false,
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "condition": "${Globals.generalsettings.ApplicationName == \"XLG CMS\"}",
+                                        "path": "add-registrant",
+                                        "then": [
+                                          {
+                                            "condition": "${result != null}",
+                                            "name": "registrant",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "RecoCms6.Models.RecoDb.Registrant"
+                                          },
+                                          {
+                                            "condition": "${result != null}",
+                                            "name": "RECODb.getRegistrants",
+                                            "parameters": [
+                                              {
+                                                "name": "$orderby",
+                                                "value": [
+                                                  {
+                                                    "direction": "asc",
+                                                    "property": "Name"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "getRegistrantsResult",
+                                                "type": "set",
+                                                "value": "${result}",
+                                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Registrant>"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          },
+                                          {
+                                            "condition": "${result != null}",
+                                            "name": "insured.RegistrantID",
+                                            "type": "set",
+                                            "value": "${result.RegistrantID}",
+                                            "valueType": "int"
+                                          },
+                                          {
+                                            "condition": "${result != null}",
+                                            "name": "RegistrantIdChange",
+                                            "parameters": [
+                                              {
+                                                "name": "args",
+                                                "type": "dynamic",
+                                                "value": "${args}"
+                                              }
+                                            ],
+                                            "schema": {
+                                              "$ref": "#/definitions/Task",
+                                              "dotnetType": "System.Threading.Tasks.Task"
+                                            },
+                                            "type": "invoke-method"
+                                          },
+                                          {
+                                            "code": "await InvokeAsync(() => { StateHasChanged();});",
+                                            "type": "execute"
+                                          }
+                                        ],
+                                        "type": "popup",
+                                        "width": 1200
+                                      },
+                                      {
+                                        "name": "registrant",
+                                        "type": "set",
+                                        "value": "new RecoCms6.Models.RecoDb.Registrant(){ID = Guid.NewGuid()}",
+                                        "valueType": "RecoCms6.Models.RecoDb.Registrant"
+                                      },
+                                      {
+                                        "name": "insured",
+                                        "type": "set",
+                                        "value": "new RecoCms6.Models.RecoDb.Insured(){ID = Guid.NewGuid()}",
+                                        "valueType": "RecoCms6.Models.RecoDb.Insured"
+                                      },
+                                      {
+                                        "name": "insured.ClaimID",
+                                        "type": "set",
+                                        "value": "${ClaimID}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "name": "insured.ProvinceID",
+                                        "type": "set",
+                                        "value": "${Globals.defaultProvinceID}",
+                                        "valueType": "int"
+                                      }
+                                    ]
+                                  },
+                                  "icon": "",
+                                  "name": "buttonNewRegistrant",
+                                  "text": "Reset",
+                                  "type": "button",
+                                  "visible": "${Globals.generalsettings.ApplicationName != \"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col0",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row5",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "Name",
+                                      "name": "NameLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Insured Name",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col1",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-9",
+                                  "components": [
+                                    {
+                                      "maxLength": 100,
+                                      "name": "Name",
+                                      "style": {
+                                        "display": "block",
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.Name}",
+                                      "valueType": "string"
+                                    },
+                                    {
+                                      "component": "Name",
+                                      "name": "NameRequiredValidator",
+                                      "style": {
+                                        "position": "absolute"
+                                      },
+                                      "text": "Name is required",
+                                      "type": "required-validator"
+                                    }
+                                  ],
+                                  "name": "col2",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row1",
+                              "style": {
+                                "marginBottom": "1rem"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "RegistrantNo",
+                                      "name": "RegistrantNoLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Registrant #",
+                                      "type": "label",
+                                      "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col3",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "autoComplete": false,
+                                      "maxLength": 7,
+                                      "name": "RegistrantNo",
+                                      "readOnly": false,
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${registrant.RegistrantNo}",
+                                      "valueType": "string",
+                                      "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col4",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "YearsOfExperience",
+                                      "name": "YearsOfExperienceLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Years Of Experience",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col11",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "autoComplete": false,
+                                      "min": 0,
+                                      "name": "YearsOfExperience",
+                                      "showUpDown": true,
+                                      "style": {},
+                                      "type": "numeric",
+                                      "value": "${registrant.YearsOfExperience}",
+                                      "valueType": "Int16?"
+                                    }
+                                  ],
+                                  "name": "col12",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "TransactionRoleID",
+                                      "name": "TransactionRoleIDLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Transaction Role",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col50",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "data": "${getTransactionRoles}",
+                                      "name": "TransactionRoleID",
+                                      "placeholder": "Choose Role",
+                                      "style": {},
+                                      "template": "",
+                                      "textProperty": "ParamDesc",
+                                      "type": "dropdown",
+                                      "value": "${insured.TransactionRoleID}",
+                                      "valueProperty": "ParameterID",
+                                      "valueType": "int?"
+                                    }
+                                  ],
+                                  "name": "col51",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row9",
+                              "style": {
+                                "marginBottom": "1rem"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "Address",
+                                      "name": "AddressLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Address",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col5",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-10",
+                                  "components": [
+                                    {
+                                      "maxLength": 450,
+                                      "name": "Address",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.Address}",
+                                      "valueType": "string"
+                                    }
+                                  ],
+                                  "name": "col13",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row3",
+                              "style": {
+                                "marginBottom": "1rem"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "City",
+                                      "name": "CityLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "City",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col14",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "maxLength": 100,
+                                      "name": "City",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.City}",
+                                      "valueType": "string"
+                                    }
+                                  ],
+                                  "name": "col15",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-1",
+                                  "components": [
+                                    {
+                                      "component": "ProvinceID",
+                                      "name": "ProvinceIDLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Province",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col16",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "data": "${getProvinceList}",
+                                      "name": "ProvinceID",
+                                      "placeholder": "Choose Province",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "template": "",
+                                      "textProperty": "ParamAbbrev",
+                                      "type": "dropdown",
+                                      "value": "${insured.ProvinceID}",
+                                      "valueProperty": "ParameterID",
+                                      "valueType": "int?"
+                                    }
+                                  ],
+                                  "name": "col17",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-1",
+                                  "components": [
+                                    {
+                                      "component": "PostalCode",
+                                      "name": "PostalCodeLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Postal Code",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col18",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "maxLength": 7,
+                                      "name": "PostalCode",
+                                      "placeholder": "A1A 1A1",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.PostalCode}",
+                                      "valueType": "string"
+                                    },
+                                    {
+                                      "component": "PostalCode",
+                                      "name": "regexValidator0",
+                                      "pattern": "([ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy][0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy])\\ ?([0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy][0-9])",
+                                      "style": {
+                                        "display": "block",
+                                        "position": "absolute",
+                                        "width": "100%"
+                                      },
+                                      "text": "Not a valid postal code",
+                                      "type": "regex-validator"
+                                    }
+                                  ],
+                                  "name": "col19",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row4",
+                              "style": {
+                                "marginBottom": "1rem"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "BusinessPhoneNum",
+                                      "name": "BusinessPhoneNumLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Business Phone #",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col22",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "mask": "(***) ***-****",
+                                      "name": "BusinessPhoneNum",
+                                      "pattern": "[^0-9]",
+                                      "placeholder": "(000) 000-0000",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "mask",
+                                      "value": "${insured.BusinessPhoneNum}",
+                                      "visible": true
+                                    }
+                                  ],
+                                  "name": "col23",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "CellPhoneNum",
+                                      "name": "CellPhoneNumLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Cell Phone #",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col24",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "mask": "(***) ***-****",
+                                      "name": "CellPhoneNum",
+                                      "pattern": "[^0-9]",
+                                      "placeholder": "(000) 000-0000",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "mask",
+                                      "value": "${insured.CellPhoneNum}",
+                                      "visible": true
+                                    }
+                                  ],
+                                  "name": "col25",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row7",
+                              "style": {
+                                "marginBottom": "1rem"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "EmailAddress",
+                                      "name": "EmailAddressLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Email Address",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col20",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-6",
+                                  "components": [
+                                    {
+                                      "maxLength": 450,
+                                      "name": "EmailAddress",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.EmailAddress}",
+                                      "valueType": "string"
+                                    },
+                                    {
+                                      "component": "EmailAddress",
+                                      "name": "emailValidator0",
+                                      "text": "Not a valid email address",
+                                      "type": "email-validator",
+                                      "visible": "${Globals.generalsettings.ApplicationName != \"RECO CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col21",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label12",
+                                      "text": "Primary Insured",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col52",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "PrimaryInsured",
+                                      "type": "checkbox",
+                                      "value": "${insured.PrimaryInsured}",
+                                      "valueType": "bool?"
+                                    }
+                                  ],
+                                  "name": "col53",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row6",
+                              "style": {
+                                "marginBottom": "1rem"
+                              },
+                              "type": "row"
+                            }
+                          ],
+                          "name": "fieldset1",
+                          "style": {
+                            "marginBottom": "0.25em"
+                          },
+                          "text": "Insured Details",
+                          "type": "fieldset"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "BrokerageID",
+                                  "name": "BrokerageIDLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Brokerage",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col9",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-7",
+                              "components": [
+                                {
+                                  "allowFilteringByAllStringColumns": true,
+                                  "columns": [
+                                    {
+                                      "property": "Name",
+                                      "title": "Brokerage Name"
+                                    }
+                                  ],
+                                  "data": "${getBrokeragesResult}",
+                                  "events": {
+                                    "change": [
+                                      {
+                                        "name": "RECODb.getBrokerageByBrokerageID",
+                                        "parameters": [
+                                          {
+                                            "name": "BrokerageID",
+                                            "value": "${event}"
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "insured.BrokerageName",
+                                            "type": "set",
+                                            "value": "${result.Name}",
+                                            "valueType": "string"
+                                          },
+                                          {
+                                            "name": "insured.BrokerageAddress",
+                                            "type": "set",
+                                            "value": "${result.Address}",
+                                            "valueType": "string"
+                                          },
+                                          {
+                                            "name": "insured.BrokerageProvinceID",
+                                            "type": "set",
+                                            "value": "${result.ProvinceID}",
+                                            "valueType": "int?"
+                                          },
+                                          {
+                                            "name": "insured.BrokerageCity",
+                                            "type": "set",
+                                            "value": "${result.City}",
+                                            "valueType": "string"
+                                          },
+                                          {
+                                            "name": "insured.BrokeragePostalCode",
+                                            "type": "set",
+                                            "value": "${result.PostalCode}",
+                                            "valueType": "string"
+                                          },
+                                          {
+                                            "name": "insured.BrokerageEmailAddress",
+                                            "type": "set",
+                                            "value": "${result.EmailAddress}",
+                                            "valueType": "string"
+                                          },
+                                          {
+                                            "name": "insured.BrokerageBusinessPhoneNum",
+                                            "type": "set",
+                                            "value": "${result.BusinessPhoneNum}",
+                                            "valueType": "string"
+                                          },
+                                          {
+                                            "name": "insured.BrokerOfRecord",
+                                            "type": "set",
+                                            "value": "${result.BrokerOfRecordName}",
+                                            "valueType": "string"
+                                          },
+                                          {
+                                            "name": "brokerage",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "RecoCms6.Models.RecoDb.Brokerage"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ]
+                                  },
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "itemType": "RecoCms6.Models.RecoDb.Brokerage",
+                                  "name": "BrokerageID",
+                                  "style": {
+                                    "display": "block"
+                                  },
+                                  "textProperty": "Name",
+                                  "type": "dropdown-datagrid",
+                                  "value": "${insured.BrokerageID}",
+                                  "valueProperty": "BrokerageID",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col10",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "name": "NewBrokerageClick",
+                                        "schema": {
+                                          "$ref": "#/definitions/Task",
+                                          "dotnetType": "System.Threading.Tasks.Task"
+                                        },
+                                        "type": "invoke-method"
+                                      }
+                                    ]
+                                  },
+                                  "icon": "add_circle_outline",
+                                  "name": "buttonNewBrokerage",
+                                  "template": "",
+                                  "text": "New",
+                                  "type": "button"
+                                }
+                              ],
+                              "name": "col6",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row0",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label1",
+                                      "text": "Brokerage Name",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col30",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-6",
+                                  "components": [
+                                    {
+                                      "autoComplete": false,
+                                      "name": "BrokerageName",
+                                      "placeholder": "",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.BrokerageName}"
+                                    }
+                                  ],
+                                  "name": "col31",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "name": "label9",
+                                      "text": "Update Brokerage Details?",
+                                      "type": "label",
+                                      "visible": true
+                                    }
+                                  ],
+                                  "name": "col46",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-1",
+                                  "components": [
+                                    {
+                                      "name": "checkbox0",
+                                      "type": "checkbox",
+                                      "value": "${bUpdateBroker}",
+                                      "valueType": "bool",
+                                      "visible": true
+                                    }
+                                  ],
+                                  "name": "col47",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row11",
+                              "style": {
+                                "paddingBottom": "0.25em"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label0",
+                                      "text": "Main Contact",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col7",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-5",
+                                  "components": [
+                                    {
+                                      "autoComplete": false,
+                                      "name": "textbox2",
+                                      "placeholder": "",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.BrokerageContactPerson}"
+                                    }
+                                  ],
+                                  "name": "col8",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label10",
+                                      "text": "Phone Num",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col26",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "mask": "(***) ***-****",
+                                      "name": "mask0",
+                                      "pattern": "[^0-9]",
+                                      "placeholder": "(000) 000-0000",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "mask",
+                                      "value": "${insured.BrokerageContactPhoneNum}"
+                                    }
+                                  ],
+                                  "name": "col27",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row8",
+                              "style": {
+                                "paddingBottom": "0.25em"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "BrokerageContactEmail",
+                                      "name": "label11",
+                                      "text": "Contact Email Address",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col28",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-8",
+                                  "components": [
+                                    {
+                                      "autoComplete": false,
+                                      "name": "BrokerageContactEmail",
+                                      "placeholder": "",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.BrokerageContactEmail}"
+                                    },
+                                    {
+                                      "component": "BrokerageContactEmail",
+                                      "name": "emailValidator2",
+                                      "text": "Not a valid Email Address",
+                                      "type": "email-validator",
+                                      "visible": "${Globals.generalsettings.ApplicationName != \"RECO CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col29",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row2",
+                              "style": {
+                                "paddingBottom": "0.25em"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label8",
+                                      "text": "${Globals.generalsettings.BrokerOfRecordName}",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col44",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-5",
+                                  "components": [
+                                    {
+                                      "name": "textbox1",
+                                      "placeholder": "",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.BrokerOfRecord}"
+                                    }
+                                  ],
+                                  "name": "col45",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label7",
+                                      "text": "Phone Num",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col42",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "mask": "(***) ***-****",
+                                      "name": "BrokerageBusinessPhoneNum",
+                                      "pattern": "[^0-9]",
+                                      "placeholder": "(000) 000-0000",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "mask",
+                                      "value": "${insured.BrokerageBusinessPhoneNum}"
+                                    }
+                                  ],
+                                  "name": "col43",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row17",
+                              "style": {
+                                "paddingBottom": "0.25em"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label2",
+                                      "text": "Address",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col32",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-10",
+                                  "components": [
+                                    {
+                                      "name": "BrokerageAddress",
+                                      "placeholder": "",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.BrokerageAddress}"
+                                    }
+                                  ],
+                                  "name": "col33",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row12",
+                              "style": {
+                                "paddingBottom": "0.25em"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label4",
+                                      "text": "City",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col36",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "name": "textbox0",
+                                      "placeholder": "",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.BrokerageCity}"
+                                    }
+                                  ],
+                                  "name": "col37",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-1",
+                                  "components": [
+                                    {
+                                      "name": "label3",
+                                      "text": "Province",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col34",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "allowFiltering": true,
+                                      "data": "${getProvinceList}",
+                                      "filterCaseSensitivity": "caseInsensitive",
+                                      "name": "BrokerageProvinceID",
+                                      "placeholder": "Choose Province",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "template": "",
+                                      "textProperty": "ParamAbbrev",
+                                      "type": "dropdown",
+                                      "value": "${insured.BrokerageProvinceID}",
+                                      "valueProperty": "ParameterID",
+                                      "valueType": "int?"
+                                    }
+                                  ],
+                                  "name": "col35",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-1",
+                                  "components": [
+                                    {
+                                      "name": "label5",
+                                      "text": "Postal Code",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col38",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "BrokeragePostalCode",
+                                      "placeholder": "A1A 1A1",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.BrokeragePostalCode}"
+                                    }
+                                  ],
+                                  "name": "col39",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row13",
+                              "style": {
+                                "paddingBottom": "0.25em"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "BrokerageEmailAddress",
+                                      "name": "label6",
+                                      "text": "Brokerage Email Address",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col40",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-8",
+                                  "components": [
+                                    {
+                                      "name": "BrokerageEmailAddress",
+                                      "placeholder": "",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${insured.BrokerageEmailAddress}"
+                                    },
+                                    {
+                                      "component": "BrokerageEmailAddress",
+                                      "name": "emailValidator1",
+                                      "text": "Not a valid Email Address",
+                                      "type": "email-validator",
+                                      "visible": "${Globals.generalsettings.ApplicationName != \"RECO CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col41",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row15",
+                              "style": {
+                                "paddingBottom": "0.25em"
+                              },
+                              "type": "row"
+                            }
+                          ],
+                          "name": "fieldset0",
+                          "text": "Brokerage Details",
+                          "type": "fieldset",
+                          "visible": "${insured.BrokerageID != null}"
+                        }
+                      ],
+                      "name": "panel0",
+                      "summaryTemplate": "",
+                      "text": "",
+                      "type": "panel",
+                      "visible": "${insured != null}"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "name": "buttonSave",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${insured}",
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "${result.Message}",
+                            "severity": "error",
+                            "summary": "System Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "SaveInsured",
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Insured",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${insured != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getRegistrants",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getRegistrantsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Registrant>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Insured Transaction Role\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Insured Litigation Role\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Province\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Method of Communication\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getTransactionRoles",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Insured Transaction Role\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getLitigationRoles",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Insured Litigation Role\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getCommunicationMethodList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Method of Communication\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProvinceList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getBrokerages",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getBrokeragesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Brokerage>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "intInsuredID",
+        "type": "set",
+        "value": "(int)${parameters.InsuredID}",
+        "valueType": "int"
+      },
+      {
+        "name": "insured",
+        "type": "set",
+        "value": "intInsuredID > 0 ? Get(intInsuredID) : new RecoCms6.Models.RecoDb.Insured(){ID = Guid.NewGuid()};",
+        "valueType": "RecoCms6.Models.RecoDb.Insured"
+      },
+      {
+        "name": "insured.ClaimID",
+        "type": "set",
+        "value": "${ClaimID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "${insured.InsuredID > 0}",
+        "name": "registrant",
+        "type": "set",
+        "value": "${getRegistrantsResult.Where(r=>r.RegistrantID == insured.RegistrantID).FirstOrDefault()}",
+        "valueType": "RecoCms6.Models.RecoDb.Registrant"
+      },
+      {
+        "condition": "${registrant == null}",
+        "name": "registrant",
+        "type": "set",
+        "value": " new RecoCms6.Models.RecoDb.Registrant(){ID = Guid.NewGuid()};",
+        "valueType": "RecoCms6.Models.RecoDb.Registrant"
+      },
+      {
+        "name": "bUpdateRegistrant",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "condition": "${intInsuredID == 0}",
+        "name": "insured.ProvinceID",
+        "type": "set",
+        "value": "${Globals.defaultProvinceID}",
+        "valueType": "int"
+      },
+      {
+        "name": "bUpdateBroker",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "condition": "${insured.PrimaryInsured == null}",
+        "name": "insured.PrimaryInsured",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Insured"
+}

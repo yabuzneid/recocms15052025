@@ -1,0 +1,1978 @@
+﻿@page "/edit-claim/{ClaimID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.EditClaimComponent
+
+@code {
+}
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+    <ChildContent>
+        <div style="margin-bottom: 0.25em" class="row">
+            <div class="col-md-1">
+                <RadzenHtml>
+                    <PageTitle>@("RECO CMS - " + claim?.ClaimNo)</PageTitle>
+                </RadzenHtml>
+            </div>
+            <div class="col-md-11">
+                <RadzenBadge BadgeStyle="BadgeStyle.Warning" IsPill="true" style="font-size: 16px; width: 100%" Text="Unsaved Changes" Visible="@isDirty">
+                </RadzenBadge>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div style="padding-bottom: 0.25em" class="row">
+                    <div class="col-md-5" style="background-color: rgba(98, 224, 63, 0)">
+                        <RadzenHtml>
+                            @claimsummary
+                        </RadzenHtml>
+                    </div>
+                    <div class="col-md-5">
+                        <RadzenGrid @ref="gridIncurred" Data="@getTotalIncurred" TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory">
+                            <Columns>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="TotalReserve" Title="Total Reserve">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="TotalPayment" Title="Total Payment">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="TotalRecovery" Title="Total Recovery">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="TotalIncurred" Title="Total Incurred">
+                                </RadzenGridColumn>
+                            </Columns>
+                        </RadzenGrid>
+                    </div>
+                    <div class="col-md-2">
+                        <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="add_circle_outline" style="display: block; margin-bottom: 0.5em; width: 100%" Text="Quick Note" Visible="false" Click="@ButtonAddNoteClick">
+                        </RadzenButton>
+                        <RadzenButton ButtonType="ButtonType.Submit" Icon="save" style="margin-bottom: .25em; width: 100%" Text="Save All" Visible="@(!Security?.IsInRole("Auditor") ?? false)" Click="@ButtonSaveDetails2Click">
+                        </RadzenButton>
+                        <RadzenLink Icon="open_in_new" Path="@($"edit-claim/{claim?.ClaimID.ToBase64()}")" style="width: 100%" Target="_blank" Text="Open File In New Tab">
+                        </RadzenLink>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <RadzenTabs Change="@Tabs0Change" @bind-SelectedIndex="@currentTab">
+            <Tabs>
+                <RadzenTabsItem Selected="true" Text="Claim Details" Visible="true">
+                    <ChildContent>
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="text-md-center col-md-6">
+                                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" Visible="@(!Security?.IsInRole("Auditor") ?? false)" Click="@ButtonSaveDetailsClick">
+                                </RadzenButton>
+                                <RadzenButton ButtonStyle="ButtonStyle.Light" ButtonType="ButtonType.Reset" Icon="cancel" Text="Cancel" Visible="@(!Security?.IsInRole("Auditor") ?? false)" Click="@ButtonResetClaimClick">
+                                </RadzenButton>
+                            </div>
+                            <div class="col-md-3 justify-content-end d-flex">
+                                <RadzenHtml Visible="false">
+                                    <NonModalDialog IsHtml="true" HtmlContent="@FileSummary" OnOpen="@LoadFileSummary"></NonModalDialog>
+                                </RadzenHtml>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <RadzenFieldset Text="High Level Details">
+                                    <ChildContent>
+                                        <div style="margin-bottom: 1rem; margin-top: -1em" class="row">
+                                            <div class="col-md-1">
+                                                <RadzenLabel Component="ClaimStatusID" style="width: 100%" Text="Status">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDropDown Data="@getClaimStatusList" Disabled="@(Security?.IsInRole("Auditor")??false)" Placeholder="Choose Status" style="display: block; width: 100%" TextProperty="ParamDesc" @bind-Value="@(claim.ClaimStatusID)" ValueProperty="ParameterID" Name="ClaimStatusID" Change="@ClaimStatusIdChange">
+                                                </RadzenDropDown>
+                                                <RadzenLabel style="color: rgb(249, 119, 127); font-size: 12px; font-weight: 400" Text="Status is required" Visible="@statusRequired">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenLabel Component="CloseDate" style="width: 100%" Text="Close Date">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@(Security?.IsInRole("Auditor")??false)" style="width: 100%" @bind-Value="@(claim.CloseDate)" Name="CloseDate" Change="@CloseDateChange">
+                                                </RadzenDatePicker>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenLabel Component="ClaimNo" style="width: 100%" Text="Claim #">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenTextBox AutoComplete="false" MaxLength="20" ReadOnly="@(!Security?.IsInRole("Program Manager")??false)" style="display: block; width: 100%" @bind-Value="@(claim.ClaimNo)" Name="ClaimNo" Change="@ClaimNoChange">
+                                                </RadzenTextBox>
+                                                <RadzenLabel style="color: rgb(249, 119, 127); font-size: 12px; font-weight: 400" Text="Claim # is required" Visible="@claimNumRequired">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenLabel style="width: 100%" Text="File Outcome">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getFileOutcomeList" Disabled="@(Security?.IsInRole("Auditor")??false)" Placeholder="Choose File Outcome" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.FileOutcomeID)" ValueProperty="ParameterID" Name="FileOutcomeID" Change="@FileOutcomeIdChange">
+                                                </RadzenDropDown>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: -1em; margin-top: -1em" class="row">
+                                            <div class="col-md-1">
+                                                <RadzenLabel Component="ClaimDate" style="width: 100%" Text="Claim Date">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@(Security?.IsInRole("Auditor")??false)" style="width: 100%" @bind-Value="@(claim.ClaimDate)" Name="ClaimDate" Change="@ClaimDateChange">
+                                                </RadzenDatePicker>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenLabel Component="ReportDate" style="width: 100%" Text="Report Date" >
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@(Security?.IsInRole("Auditor")??false)" style="width: 100%" @bind-Value="@(claim.ReportDate)" Name="ReportDate" Change="@ReportDateChange">
+                                                </RadzenDatePicker>
+                                                <RadzenRequiredValidator Component="ReportDate" Text="Report Date Is Required">
+                                                </RadzenRequiredValidator>
+                                            </div>
+                                            <div class="text-md-right col-md-2">
+                                                <RadzenLabel Text="Notice Of Claim Ref #" Visible="@(NoticeOfClaimRefNum != "")">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenLabel Text="@($"{NoticeOfClaimRefNum}")" Visible="@(NoticeOfClaimRefNum != "")">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-1" style="text-align: right">
+                                                <RadzenLabel Component="SurveyOnClose" style="width: 100%" Text="Survey On Close" >
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenCheckBox Disabled="@(!Security?.IsInRole("Program Manager")??false)" TriState="false" @bind-Value="@(claim.SurveyOnClose)" TValue="bool"  Name="SurveyOnClose" Change="@SurveyOnCloseChange">
+                                                </RadzenCheckBox>
+                                            </div>
+                                        </div>
+                                    </ChildContent>
+                                </RadzenFieldset>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <RadzenFieldset Text="File Contacts">
+                                    <ChildContent>
+                                        <div style="margin-bottom: 0.25rem" class="row">
+                                            <div class="col-md-1">
+                                                <RadzenLabel Component="AdjusterID" style="width: 100%" Text="Adjuster" >
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getAdjustersList" Disabled="@(Security?.IsInRole("Auditor") ?? false)" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Adjuster" style="width: 100%" TextProperty="Name" @bind-Value="@(claim.AdjusterID)" ValueProperty="ServiceProviderID" Name="AdjusterID" Change="@AdjusterIdChange">
+                                                </RadzenDropDown>
+                                            </div>
+                                            <div class="col-md-1" style="margin-right: ">
+                                                <RadzenLabel Component="AdjusterClaimNo" style="width: 100%" Text="Adjuster File #">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenTextBox MaxLength="12" ReadOnly="@(Security?.IsInRole("Auditor") ?? false)" style="width: 100%" @bind-Value="@(claim.AdjusterClaimNo)"  Name="AdjusterClaimNo" Change="@AdjusterClaimNoChange">
+                                                </RadzenTextBox>
+                                                <RadzenLabel style="color: rgb(249, 119, 127); font-size: 12px; font-weight: 400" Text="Adjuster File Number must be 6 digits long or start with 33410-" Visible="@invalidAdjusterNum">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenLabel Component="FileHandlerID" style="width: 100%" Text="File Handler">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getFileHandlerList" Disabled="@(Security?.IsInRole("Auditor") ?? false)" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose File Handler" style="width: 100%" TextProperty="Name" @bind-Value="@(claim.FileHandlerID)" ValueProperty="ServiceProviderID" Name="FileHandlerID" Change="@FileHandlerIdChange">
+                                                </RadzenDropDown>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenLabel Text="Copy Reports To">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDropDown AllowClear="false" AllowFiltering="true" Data="@getReportsToList" Multiple="true" TextProperty="Name" ValueProperty="ServiceProviderID" Name="ClaimFileReportings" @bind-Value="@selectedFileReportIds" TValue="IEnumerable<int>">
+                                                </RadzenDropDown>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <RadzenLabel Component="DefenseCounselID" style="width: 100%" Text="Defense Counsel">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getDefenseCounselList" Disabled="@(Security?.IsInRole("Auditor") ?? false)" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Defense Counsel" style="width: 100%" TextProperty="Name" @bind-Value="@(claim.DefenseCounselID)" ValueProperty="ServiceProviderID" Name="DefenseCounselID" Change="@DefenseCounselIdChange">
+                                                </RadzenDropDown>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenLabel Component="AdjusterClaimNo" style="width: 100%" Text="Counsel File #">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenTextBox MaxLength="50" ReadOnly="@(Security?.IsInRole("Auditor") ?? false)" style="width: 100%" @bind-Value="@(claim.CounselFileNo)" Name="CounselFileNo" Change="@CounselFileNoChange">
+                                                </RadzenTextBox>
+                                            </div>
+                                            <div class="col-md-1" style="margin-left: 1em">
+                                                <RadzenLabel Component="CoverageCounselID" style="width: 100%" Text="Coverage Counsel" >
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getCoverageCounselList" Disabled="@(Security?.IsInRole("Auditor") ?? false)" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Coverage Counsel" style="width: 100%" TextProperty="Name" @bind-Value="@(claim.CoverageCounselID)" ValueProperty="ServiceProviderID"  Name="CoverageCounselID" Change="@CoverageCounselIdChange">
+                                                </RadzenDropDown>
+                                            </div>
+                                        </div>
+                                    </ChildContent>
+                                </RadzenFieldset>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <RadzenFieldset AllowCollapse="true" Collapsed="false" Text="Cross Referenced Files">
+                                    <ChildContent>
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <RadzenGrid @ref="gridCrossRefFiles" AllowColumnResize="true" AllowPaging="true" AllowSorting="true" Data="@ViewGetXRefClaimsList" TItem="RecoCms6.Models.RecoDb.XRefClaim" PageSize="3">
+                                                    <Columns>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.XRefClaim" Property="XRefClaimNo" Title="Claim No" Type="string">
+                                                        </RadzenGridColumn>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.XRefClaim" Property="XRefInsureds" Title="Insureds" Type="string">
+                                                        </RadzenGridColumn>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.XRefClaim" Property="FileHandler" Title="File Handler" Visible="true" Type="string">
+                                                        </RadzenGridColumn>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.XRefClaim" Property="DefenceCounsel" Title="Defence Counsel" Type="string">
+                                                        </RadzenGridColumn>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.XRefClaim" Filterable="false" Sortable="false">
+                                                            <Template Context="recoCms6ModelsRecoDbXRefClaim">
+                                                                <RadzenButton Icon="search" Click="@((args) => ButtonViewClaimClick(args, recoCms6ModelsRecoDbXRefClaim))">
+                                                                </RadzenButton>
+                                                                <RadzenButton Icon="delete_forever" Visible="@(!Security?.IsInRole("Auditor") ?? false)" Click="@((args) =>ButtonDeleteCrossRefClick(args, recoCms6ModelsRecoDbXRefClaim))">
+                                                                </RadzenButton>
+                                                            </Template>
+                                                        </RadzenGridColumn>
+                                                    </Columns>
+                                                </RadzenGrid>
+                                            </div>
+                                            <div class="justify-content-center align-items-center d-flex col-md-2">
+                                                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Text="Add" Visible="@(!Security?.IsInRole("Auditor") ?? false)" Click="@ButtonAddCrossReferenceClaimsClick">
+                                                </RadzenButton>
+                                            </div>
+                                        </div>
+                                    </ChildContent>
+                                </RadzenFieldset>
+                                <RadzenFieldset Text="Description">
+                                    <ChildContent>
+                                        <div style="margin-bottom: -1em; margin-top: -1EM" class="row">
+                                            <div class="col-md-12">
+                                                <RadzenTextArea Cols="150" MaxLength="1000" ReadOnly="@(Security?.IsInRole("Auditor") ?? false)" Rows="3" style="width: 100%" @bind-Value="@(claim.ClaimDescription)" Name="ClaimDescription" Change="@ClaimDescriptionChange">
+                                                </RadzenTextArea>
+                                            </div>
+                                        </div>
+                                    </ChildContent>
+                                </RadzenFieldset>
+                                <RadzenFieldset Text="Flags">
+                                    <ChildContent>
+                                        <div style="margin-bottom: 1rem" class="row">
+                                            <div class="col-md-12">
+                                                <RadzenFieldset style="margin-top: -1em" Text="Reservation of Rights">
+                                                    <ChildContent>
+                                                        <div style="margin-bottom: -1em; margin-top: -1em; padding-bottom: 0px; padding-top: 0px" class="row">
+                                                            <div class="col-md-1 align-items-center d-flex" style="text-align: right">
+                                                                <RadzenLabel Component="CoverageIssue" style="width: 100%" Text="Coverage Issue" >
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <RadzenCheckBox Disabled="@(Security?.IsInRole("Auditor") ?? false)" TriState="false" @bind-Value="@(claim.CoverageIssue)" TValue="bool" Name="CoverageIssue" Change="@CoverageIssueChange">
+                                                                </RadzenCheckBox>
+                                                            </div>
+                                                            <div class="col-md-1 align-items-center d-flex">
+                                                                <RadzenLabel Component="ReservationOfRightsID" style="width: 100%" Text="Reason" Visible="@((bool)claim?.CoverageIssue)">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="justify-content-center align-items-center d-flex col-md-3">
+                                                                <RadzenDropDown AllowFiltering="true" Data="@getRORList" Disabled="@(Security?.IsInRole("Auditor") ?? false)" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Reason" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(claim.ReservationOfRightsID)" ValueProperty="ParameterID" Visible="@((bool)claim?.CoverageIssue)" Name="ReservationOfRightsID" Change="@ReservationOfRightsIdChange">
+                                                                </RadzenDropDown>
+                                                            </div>
+                                                            <div class="justify-content-center align-items-center d-flex col-md-1">
+                                                                <RadzenLabel Component="ReservationOfRightsOther" style="width: 100%" Text="Other" Visible="@((bool)claim?.CoverageIssue)">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="justify-content-center align-items-center d-flex col-md-2">
+                                                                <RadzenTextBox ReadOnly="@(Security?.IsInRole("Auditor") ?? false)" style="width: 100%" @bind-Value="@(claim.ReservationOfRightsOther)" Visible="@((bool)claim?.CoverageIssue)" Name="ReservationOfRightsOther" Change="@ReservationOfRightsOtherChange">
+                                                                </RadzenTextBox>
+                                                            </div>
+                                                            <div class="justify-content-center align-items-center d-flex col-md-2">
+                                                                <RadzenLabel Component="ReservationOfRightsOther" style="width: 100%" Text="Coverage Letter Date" Visible="@((bool)claim?.CoverageIssue)">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <RadzenDatePicker DateFormat="yyyy-MM-dd" @bind-Value="@(claim.ReservationOfRightsDate)" Visible="@(claim?.CoverageIssue?? false)" Name="ReservationOfRightsDate" Change="@ReservationOfRightsDateChange">
+                                                                </RadzenDatePicker>
+                                                            </div>
+                                                        </div>
+                                                    </ChildContent>
+                                                </RadzenFieldset>
+                                                <RadzenFieldset Text="Denied">
+                                                    <ChildContent>
+                                                        <div style="margin-bottom: 0.25em; margin-top: -1em" class="row">
+                                                            <div class="justify-content-center  d-flex col-md-1 align-items-center" style="text-align: right">
+                                                                <RadzenLabel Text="Denied">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-1 ">
+                                                                <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" TriState="false" @bind-Value="@(eoclaimdetails.Denied)" TValue="bool?"  Name="Denied" Change="@DeniedChange">
+                                                                </RadzenCheckBox>
+                                                            </div>
+                                                            <div class="col-md-1 align-items-center d-flex">
+                                                                <RadzenLabel Component="ReservationOfRightsID" style="width: 100%" Text="Reason" Visible="@((bool)(eoclaimdetails.Denied??false))">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="justify-content-center align-items-center d-flex col-md-3">
+                                                                <RadzenDropDown AllowFiltering="true" Data="@getDenialCodeList" Disabled="@(Security.IsInRole("Auditor"))" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Reason" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.DenialCodeID)" ValueProperty="ParameterID" Visible="@((bool)(eoclaimdetails.Denied??false))" Name="DenialCodeID" Change="@DenialCodeIdChange">
+                                                                </RadzenDropDown>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <RadzenLabel Text="Date of Denial Letter" Visible="@((bool)(eoclaimdetails.Denied??false))">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <RadzenDatePicker DateFormat="yyyy-MM-dd" @bind-Value="@(eoclaimdetails.DenialLetterDate)" Visible="@((bool)(eoclaimdetails.Denied??false))" Name="DenialLetterDate" Change="@DenialLetterDateChange">
+                                                                </RadzenDatePicker>
+                                                            </div>
+                                                        </div>
+                                                        <div style="margin-bottom: -1em" class="row">
+                                                            <div class="justify-content-center  d-flex col-md-1 align-items-center">
+                                                                <RadzenLabel Text="Comments" Visible="@((bool)(eoclaimdetails.Denied??false))">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-11">
+                                                                <RadzenTextArea ReadOnly="@(Security?.IsInRole("Auditor") ?? false)" style="width: 100%" @bind-Value="@(eoclaimdetails.DenialComments)" Visible="@((eoclaimdetails?.Denied??false))" Name="DenialComments" Change="@DenialCommentsChange">
+                                                                </RadzenTextArea>
+                                                            </div>
+                                                        </div>
+                                                    </ChildContent>
+                                                </RadzenFieldset>
+                                                <RadzenFieldset Text="RECO Complaint">
+                                                    <ChildContent>
+                                                        <div style="margin-bottom: -1.5em; margin-top: -1em" class="row">
+                                                            <div class="justify-content-center  d-flex col-md-2 align-items-center">
+                                                                <RadzenLabel Text="RECO Complaint" >
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <RadzenCheckBox Disabled="@(Security?.IsInRole("Auditor") ?? false)" @bind-Value="@(eoclaimdetails.RECOComplaint)" TValue="bool" Name="RECOComplaint" Change="@RecoComplaintChange">
+                                                                </RadzenCheckBox>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getRECOOutcomeList" Disabled="@(Security?.IsInRole("Auditor") ?? false)" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Outcome" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.RECOComplaintOutcomeID)" ValueProperty="ParameterID" Visible="@(eoclaimdetails?.RECOComplaint ?? false)" Name="Dropdown3" Change="@Dropdown3Change">
+                                                                </RadzenDropDown>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <RadzenLabel Text="Details" Visible="@(eoclaimdetails.RECOComplaint)">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <RadzenTextArea ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(eoclaimdetails.RECOComplaintDetails)" Visible="@(eoclaimdetails.RECOComplaint)" Name="Textarea2" Change="@Textarea2Change">
+                                                                </RadzenTextArea>
+                                                            </div>
+                                                        </div>
+                                                    </ChildContent>
+                                                </RadzenFieldset>
+                                            </div>
+                                        </div>
+                                        <RadzenFieldset Text="File For">
+                                            <ChildContent>
+                                                <div style="margin-top: -1em" class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="row align-items-start" style="margin-bottom: ">
+                                                            <div class="align-items-start d-flex col-md-7 justify-content-start text-md-left" style="text-align: center; vertical-align: top">
+                                                                <RadzenRadioButtonList Data="@getBrokerageOnlyList" Disabled="@(Security.IsInRole("Auditor"))" Orientation="Orientation.Horizontal" TextProperty="ParamDesc" @bind-Value="@(claim.BrokerageOnly)" ValueProperty="ParameterID" TValue="int?" Name="Radiobuttonlist0" Change="@Radiobuttonlist0Change">
+                                                                </RadzenRadioButtonList>
+                                                            </div>
+                                                            <div class="col-md-1 align-items-start d-flex text-md-right" style="text-align: right">
+                                                                <RadzenLabel Component="NotYetReported" style="width: 100%" Text="Not Yet Reported">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-1 align-items-start d-flex">
+                                                                <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" TriState="false" @bind-Value="@(claim.NotYetReported)" TValue="bool"  Name="NotYetReported" Change="@NotYetReportedChange">
+                                                                </RadzenCheckBox>
+                                                            </div>
+                                                            <div class="col-md-1 align-items-start d-flex text-md-right justify-content-end" style="text-align: right">
+                                                                <RadzenLabel Text="By">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-2 align-items-start d-flex text-md-left">
+                                                                <RadzenDropDown AllowFiltering="true" Data="@getBrokerageOnlyList" Disabled="@(Security.IsInRole("Auditor"))" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(claim.NotYetReportedByID)" ValueProperty="ParameterID"  Name="NotYetReportedByID" Change="@NotYetReportedByIdChange">
+                                                                </RadzenDropDown>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ChildContent>
+                                        </RadzenFieldset>
+                                        <div style="margin-bottom: -1em" class="row">
+                                            <div class="col-md-4">
+                                                <RadzenLabel Component="ClaimOrIncident" Text="Claim Report reminder in days" >
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenNumeric AutoComplete="false" Min="1" Max="365" Placeholder="Days" Step="30" @bind-Value="@(claim.ReportingDays)" TValue="int?" Name="NumericDaysReminder" Change="@NumericDaysReminderChange">
+                                                </RadzenNumeric>
+                                            </div>
+                                        </div>
+                                    </ChildContent>
+                                </RadzenFieldset>
+                            </div>
+                        </div>
+                        <RadzenFieldset Text="Claim Data">
+                            <ChildContent>
+                                <div style="margin-bottom: 1rem" class="row">
+                                    <div class="col-md-2">
+                                        <RadzenLabel Component="LossCauseID" style="width: 100%" Text="@($"{(Globals?.generalsettings?.LossCauseName)}")">
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <RadzenDropDown AllowFiltering="true" Data="@getLossCauseResult" Disabled="@(Security.IsInRole("Auditor"))" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Loss Cause" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(claim.LossCauseID)" ValueProperty="ParameterID" Name="LossCauseID" Change="@LossCauseIdChange">
+                                        </RadzenDropDown>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Disabled="@(claim?.LossCauseID == null)" Icon="local_offer" Text="Tags" Click="@BtnLossCauseTagsClick">
+                                        </RadzenButton>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <RadzenLabel Component="BoardJurisdictionID" style="width: 100%" Text="Board" >
+                                        </RadzenLabel>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <RadzenLabel Component="ClaimInitiationID" style="width: 100%" Text="@($"{(Globals?.generalsettings?.ClaimInitiation)}")" >
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <RadzenDropDown AllowFiltering="true" Data="@getClaimInitiationList" Disabled="@(Security.IsInRole("Auditor"))" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Initial Trigger" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.ClaimInitiationID)" ValueProperty="ParameterID" Name="ClaimInitiationID" Change="@ClaimInitiationIdChange">
+                                        </RadzenDropDown>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <RadzenLabel Component="ClaimConvertedToID" style="width: 100%" Text="Converted To" >
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <RadzenDropDown AllowFiltering="true" Data="@getClaimInitiationList" Disabled="@(Security.IsInRole("Auditor"))" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Converted To" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.ClaimConvertedToID)" ValueProperty="ParameterID" Name="ClaimConvertedToID" Change="@ClaimConvertedToIdChange">
+                                        </RadzenDropDown>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <RadzenLabel Component="ConvertedToLitigation" style="width: 100%" Text="Converted To Litigation">
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <RadzenDatePicker DateFormat="d" Disabled="@(Security.IsInRole("Auditor"))" @bind-Value="@(eoclaimdetails.ConvertedToLitigation)" Name="ConvertedToLitigation" Change="@ConvertedToLitigationChange">
+                                        </RadzenDatePicker>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </RadzenFieldset>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <RadzenFieldset Text="Transaction Details" Visible="@(trade != null)">
+                                            <ChildContent>
+                                                <div style="margin-bottom: .25em; margin-top: -1em" class="row">
+                                                    <div class="col-md-2">
+                                                        <RadzenLabel Text="Date of APS/Lease">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@(Security.IsInRole("Auditor"))" ShowTimeOkButton="false" @bind-Value="@(trade.LeaseDate)" Name="LeaseDate" Change="@LeaseDateChange">
+                                                        </RadzenDatePicker>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <RadzenLabel Text="Price">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenNumeric AutoComplete="false" Format="c" Min="0" Max="999999999" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" Step="10000" @bind-Value="@(trade.Price)" TValue="decimal?" Name="Price" Change="@PriceChange">
+                                                        </RadzenNumeric>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenLabel Text="Transaction Value">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenDropDown Data="@getTransactionValueList" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.TransactionValueID)" ValueProperty="ParameterID" Name="Dropdown6" Change="@Dropdown6Change">
+                                                        </RadzenDropDown>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <RadzenLabel Text="Did The Deal Close?">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenDropDown Data="@getYesNoPendingList" Disabled="false" TextProperty="ParamDesc" @bind-Value="@(trade.DidDealClose)" ValueProperty="ParameterID" Name="Dropdown5" Change="@Dropdown5Change">
+                                                        </RadzenDropDown>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <RadzenLabel Text="Date Closed">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@(Security.IsInRole("Auditor"))" ShowTimeOkButton="false" @bind-Value="@(trade.DateClosed)" Name="DateClosed" Change="@DateClosedChange">
+                                                        </RadzenDatePicker>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenLabel Text="Deposit Amount">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenNumeric AutoComplete="false" Format="c" Min="0" Max="999999999" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" Step="1000" @bind-Value="@(trade.DepositAmount)" TValue="decimal?" Name="DepositAmount" Change="@DepositAmountChange">
+                                                        </RadzenNumeric>
+                                                    </div>
+                                                </div>
+                                                <div style="margin-bottom: -1em" class="row">
+                                                    <div class="col-md-2">
+                                                        <RadzenLabel Component="ClaimTradeTypeID" Text="@($"{(Globals?.generalsettings?.LocationName) + " Type"}")">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getTradeTypeList" Disabled="false" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.TradeTypeID)" ValueProperty="ParameterID" Name="TradeTypeID" Change="@TradeTypeIdChange">
+                                                        </RadzenDropDown>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <RadzenLabel Text="Urban Or Rural">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenDropDown AllowFiltering="true" Data="@getUrbanOrRuralList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.UrbanOrRuralID)" ValueProperty="ParameterID" Name="UrbanOrRuralID" Change="@UrbanOrRuralIdChange">
+                                                        </RadzenDropDown>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenLabel Component="ClaimConvertedToID" style="width: 100%" Text="End of Deal">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenDropDown AllowFiltering="true" Data="@getEndOfDealList" Disabled="@(Security.IsInRole("Auditor"))" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose End of Deal" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.EndOfDealID)" ValueProperty="ParameterID" Name="Dropdown4" Change="@Dropdown4Change">
+                                                        </RadzenDropDown>
+                                                    </div>
+                                                </div>
+                                            </ChildContent>
+                                        </RadzenFieldset>
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <RadzenFieldset AllowCollapse="true" Collapsed="false" Text="Other Claims With Indemnity Paid/Reserved">
+                                                    <ChildContent>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <RadzenGrid @ref="gridOtherClaims" AllowPaging="true" AllowSorting="true" Data="@getSevenYearIndemnitiesResult" TItem="RecoCms6.Models.RecoDb.GetSevenYearsClaimIndemnity" PageSize="3">
+                                                                    <Columns>
+                                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GetSevenYearsClaimIndemnity" Property="ClaimNo" Title="Claim No" Type="string">
+                                                                        </RadzenGridColumn>
+                                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GetSevenYearsClaimIndemnity" Filterable="false" Format="decimal" FormatString="{0:C}" Property="IndemnityReserve" Sortable="false" Title="Indemnity Reserve" Type="number">
+                                                                        </RadzenGridColumn>
+                                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GetSevenYearsClaimIndemnity" Format="decimal" FormatString="{0:C}" Property="IndemnityPayment" Title="Indemnity Paid" Type="number">
+                                                                        </RadzenGridColumn>
+                                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GetSevenYearsClaimIndemnity" Format="decimal" Sortable="false" Type="number">
+                                                                            <Template Context="recoCms6ModelsRecoDbGetSevenYearsClaimIndemnity">
+                                                                                <RadzenButton Icon="search" Click="@((args) =>ButtonViewOtherClaimClick(args, recoCms6ModelsRecoDbGetSevenYearsClaimIndemnity))">
+                                                                                </RadzenButton>
+                                                                            </Template>
+                                                                        </RadzenGridColumn>
+                                                                    </Columns>
+                                                                </RadzenGrid>
+                                                            </div>
+                                                        </div>
+                                                    </ChildContent>
+                                                </RadzenFieldset>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <RadzenFieldset Text="Deductible Details">
+                                                    <ChildContent>
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+                                                                <RadzenLabel Text="Increasing Deductible">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" @bind-Value="@(eoclaimdetails.IncreasedDeductible)" TValue="bool" Visible="@(Security.IsInRole("Auditor"))" Name="IncreasedDeductible" Change="@IncreasedDeductibleChange">
+                                                                </RadzenCheckBox>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <RadzenLabel Component="Deductible" style="width: 100%" Text="Deductible">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <RadzenDropDown Data="@getDeductibleList" Disabled="@(Security.IsInRole("Auditor"))" Placeholder="Choose Deductible" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(claim.Deductible)" ValueProperty="ParameterID" Visible="true" Name="Deductible" Change="@DeductibleChange">
+                                                                </RadzenDropDown>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <RadzenLabel Text="Deductible Handled">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenDropDown Data="@getDeductibleHandlingList" Disabled="@(Security.IsInRole("Auditor"))" Placeholder="Choose..." TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.DeductibleHandledID)" ValueProperty="ParameterID" Name="Dropdown0" Change="@Dropdown0Change">
+                                                                </RadzenDropDown>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-2  d-flex align-items-center">
+                                                                <RadzenLabel Text="Details">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-10  d-flex align-items-end">
+                                                                <RadzenTextArea Cols="100" ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(eoclaimdetails.DeductibleDetails)" Name="Textarea0" Change="@Textarea0Change">
+                                                                </RadzenTextArea>
+                                                            </div>
+                                                        </div>
+                                                    </ChildContent>
+                                                </RadzenFieldset>
+                                                <RadzenFieldset Text="Other Amounts" Visible="false">
+                                                    <ChildContent>
+                                                        <div style="margin-bottom: 0.5em" class="row">
+                                                            <div class="col-md-3">
+                                                                <RadzenLabel Text="Misrepresentation">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenNumeric AutoComplete="false" Format="N2" Min="0" Max="999999999" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" @bind-Value="@(eoclaimdetails.Misrepresentation)" TValue="decimal?" Name="Misrepresentation" Change="@MisrepresentationChange">
+                                                                </RadzenNumeric>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenLabel Text="Negligence">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenNumeric AutoComplete="false" Format="N2" Min="0" Max="999999999" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" @bind-Value="@(eoclaimdetails.Negligence)" TValue="decimal?" Name="Negligence" Change="@NegligenceChange">
+                                                                </RadzenNumeric>
+                                                            </div>
+                                                        </div>
+                                                        <div style="margin-bottom: 0.5em" class="row">
+                                                            <div class="col-md-3">
+                                                                <RadzenLabel Text="Negligent Misrep">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenNumeric AutoComplete="false" Format="N2" Min="0" Max="999999999" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" @bind-Value="@(eoclaimdetails.NegligentMisrep)" TValue="decimal?" Name="NegligentMisrep" Change="@NegligentMisrepChange">
+                                                                </RadzenNumeric>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenLabel Text="Punitive Amount">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenNumeric AutoComplete="false" Format="N2" Min="0" Max="999999999" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" @bind-Value="@(eoclaimdetails.PunitiveAmount)" TValue="decimal?" Name="PunitiveAmount" Change="@PunitiveAmountChange">
+                                                                </RadzenNumeric>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <RadzenLabel Text="Fraud">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenNumeric AutoComplete="false" Format="N2" Min="0" Max="999999999" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" @bind-Value="@(eoclaimdetails.Fraud)" TValue="decimal?" Name="Fraud" Change="@FraudChange">
+                                                                </RadzenNumeric>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenLabel Text="Other Amount">
+                                                                </RadzenLabel>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <RadzenNumeric AutoComplete="false" Format="N2" Min="0" Max="999999999" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" @bind-Value="@(eoclaimdetails.OtherAmount)" TValue="decimal?" Name="OtherAmount" Change="@OtherAmountChange">
+                                                                </RadzenNumeric>
+                                                            </div>
+                                                        </div>
+                                                    </ChildContent>
+                                                </RadzenFieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1em" class="row">
+                            <div class="col-md-12" style="bottom: 1em">
+                                <RadzenFieldset AllowCollapse="true" Collapsed="true" Text="Claim Assessment" Visible="false">
+                                    <ChildContent>
+                                        <div style="margin-bottom: 1rem" class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Component="ClaimVerification" style="width: 100%" Text="Discussions/Claim Verification" Visible="@(!isEOProgram)">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextBox AutoComplete="false" ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(claimdetails.ClaimVerification)" Visible="@(!isEOProgram)" Name="ClaimVerification" Change="@ClaimVerificationChange">
+                                                </RadzenTextBox>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Text="Liability">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextArea ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(claim.Liability)" Name="Liability" Change="@LiabilityChange">
+                                                </RadzenTextArea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Text="Apportionment">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextArea ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(claim.Apportionment)" Name="Apportionment" Change="@ApportionmentChange">
+                                                </RadzenTextArea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Text="Real Damages">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextArea ReadOnly="@(Security.IsInRole("Auditor"))" Rows="1" style="width: 100%" @bind-Value="@(claim.RealDamages)" Name="RealDamages" Change="@RealDamagesChange">
+                                                </RadzenTextArea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Text="Our Loss Potential">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextArea ReadOnly="@(Security.IsInRole("Auditor"))" Rows="1" style="width: 100%" @bind-Value="@(claim.LossPotential)" Name="LossPotential" Change="@LossPotentialChange">
+                                                </RadzenTextArea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Text="Coverage Issues">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextArea ReadOnly="@(Security.IsInRole("Auditor"))" Rows="1" style="width: 100%" @bind-Value="@(claim.CoverageIssues)" Name="CoverageIssues" Change="@CoverageIssuesChange">
+                                                </RadzenTextArea>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: 1rem" class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Component="Comments" style="width: 100%" Text="Current Plan">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextBox ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(claim.CurrentPlan)" Name="CurrentPlan" Change="@CurrentPlanChange">
+                                                </RadzenTextBox>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: 1rem" class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Component="Comments" style="width: 100%" Text="Comments" Visible="@(!isEOProgram)">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextBox ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(claimdetails.Comments)" Visible="@(!isEOProgram)" Name="Textbox0" Change="@Textbox0Change">
+                                                </RadzenTextBox>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: 1rem" class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Component="ClaimCalcuation" style="width: 100%" Text="Claim Calculation" Visible="@(!isEOProgram)">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextBox ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(claimdetails.ClaimCalculation)" Visible="@(!isEOProgram)" Name="ClaimCalcuation" Change="@ClaimCalcuationChange">
+                                                </RadzenTextBox>
+                                            </div>
+                                        </div>
+                                    </ChildContent>
+                                </RadzenFieldset>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <RadzenFieldset AllowCollapse="true" Collapsed="false" Text="Litigation Details">
+                                    <ChildContent>
+                                        <div style="margin-bottom: .25em" class="row">
+                                            <div class="col-md-2">
+                                                <RadzenLabel style="width: 100%" Text="Litigation">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" TriState="false" @bind-Value="@(eoclaimdetails.Litigation)" TValue="bool" Name="Checkbox5" Change="@Checkbox5Change">
+                                                </RadzenCheckBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenLabel Component="ClaimConvertedToID" style="width: 100%" Text="Litigation Type" Visible="false">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <RadzenDropDown AllowFiltering="true" Data="@getLitigationTypeList" Disabled="@(Security.IsInRole("Auditor"))" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Litigation Type" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.LitigationTypeID)" ValueProperty="ParameterID" Visible="false" Name="LitigationTypeID" Change="@LitigationTypeIdChange">
+                                                </RadzenDropDown>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenLabel Component="MatterSetForTrial" style="width: 100%" Text="Matter Set For Trial">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" TriState="false" @bind-Value="@(eoclaimdetails.MatterSetForTrial)" TValue="bool" Name="MatterSetForTrial" Change="@MatterSetForTrialChange">
+                                                </RadzenCheckBox>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: .25em" class="row">
+                                            <div class="col-md-2">
+                                                <RadzenLabel Component="PretrialDate" style="width: 100%" Text="Pretrial Date
+                        " Visible="false">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDatePicker DateFormat="MM/dd/yyyy" Disabled="@(Security.IsInRole("Auditor"))" ShowTime="true" style="width: 100%" @bind-Value="@(eoclaimdetails.PretrialDate)" Visible="false" Name="PretrialDate" Change="@PretrialDateChange">
+                                                </RadzenDatePicker>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenLabel Component="TrialDate" style="width: 100%" Text="Trial Date
+                        " Visible="false">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDatePicker DateFormat="MM/dd/yyyy" Disabled="@(Security.IsInRole("Auditor"))" ShowTime="true" style="width: 100%" @bind-Value="@(eoclaimdetails.TrialDate)" Visible="false" Name="TrialDate" Change="@TrialDateChange">
+                                                </RadzenDatePicker>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenLabel Component="LitigationDate" style="width: 100%" Text="Litigation Date" Visible="false">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <RadzenDatePicker DateFormat="MM/dd/yyyy" Disabled="@(Security.IsInRole("Auditor"))" ShowTime="true" style="width: 100%" @bind-Value="@(eoclaimdetails.LitigationDate)" Visible="false" Name="LitigationDate" Change="@LitigationDateChange">
+                                                </RadzenDatePicker>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Component="ClaimConvertedToID" style="width: 100%" Text="Type of Action">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenDropDown Data="@getClaimInitiationList" Disabled="@(Security.IsInRole("Auditor"))" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Type of Action" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.TypeOfActionID)" ValueProperty="ParameterID" Name="TypeOfActionID" Change="@TypeOfActionIdChange">
+                                                </RadzenDropDown>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: .25em" class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel style="width: 100%" Text="Jurisdiction">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextBox AutoComplete="true" MaxLength="100" Placeholder="location of court" ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(eoclaimdetails.Jurisdiction)" Name="Textbox2" Change="@Textbox2Change">
+                                                </RadzenTextBox>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: .25em" class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel style="width: 100%" Text="Court/Tribunal File No.">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextBox MaxLength="25" ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(eoclaimdetails.CourtFileNumber)" Name="Textbox3" Change="@Textbox3Change">
+                                                </RadzenTextBox>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: .25em" class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel style="width: 100%" Text="Who is suing us?">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextBox MaxLength="100" ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(eoclaimdetails.WhoIsSuing)" Name="Textbox4" Change="@Textbox4Change">
+                                                </RadzenTextBox>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: .25em" class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel style="width: 100%" Text="Offers made">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextBox MaxLength="100" ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(eoclaimdetails.OffersMade)" Name="Textbox5" Change="@Textbox5Change">
+                                                </RadzenTextBox>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: .25em" class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Text="Recovery">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenDropDown AllowFiltering="true" Data="@getRecoveryList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Recovery" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.RecoveryID)" ValueProperty="ParameterID" Name="Dropdown1" Change="@Dropdown1Change">
+                                                </RadzenDropDown>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel style="width: 100%" Text="Stage at which Settled
+                        ">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <RadzenDropDown AllowFiltering="true" Data="@getStageSettledList" Disabled="@(Security.IsInRole("Auditor"))" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Stage Which Settled" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(eoclaimdetails.StageSettled)" ValueProperty="ParameterID" Name="StageSettled" Change="@StageSettledChange">
+                                                </RadzenDropDown>
+                                            </div>
+                                        </div>
+                                    </ChildContent>
+                                </RadzenFieldset>
+                            </div>
+                            <div class="col-md-5">
+                                <RadzenFieldset AllowCollapse="true" Collapsed="false" Text="Litigation Dates">
+                                    <ChildContent>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Text="Add Date" Click="@ButtonAddLitigationDateClick">
+                                                </RadzenButton>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <RadzenGrid @ref="gridLitigationDates" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getClaimLitigationDatesList" TItem="RecoCms6.Models.RecoDb.ClaimLitigationDate" PageSize="5" RowDoubleClick="@GridLitigationDatesRowDoubleClick">
+                                                    <Columns>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimLitigationDate" Property="Parameter.ParamDesc" Title="Litigation Type" Type="string">
+                                                        </RadzenGridColumn>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimLitigationDate" FormatString="{0:d}" Property="LitigationDate" Title="Litigation Date">
+                                                        </RadzenGridColumn>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimLitigationDate" Property="LitigationStatusID" Title="Status" Type="integer">
+                                                            <Template Context="data">
+                                                                @(data.Parameter1?.ParamDesc)
+                                                            </Template>
+                                                        </RadzenGridColumn>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimLitigationDate" Filterable="false" Sortable="false" Width="40px">
+                                                            <Template Context="recoCms6ModelsRecoDbClaimLitigationDate">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <RadzenButton Icon="delete_outline" Size="ButtonSize.Small" Click="@((args) =>ButtonDeleteLitigationDateClick(args, recoCms6ModelsRecoDbClaimLitigationDate))">
+                                                                        </RadzenButton>
+                                                                    </div>
+                                                                </div>
+                                                            </Template>
+                                                        </RadzenGridColumn>
+                                                    </Columns>
+                                                </RadzenGrid>
+                                            </div>
+                                        </div>
+                                    </ChildContent>
+                                </RadzenFieldset>
+                                <RadzenFieldset AllowCollapse="true" Text="Cost Awards">
+                                    <ChildContent>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Text="Add Cost Award" Click="@ButtonAddCostAwardClick">
+                                                </RadzenButton>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <RadzenGrid @ref="gridCostAwards" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getCostAwardsList" TItem="RecoCms6.Models.RecoDb.CostAward" PageSize="5" RowDoubleClick="@GridCostAwardsRowDoubleClick">
+                                                    <Columns>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.CostAward" FormatString="{0:C}" Property="CostAward1" Title="Cost Award">
+                                                        </RadzenGridColumn>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.CostAward" FormatString="{0:d}" Property="CostAwardDate" Title="Date">
+                                                        </RadzenGridColumn>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.CostAward" Property="Paid" Title="Paid" Type="boolean">
+                                                        </RadzenGridColumn>
+                                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.CostAward" Filterable="false" Sortable="false" Width="40px">
+                                                            <Template Context="recoCms6ModelsRecoDbCostAward">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <RadzenButton Icon="delete" Size="ButtonSize.Small" Click="@((args) =>ButtonDeleteCostAwardClick(args, recoCms6ModelsRecoDbCostAward))">
+                                                                        </RadzenButton>
+                                                                    </div>
+                                                                </div>
+                                                            </Template>
+                                                        </RadzenGridColumn>
+                                                    </Columns>
+                                                </RadzenGrid>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <RadzenLabel Text="Additional Details">
+                                                </RadzenLabel>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <RadzenTextArea style="width: 100%" @bind-Value="@(eoclaimdetails.CostAwardsDetails)" Name="CostAwardsDetails">
+                                                </RadzenTextArea>
+                                            </div>
+                                        </div>
+                                    </ChildContent>
+                                </RadzenFieldset>
+                            </div>
+                        </div>
+                    </ChildContent>
+                </RadzenTabsItem>
+                <RadzenTabsItem Selected="false" Text="Contact Info">
+                    <ChildContent>
+                        <RadzenFieldset AllowCollapse="false" Text="@(Globals?.generalsettings?.LocationName)">
+                            <ChildContent>
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <RadzenDataGrid @ref="datagridTrades" Data="@getTradesList" TItem="TradeDetail" KeyProperty="TradeID" RowClick="OnTradeClick">
+                                            <Columns>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TradeDetail" Property="Address1" Title="Address 1">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TradeDetail" Property="Address2" Title="Address 2">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TradeDetail" Property="UnitNumber" Title="Unit #">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TradeDetail" Property="City" Title="City">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TradeDetail" Property="PostalCode" Title="Postal Code">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TradeDetail" Property="Province" Title="Province">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TradeDetail" Property="TradeType" Title="Trade Type">
+                                                </RadzenDataGridColumn>
+                                                 <ColumnDeleteRecord TItem="TradeDetail" DataGrid="@datagridTrades" DeleteRow="@DeleteTrade">
+                                                </ColumnDeleteRecord>
+                                            </Columns>
+                                        </RadzenDataGrid>
+                                    </div>
+                                    <div class="col-md-1" style="float: none; padding-left: 0px; padding-right: 0px">
+                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Size="ButtonSize.Small" style="font-size: 12px; margin-right: 5px; padding-left: 0px; padding-right: 5px" Text="Add Trade" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonAddTrade0Click">
+                                        </RadzenButton>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </RadzenFieldset>
+                        <RadzenFieldset AllowCollapse="true" Text="Insured(s)">
+                            <ChildContent>
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <RadzenDataGrid @ref="datagridInsureds" Data="@getInsureds" TItem="RecoCms6.Models.RecoDb.ClaimInsured" KeyProperty="InsuredID" RowClick="OnInsuredClick">
+                                            <Columns>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="TransactionRole" Title="Transaction Role">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="Name" Title="Name">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="EmailAddress" Title="Email Address">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="BusinessPhoneNum" Title="Business Phone Num">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="CellPhoneNum" Title="Cell Phone Num">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="BrokerOfRecord" Title="Broker Of Record">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="Brokerage" Title="Brokerage">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="RegistrantNo" Title="Registrant No">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="PrimaryInsured" Title="Primary Insured">
+                                                </RadzenDataGridColumn>
+                                                 <ColumnDeleteRecord TItem="ClaimInsured" DataGrid="@datagridInsureds" DeleteRow="@DeleteInsured">
+                                                </ColumnDeleteRecord>
+                                            </Columns>
+                                        </RadzenDataGrid>
+                                    </div>
+                                    <div class="col-md-1" style="padding-left: 0px; padding-right: 0px">
+                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Size="ButtonSize.Small" style="font-size: 12px; margin-right: 5px; padding-left: 0px; padding-right: 5px" Text="Add Insured" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonAddInsured0Click">
+                                        </RadzenButton>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </RadzenFieldset>
+                        <RadzenFieldset AllowCollapse="true" Text="Brokerage(s)">
+                            <ChildContent>
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <RadzenDataGrid @ref="datagrid8" Data="@getInsureds" TItem="RecoCms6.Models.RecoDb.ClaimInsured" KeyProperty="InsuredID">
+                                            <Columns>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="Brokerage" Title="Brokerage">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="BrokerageContactPerson" Title="Main Contact">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="BrokerageContactEmail" Title="Email Address">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="BrokerageContactPhoneNum" Title="Phone #">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimInsured" Property="BrokerOfRecord" Title="Broker Of Record">
+                                                </RadzenDataGridColumn>
+                                            </Columns>
+                                        </RadzenDataGrid>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </RadzenFieldset>
+                        <RadzenFieldset AllowCollapse="true" Text="Claimants">
+                            <ChildContent>
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <RadzenDataGrid @ref="datagridClaimants" Data="@getClaimants" TItem="RecoCms6.Models.RecoDb.ClaimClaimant" KeyProperty="ID" RowClick="OnClaimantClick">
+                                            <Columns>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimClaimant" Property="TransactionRole" Title="Transaction Role">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimClaimant" Property="Name" Title="Name">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimClaimant" Property="EmailAddress" Title="Email Address">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimClaimant" Property="ClaimantSolicitor" Title="Claimant Solicitor">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimClaimant" Property="BusinessPhoneNum" Title="Business Phone #">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimClaimant" Property="CellPhoneNum" Title="Cell Phone #">
+                                                </RadzenDataGridColumn>
+                                                  <ColumnDeleteRecord TItem="ClaimClaimant" DataGrid="@datagridClaimants" DeleteRow="@(async (row) => await RecoDb.DeleteClaimant(row.ID))">
+                                                </ColumnDeleteRecord>
+                                            </Columns>
+                                        </RadzenDataGrid>
+                                    </div>
+                                    <div class="col-md-1" style="padding-left: 0px; padding-right: 0px">
+                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Size="ButtonSize.Small" style="font-size: 12px; margin-right: 5px; padding-left: 0px; padding-right: 5px" Text="Add Claimant" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonAddClaimant1Click">
+                                        </RadzenButton>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </RadzenFieldset>
+                        <RadzenFieldset AllowCollapse="true" Collapsed="false" Text="Other Parties">
+                            <ChildContent>
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <RadzenDataGrid @ref="datagridOthers" Data="@getOtherPartyList" TItem="RecoCms6.Models.RecoDb.ClaimOtherParty" RowClick="OnOtherPartyClick">
+                                            <Columns>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimOtherParty" Property="TransactionRole" Title="Transaction Role">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimOtherParty" Property="Name" Title="Name">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimOtherParty" Property="BusinessPhoneNum" Title="Business Phone #">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimOtherParty" Property="CellPhoneNum" Title="Cell Phone #">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimOtherParty" Property="CommunicationMethod" Title="Communication Method">
+                                                </RadzenDataGridColumn>
+                                                  <ColumnDeleteRecord TItem="ClaimOtherParty" DataGrid="@datagridOthers" DeleteRow="@(async (row) => await RecoDb.DeleteOtherParty(row.ID))">
+                                                </ColumnDeleteRecord>
+                                            </Columns>
+                                        </RadzenDataGrid>
+                                    </div>
+                                    <div class="col-md-1" style="padding-left: 0px; padding-right: 0px">
+                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Size="ButtonSize.Small" style="font-size: 12px; margin-right: 5px; padding-left: 0px; padding-right: 5px" Text="Add Other Party" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonAddOtherParty2Click">
+                                        </RadzenButton>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </RadzenFieldset>
+                        <RadzenFieldset AllowCollapse="true" Collapsed="true" Text="Experts">
+                            <ChildContent>
+                                <div class="row">
+                                    <div class="col-md-11">
+                                         <RadzenDataGrid @ref="datagridExperts" Data="@getExpertList" TItem="RecoCms6.Models.RecoDb.ClaimExpert" KeyProperty="ExpertID" RowClick="OnExpertsClick">
+                                            <Columns>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimExpert" Property="ServiceProviderRole" Title="Role">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimExpert" Property="Name" Title="Name">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimExpert" Property="FirmName" Title="Firm">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimExpert" Property="EmailAddress" Title="Email Address">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimExpert" Property="BusinessPhoneNum" Title="Business Phone Num">
+                                                </RadzenDataGridColumn>
+                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimExpert" Property="CellPhoneNum" Title="Cell Phone #">
+                                                </RadzenDataGridColumn>
+                                                <ColumnDeleteRecord TItem="ClaimExpert" DataGrid="@datagridExperts" DeleteRow="@(DeleteExpertButton)">
+                                                </ColumnDeleteRecord>
+                                            </Columns>
+                                        </RadzenDataGrid>
+                                    </div>
+                                    <div class="col-md-1" style="padding-left: 0px; padding-right: 0px">
+                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Size="ButtonSize.Small" style="font-size: 12px; margin-right: 5px; padding-left: 0px; padding-right: 5px" Text="Add Expert" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonAddExpert3Click">
+                                        </RadzenButton>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </RadzenFieldset>
+                    </ChildContent>
+                </RadzenTabsItem>
+                <RadzenTabsItem Selected="false" Text="Reserves/Payments">
+                    <ChildContent>
+                        <RadzenPanel AllowCollapse="true">
+                            <ChildContent>
+                                <RadzenGrid @ref="gridTotalIncurredDetailed" Data="@getTotalIncurred" TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory">
+                                    <Columns>
+                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="IndemnityReserve" Title="Indemnity Reserve">
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="IndemnityPayment" Title="Indemnity Payment">
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="AdjustingReserve" Title="Adjusting Reserve" Visible="@((bool)Globals?.generalsettings?.ShowAdjusting)">
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="AdjustingPayment" Title="Adjusting Payment" Visible="@((bool)Globals?.generalsettings?.ShowAdjusting)">
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="LegalReserve" Title="Legal Reserve" Visible="@((bool)Globals?.generalsettings?.ShowLegal)">
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="LegalPayment" Title="Legal Payment" Visible="@((bool)Globals?.generalsettings?.ShowLegal)">
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" Format="decimal" FormatString="{0:C}" Property="ExpenseReserve" Title="Expense Reserve" Visible="@((bool)Globals?.generalsettings?.ShowExpense)" Type="number">
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" Format="decimal" FormatString="{0:C}" Property="ExpensePayment" Title="Expense Payment" Visible="@((bool)Globals?.generalsettings?.ShowExpense)" Type="number">
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="Deductible" Title="Deductible">
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="Subrogation" Title="@(Globals?.generalsettings?.SubrogationName)" Visible="@((bool)Globals?.generalsettings?.ShowRecovery)">
+                                        </RadzenGridColumn>
+                                    </Columns>
+                                </RadzenGrid>
+                            </ChildContent>
+                        </RadzenPanel>
+                        <RadzenButton Icon="add_circle_outline" Text="New" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("Claims Manager") || Security.IsInRole("Adjuster"))" Click="@ButtonNewTransactionClick">
+                        </RadzenButton>
+                        <RadzenGrid @ref="gridTransactions" AllowColumnResize="true" AllowFiltering="true" AllowSorting="true" Data="@transactions" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TItem="RecoCms6.Models.RecoDb.ClaimIndividualTransaction" RowDoubleClick="@GridTransactionsRowDoubleClick">
+                            <Columns>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimIndividualTransaction" Format="date-time" FormatString="{0:d}" Property="TransactionDate" Title="Transaction Date" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimIndividualTransaction" Property="IncurredType" Title="Incurred Type" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimIndividualTransaction" Property="IncurredCategory" Title="Incurred Category" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimIndividualTransaction" Property="PayableTo" Title="Payable To" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimIndividualTransaction" Format="decimal" FormatString="{0:C}" Property="Amount" Title="Amount" Type="number">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimIndividualTransaction" Format="decimal" FormatString="{0:C}" Property="Disbursements" Title="Expenses" Type="number">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimIndividualTransaction" Property="Comments" Title="Comments" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimIndividualTransaction" Property="EnteredBy" Title="Entered By"  Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimIndividualTransaction" Filterable="false" Sortable="false" Type="string">
+                                    <Template Context="recoCms6ModelsRecoDbClaimIndividualTransaction">
+                                        <RadzenLabel style="color: #ffffff" Text="Voided" Visible="@(recoCms6ModelsRecoDbClaimIndividualTransaction.VoidDate != null)">
+                                        </RadzenLabel>
+                                        <RadzenButton Icon="block" Size="ButtonSize.Small" Text="Void Transaction" Visible="@(recoCms6ModelsRecoDbClaimIndividualTransaction.VoidDate == null && (Security.IsInRole("Program Manager") || Security.IsInRole("Claims Manager")) && Globals?.generalsettings?.ApplicationName == "REIX CMS")" Click="@((args) =>ButtonVoidTransactionClick(args, recoCms6ModelsRecoDbClaimIndividualTransaction))">
+                                        </RadzenButton>
+                                        <RadzenLabel style="color: #ff0000" Text="Voided" Visible="@(recoCms6ModelsRecoDbClaimIndividualTransaction.VoidDate != null)">
+                                        </RadzenLabel>
+                                    </Template>
+                                </RadzenGridColumn>
+                            </Columns>
+                        </RadzenGrid>
+                    </ChildContent>
+                </RadzenTabsItem>
+                <RadzenTabsItem Selected="false" Text="Notes">
+                    <ChildContent>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <RadzenFieldset AllowCollapse="true" Collapsed=@bCollapsedNote Text="Create/Edit Note" Visible="@(!Security.IsInRole("Auditor"))" Expand="@FieldsetEditNoteExpand">
+                                    <ChildContent>
+                                        <RadzenTemplateForm Data="@note" TItem="RecoCms6.Models.RecoDb.Note" Visible="@(note != null)" InvalidSubmit="@FormNoteInvalidSubmit" Submit="@FormNoteSubmit">
+                                            <ChildContent>
+                                                <div style="margin-bottom: 0.25em" class="row">
+                                                    <div class="col-md-1">
+                                                        <RadzenLabel Text="Template">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <RadzenDropDown AllowFiltering="true" Data="@getNoteTemplateResults" Disabled="false" Placeholder="Choose a Template" style="display: block; width: 100%" TextProperty="Title" @bind-Value="@TemplateID" ValueProperty="DiaryTemplateID" Name="DropdownTemplate" Change="@DropdownTemplateChange">
+                                                        </RadzenDropDown>
+                                                    </div>
+                                                    <div class="col-md-2 text-md-right">
+                                                        <RadzenLabel Text="Privileged & Confidential">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <RadzenCheckBox @bind-Value="@(note.Confidential)" Name="Checkbox0">
+                                                        </RadzenCheckBox>
+                                                    </div>
+                                                    <div class="col-md-2 text-md-right">
+                                                        <RadzenLabel Text="Visible To Counsel">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <RadzenCheckBox @bind-Value="@(note.VisibleToCounsel)" Name="Checkbox1">
+                                                        </RadzenCheckBox>
+                                                    </div>
+                                                </div>
+                                                <div style="padding-bottom: 0.25em" class="row">
+                                                    <div class="col-md-1">
+                                                        <RadzenLabel Component="NoteTypeID" style="width: 100%" Text="Note Type">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <RadzenDropDown AllowFiltering="true" Data="@getNoteTypeList" Placeholder="Choose Note Type" style="display: block; width: 100%" TextProperty="ParamDesc" @bind-Value="@(note.NoteTypeID)" ValueProperty="ParameterID" Name="NoteTypeID">
+                                                        </RadzenDropDown>
+                                                        <RadzenRequiredValidator Component="NoteTypeID" Popup="false" Text="Note Type is required">
+                                                        </RadzenRequiredValidator>
+                                                    </div>
+                                                    <div class="col-md-2" style="text-align: right">
+                                                        <RadzenLabel Component="LargeLoss" style="width: 100%" Text="Large Loss">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <RadzenCheckBox @bind-Value="@(note.LargeLoss)" Name="LargeLoss">
+                                                        </RadzenCheckBox>
+                                                    </div>
+                                                    <div class="col-md-2" style="text-align: right">
+                                                        <RadzenLabel Component="Sticky" style="width: 100%" Text="Keep At Top">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <RadzenCheckBox @bind-Value="@(note.Sticky)" Name="Sticky">
+                                                        </RadzenCheckBox>
+                                                    </div>
+                                                </div>
+                                                <div style="margin-bottom: 1em; padding-bottom: 0.25em" class="row">
+                                                    <div class="col-md-1">
+                                                        <RadzenLabel Component="Subject" style="width: 100%" Text="Subject">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <RadzenTextBox MaxLength="255" style="display: block; width: 100%" @bind-Value="@(note.Subject)" Name="Subject">
+                                                        </RadzenTextBox>
+                                                        <RadzenRequiredValidator Component="Subject" Popup="false" style="position: absolute" Text="Subject is required">
+                                                        </RadzenRequiredValidator>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-1">
+                                                        <RadzenLabel Component="Details" style="width: 100%" Text="Details">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-11">
+                                                        <RadzenHtml>
+                                                            <RichTextEditor Height="500px" Data="@(note.Details)" DataChanged="@NoteDetailsChanged" EnableResize="true" @ref="RteObj"></RichTextEditor>
+                                                        </RadzenHtml>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col offset-sm-3">
+                                                        <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                                                        </RadzenButton>
+                                                        <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@ButtonCancelNoteClick">
+                                                        </RadzenButton>
+                                                    </div>
+                                                </div>
+                                            </ChildContent>
+                                        </RadzenTemplateForm>
+                                    </ChildContent>
+                                </RadzenFieldset>
+                                <RadzenDataGrid @ref="datagridActivityLog" AllowColumnResize="true" AllowRowSelectOnRowClick="false" Data="@activityLog" EditMode="DataGridEditMode.Single" TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Responsive="true" ShowExpandColumn="true" CellRender="@DatagridActivityLogCellRender" RowCollapse="@DatagridActivityLogRowCollapse" RowDoubleClick="@DatagridActivityLogRowDoubleClick" RowExpand="@DatagridActivityLogRowExpand" RowRender="@DatagridActivityLogRowRender">
+                                    <Columns>
+                                        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" FormatString="{0:d}" Property="EntryDate" Title="Entry Date" Width="125px">
+                                        </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Property="Subject" Title="Subject">
+                                        </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Property="NoteType" Title="Note Type" Width="125px">
+                                        </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Property="LogType" Width="125px">
+                                            <Template Context="recoCms6ModelsRecoDbClaimActivityLog">
+                                                <div class="row">
+                                                    <div class="col-md-1">
+                                                        <RadzenIcon Icon="attach_money" style="color: rgb(14, 131, 249)" Visible="@(recoCms6ModelsRecoDbClaimActivityLog.LargeLoss == true)">
+                                                        </RadzenIcon>
+                                                        <RadzenIcon Icon="vertical_align_top" style="color: rgb(14, 131, 249)" Visible="@(recoCms6ModelsRecoDbClaimActivityLog.Sticky == true)">
+                                                        </RadzenIcon>
+                                                        <RadzenIcon Icon="description" style="color: rgb(14, 131, 249)" Visible="@(recoCms6ModelsRecoDbClaimActivityLog.LogType == "Note")">
+                                                        </RadzenIcon>
+                                                        <RadzenIcon Icon="insert_photo" style="color: rgb(14, 131, 249)" Visible="@(recoCms6ModelsRecoDbClaimActivityLog.NoteType == "Image")">
+                                                        </RadzenIcon>
+                                                        <RadzenIcon Icon="today" style="color: rgb(14, 131, 249)" Visible="@(recoCms6ModelsRecoDbClaimActivityLog.LogType == "Diary")">
+                                                        </RadzenIcon>
+                                                        <RadzenIcon Icon="attach_file" style="color: rgb(14, 131, 249)" Visible="@(recoCms6ModelsRecoDbClaimActivityLog.LogType == "File" && recoCms6ModelsRecoDbClaimActivityLog.NoteType != "Image")">
+                                                        </RadzenIcon>
+                                                    </div>
+                                                </div>
+                                            </Template>
+                                        </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Property="Name" Title="Name">
+                                        </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Width="100px">
+                                            <Template Context="recoCms6ModelsRecoDbClaimActivityLog">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <RadzenLink Path="@($"file-viewer/{recoCms6ModelsRecoDbClaimActivityLog.ID}")" Target="_blank" Text="View File" Visible="@(recoCms6ModelsRecoDbClaimActivityLog.LogType == "File" && recoCms6ModelsRecoDbClaimActivityLog.NoteType != "Image")">
+                                                        </RadzenLink>
+                                                        <RadzenImage Path="@(string.Format("{0}download/file/FileID={1}", Globals.Uri, recoCms6ModelsRecoDbClaimActivityLog.ID))" style="height: 150px" Visible="@(recoCms6ModelsRecoDbClaimActivityLog.LogType == "Image" || recoCms6ModelsRecoDbClaimActivityLog.NoteType=="Image")">
+                                                        </RadzenImage>
+                                                    </div>
+                                                </div>
+                                            </Template>
+                                        </RadzenDataGridColumn>
+                                    </Columns>
+                                    <Template Context="recoCms6ModelsRecoDbClaimActivityLog">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <RadzenHtml>
+                                                    <RichTextEditor Height="auto" Data="@(recoCms6ModelsRecoDbClaimActivityLog.Details)" EnableResize="false" InlineMode="true" ShowCharCount="false" Readonly="true" ShowSelection="false"></RichTextEditor>
+                                                </RadzenHtml>
+                                            </div>
+                                        </div>
+                                    </Template>
+                                </RadzenDataGrid>
+                            </div>
+                        </div>
+                    </ChildContent>
+                </RadzenTabsItem>
+                <RadzenTabsItem Selected="false" Text="Attachments">
+                    <ChildContent>
+                        <RadzenButton Icon="backup" IsBusy="false" style="margin-bottom: 15px" Text="Add File" Click="@BtnAddFileClick">
+                        </RadzenButton>
+                        <RadzenGrid @ref="gridfiles" AllowColumnResize="true" AllowFiltering="true" AllowPaging="false" Data="@claimfiles" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TItem="RecoCms6.Models.RecoDb.ClaimFilesByUser" CellRender="@GridfilesCellRender" RowDoubleClick="@GridfilesRowDoubleClick">
+                            <Columns>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimFilesByUser" FormatString="{0:d}" Property="EntryDate" Title="Entry Date" Width="100px">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimFilesByUser" Property="Subject" Title="Subject" Width="300px">
+                                    <Template Context="data">
+                                        <p style="white-space:normal">@(data.Subject)</p>
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimFilesByUser" Property="FileType" Title="File Type" Width="250px">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimFilesByUser" Property="FileDescription" Title="Description">
+                                    <Template Context="data">
+                                        <p style="white-space: pre-line">@((MarkupString)data.FileDescription)</p>
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimFilesByUser" Property="UploadedBy" Sortable="false" Title="Uploaded By" Width="150px" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimFilesByUser" Format="int64" Property="Filesize" Title="Filesize" Width="100px" Type="integer">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimFilesByUser" Filterable="false" Sortable="false" Width="200px">
+                                    <Template Context="recoCms6ModelsRecoDbClaimFilesByUser">
+                                        <div class="row justify-content-start align-items-center">
+                                            <div class="col-md-12">
+                                                <RadzenButton ButtonStyle="ButtonStyle.Secondary" ButtonType="ButtonType.Button" Icon="open_in_new" Size="ButtonSize.Small" style="margin-right: .25em" Text="Download" Click="@((args) =>ButtonDownloadFileClick(args, recoCms6ModelsRecoDbClaimFilesByUser))">
+                                                </RadzenButton>
+                                                <RadzenImage Path="@(string.Format("{0}download/file/FileID={1}", Globals.Uri, recoCms6ModelsRecoDbClaimFilesByUser.ID))" style="height: 50px" Visible="@(IsImage(recoCms6ModelsRecoDbClaimFilesByUser.Extension))">
+                                                </RadzenImage>
+                                                <RadzenLink Icon="open_in_new" Path="@($"image-viewer/{recoCms6ModelsRecoDbClaimFilesByUser.ID}")" style="float: left; margin-right: .25em; vertical-align: baseline" Target="_blank" Text="View Image" Visible="@(IsImage(recoCms6ModelsRecoDbClaimFilesByUser.Extension))">
+                                                </RadzenLink>
+                                                <RadzenLink Icon="open_in_new" Path="@($"file-viewer/{recoCms6ModelsRecoDbClaimFilesByUser.ID}")" style="float: left; margin-right: .25em; vertical-align: baseline" Target="_blank" Text="View File" Visible="@(IsDocument(recoCms6ModelsRecoDbClaimFilesByUser.Extension))">
+                                                </RadzenLink>
+                                            </div>
+                                        </div>
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimFilesByUser" Width="40px">
+                                    <Template Context="recoCms6ModelsRecoDbClaimFilesByUser">
+                                        <RadzenButton Icon="delete_forever" Size="ButtonSize.Small" Click="@((args) =>Button1Click(args, recoCms6ModelsRecoDbClaimFilesByUser))">
+                                        </RadzenButton>
+                                    </Template>
+                                </RadzenGridColumn>
+                            </Columns>
+                        </RadzenGrid>
+                    </ChildContent>
+                </RadzenTabsItem>
+                <RadzenTabsItem Selected="false" Text="Diaries" Visible="@(!(Security.IsInRole("Accountant") || Security.IsInRole("Auditor") || Security.IsInRole("Coverage Counsel")))">
+                    <ChildContent>
+                        <RadzenButton Disabled="@(Security.IsInRole("Auditor"))" Icon="add_circle_outline" Text="Add" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonAddDiaryClick">
+                        </RadzenButton>
+                        <RadzenGrid @ref="gridDiaries" AllowColumnResize="true" AllowFiltering="true" AllowSorting="true" Data="@diaries" TItem="RecoCms6.Models.RecoDb.ClaimDiaryDetail" RowDoubleClick="@GridDiariesRowDoubleClick">
+                            <Columns>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimDiaryDetail" Format="date-time" FormatString="{0:d}" Property="EntryDate" Title="Entry Date" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimDiaryDetail" Property="Subject" Title="Subject" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimDiaryDetail" Property="Recipients" Title="Recipients" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimDiaryDetail" Format="date-time" FormatString="{0:d}" Property="AbeyanceDate" Title="Abeyance Date" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimDiaryDetail" Property="DiaryStatus" Title="Diary Status" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimDiaryDetail" Property="EnteredBy" Title="Entered By" Type="string">
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimDiaryDetail" Filterable="false" Sortable="false">
+                                    <Template Context="recoCms6ModelsRecoDbClaimDiaryDetail">
+                                        <RadzenButton Icon="delete_forever" Click="@((args) =>ButtonDeleteDiaryClick(args, recoCms6ModelsRecoDbClaimDiaryDetail))" @onclick:stopPropagation="true">
+                                        </RadzenButton>
+                                    </Template>
+                                </RadzenGridColumn>
+                            </Columns>
+                        </RadzenGrid>
+                    </ChildContent>
+                </RadzenTabsItem>
+                <RadzenTabsItem Selected="false" Text="Claim Reports" Visible="@(!(Security.IsInRole("Accountant") || Security.IsInRole("Auditor") || Security.IsInRole("Coverage Counsel")))">
+                    <ChildContent>
+                        <div class="row">
+                            <RadzenTemplateForm Data="@report" TItem="RecoCms6.Models.RecoDb.ClaimReport" style="margin-right: 15px; width: 90%" InvalidSubmit="@FormReportInvalidSubmit" Submit="@FormReportSubmit">
+                                <ChildContent>
+                                    <div style="margin-bottom: 1rem" class="row">
+                                        <div class="col-md-2">
+                                            <RadzenLabel Text="Counsel File #">
+                                            </RadzenLabel>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <RadzenTextBox ReadOnly="@(!Security.IsInRole("Defense Counsel"))" style="width: 100%" @bind-Value="@(claim.CounselFileNo)" Name="Textbox1">
+                                            </RadzenTextBox>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <RadzenLabel Component="textBox1" style="width: 100%" Text="Flag">
+                                            </RadzenLabel>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <RadzenDropDown AllowFiltering="true" Data="@parameterFlags" style="display: block; width: 100%" TextProperty="ParamDesc" @bind-Value="@(report.ClaimReportFlagID)" ValueProperty="ParameterID" Name="DropdownFlag">
+                                            </RadzenDropDown>
+                                        </div>
+                                    </div>
+                                    <RadzenTabs style="margin-bottom: 0.5em">
+                                        <Tabs>
+                                            <RadzenTabsItem Selected="true" Text="Reports">
+                                                <ChildContent>
+                                                    <RadzenGrid @ref="gridReports" Data="@claimreports" TItem="RecoCms6.Models.RecoDb.ClaimReportDetail">
+                                                        <Columns>
+                                                            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Title="#">
+                                                                <Template Context="recoCms6ModelsRecoDbClaimReportDetail">
+                                                                    <RadzenButton style="margin-right: 25px;" Text="Select" Visible="false">
+                                                                    </RadzenButton>
+                                                                    <RadzenLink Icon="open_in_new" Path="@($"file-viewer/{recoCms6ModelsRecoDbClaimReportDetail.ID}")" Target="_blank" Text="View Claim Report" Visible="@(recoCms6ModelsRecoDbClaimReportDetail.ID != null)">
+                                                                    </RadzenLink>
+                                                                </Template>
+                                                            </RadzenGridColumn>
+                                                            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="InitialReport" Title="Initial Report" Type="boolean">
+                                                            </RadzenGridColumn>
+                                                            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="SubmittedByName" Sortable="false" Title="Submitted By" Type="string">
+                                                            </RadzenGridColumn>
+                                                            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Format="date-time" FormatString="{0:d}" Property="DateLastModified" Title="Last Modified" Type="string">
+                                                            </RadzenGridColumn>
+                                                            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Format="date-time" FormatString="{0:d}" Property="DateSubmitted" Title="Submitted" Type="string">
+                                                            </RadzenGridColumn>
+                                                        </Columns>
+                                                    </RadzenGrid>
+                                                </ChildContent>
+                                            </RadzenTabsItem>
+                                            <RadzenTabsItem Disabled="false" Selected="false" Text="Executive Summary">
+                                                <ChildContent>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <RadzenHtmlEditor Disabled="false" style="height: 350px" UploadUrl="upload/image" @bind-Value="@(report.ExecutiveSummary)" Name="ExecutiveSummary" Visible="false">
+                                                            </RadzenHtmlEditor>
+                                                            <RadzenHtml>
+                                                                <RichTextEditor Height="350px" Data="@(report.ExecutiveSummary)" DataChanged="@ExecutiveSummaryChanged" EnableResize="true" @ref="rteExecutiveSummary"></RichTextEditor>
+                                                            </RadzenHtml>
+                                                        </div>
+                                                    </div>
+                                                </ChildContent>
+                                            </RadzenTabsItem>
+                                            <RadzenTabsItem Selected="false" Text="Facts">
+                                                <ChildContent>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <RadzenHtmlEditor Disabled="false" style="height: 350px" UploadUrl="upload/image" @bind-Value="@(report.Facts)" Name="Facts" Visible="false">
+                                                            </RadzenHtmlEditor>
+                                                            <RadzenHtml>
+                                                                <RichTextEditor Height="350px" Data="@(report.Facts)" DataChanged="@FactsChanged" EnableResize="true" @ref="rteFacts"></RichTextEditor>
+                                                            </RadzenHtml>
+                                                        </div>
+                                                    </div>
+                                                    <RadzenPanel AllowCollapse="true" Collapsed="true" Text="Previous Facts">
+                                                        <ChildContent>
+                                                            <RadzenDataGrid @ref="datagrid0" Data="@previousFacts" TItem="RecoCms6.Models.RecoDb.ClaimReportDetail">
+                                                                <Columns>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="Facts" Title="Facts">
+                                                                        <Template Context="data">
+                                                                            <span style="white-space: pre-wrap">@((MarkupString)data.Facts)</span>
+                                                                        </Template>
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" FormatString="{0:d}" Property="DateSubmitted" Title="Date Submitted" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="SubmittedBy" Title="Submitted By" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                </Columns>
+                                                            </RadzenDataGrid>
+                                                        </ChildContent>
+                                                    </RadzenPanel>
+                                                </ChildContent>
+                                            </RadzenTabsItem>
+                                            <RadzenTabsItem Selected="false" Text="Coverage">
+                                                <ChildContent>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <RadzenHtmlEditor Disabled="false" style="height: 350px" UploadUrl="upload/image" @bind-Value="@(report.Coverage)" Name="Coverage" Visible="false">
+                                                            </RadzenHtmlEditor>
+                                                            <RadzenHtml>
+                                                                <RichTextEditor Height="350px" Data="@(report.Coverage)" DataChanged="@CoverageChanged" EnableResize="true" @ref="rteCoverage"></RichTextEditor>
+                                                            </RadzenHtml>
+                                                        </div>
+                                                    </div>
+                                                    <RadzenPanel AllowCollapse="true" Collapsed="true" Text="Previous Coverage">
+                                                        <ChildContent>
+                                                            <RadzenDataGrid @ref="datagrid1" Data="@previousCoverage" TItem="RecoCms6.Models.RecoDb.ClaimReportDetail">
+                                                                <Columns>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="Coverage" Title="Coverage">
+                                                                        <Template Context="data">
+                                                                            <span style="white-space: pre-wrap">@((MarkupString)data.Coverage)</span>
+                                                                        </Template>
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" FormatString="{0:d}" Property="DateSubmitted" Title="Date Submitted" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="SubmittedBy" Title="Submitted By" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                </Columns>
+                                                            </RadzenDataGrid>
+                                                        </ChildContent>
+                                                    </RadzenPanel>
+                                                </ChildContent>
+                                            </RadzenTabsItem>
+                                            <RadzenTabsItem Selected="false" Text="Liability">
+                                                <ChildContent>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <RadzenHtmlEditor Disabled="false" style="height: 350px" UploadUrl="upload/image" @bind-Value="@(report.Liability)" Name="Liability" Visible="false">
+                                                            </RadzenHtmlEditor>
+                                                            <RadzenHtml>
+                                                                <RichTextEditor Height="350px" Data="@(report.Liability)" DataChanged="@LiabilityChanged" EnableResize="true" @ref="rteLiability"></RichTextEditor>
+                                                            </RadzenHtml>
+                                                        </div>
+                                                    </div>
+                                                    <RadzenPanel AllowCollapse="true" Collapsed="true" Text="Previous Liability">
+                                                        <ChildContent>
+                                                            <RadzenDataGrid @ref="datagrid2" Data="@previousClaimReports" TItem="RecoCms6.Models.RecoDb.ClaimReportDetail">
+                                                                <Columns>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="Liability" Title="Liability">
+                                                                        <Template Context="data">
+                                                                            <span style="white-space: pre-wrap">@((MarkupString)data.Liability)</span>
+                                                                        </Template>
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" FormatString="{0:d}" Property="DateSubmitted" Title="Date Submitted" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="SubmittedBy" Title="Submitted By" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                </Columns>
+                                                            </RadzenDataGrid>
+                                                        </ChildContent>
+                                                    </RadzenPanel>
+                                                </ChildContent>
+                                            </RadzenTabsItem>
+                                            <RadzenTabsItem Selected="false" Text="Damage">
+                                                <ChildContent>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <RadzenHtmlEditor Disabled="false" style="height: 350px" UploadUrl="upload/image" @bind-Value="@(report.Damages)" Name="Damages" Visible="false">
+                                                            </RadzenHtmlEditor>
+                                                            <RadzenHtml>
+                                                                <RichTextEditor Height="350px" Data="@(report.Damages)" DataChanged="@DamagesChanged" EnableResize="true" @ref="rteDamages"></RichTextEditor>
+                                                            </RadzenHtml>
+                                                        </div>
+                                                    </div>
+                                                    <RadzenPanel AllowCollapse="true" Collapsed="true" Text="Previous Damages">
+                                                        <ChildContent>
+                                                            <RadzenDataGrid @ref="datagrid3" Data="@previousDamages" TItem="RecoCms6.Models.RecoDb.ClaimReportDetail">
+                                                                <Columns>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="Damages" Title="Damages">
+                                                                        <Template Context="data">
+                                                                            <span style="white-space: pre-wrap">@((MarkupString)data.Damages)</span>
+                                                                        </Template>
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" FormatString="{0:d}" Property="DateSubmitted" Title="Date Submitted" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="SubmittedBy" Title="Submitted By" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                </Columns>
+                                                            </RadzenDataGrid>
+                                                        </ChildContent>
+                                                    </RadzenPanel>
+                                                </ChildContent>
+                                            </RadzenTabsItem>
+                                            <RadzenTabsItem Selected="false" Text="Reserves">
+                                                <ChildContent>
+                                                    <RadzenLabel Component="textBox1" style="width: 100%" Text="Estimated Expenses:">
+                                                    </RadzenLabel>
+                                                    <RadzenLabel Component="textBox1" style="color: rgba(100, 101, 103, 0.72); font-size: 14px; width: 80%" Text="Note: Please consider the stage that you think this claim will be resolved at and the tasks that will need to be performed in providing us your estimate
+                          (e.g Initial Review and defence; discovery: mediation: trial preparation; pre-trial and trial.)">
+                                                    </RadzenLabel>
+                                                    <RadzenTextArea MaxLength="255" style="height: 80px; width: 80%" @bind-Value="@(report.EstimatedExpenses)" Name="TextareaEstimatedExpenses">
+                                                    </RadzenTextArea>
+                                                    <RadzenRequiredValidator Component="TextareaEstimatedExpenses" style="display: block; margin-bottom: 15px" Text="Estimated Expenses is required">
+                                                    </RadzenRequiredValidator>
+                                                    <RadzenLabel Component="textBox1" style="margin-top: 20px; width: 100%" Text="Estimated Indemnity">
+                                                    </RadzenLabel>
+                                                    <RadzenLabel Component="textBox1" style="color: rgba(100, 101, 103, 0.72); font-size: 14px; width: 611.59375px" Text="Note: Based on what you know about the claim today, please provide your best estimate of what you think the claim is worth or what you would be comfortable in recommending as a settlement.">
+                                                    </RadzenLabel>
+                                                    <RadzenLabel Component="textBox1" style="margin-top: 20px; width: 100%" Text="Damages Claimed">
+                                                    </RadzenLabel>
+                                                    <RadzenLabel Component="textBox1" style="color: rgba(100, 101, 103, 0.72); font-size: 14px; width: 611.59375px" Text="(in demand letter or pleading) ">
+                                                    </RadzenLabel>
+                                                    <RadzenTextBox MaxLength="50" style="width: 100%" @bind-Value="@(report.DamagesClaimed)" Name="TextboxDamagesClaimed">
+                                                    </RadzenTextBox>
+                                                    <RadzenRequiredValidator Component="TextboxDamagesClaimed" style="display: block" Text="Damages Claimed is required">
+                                                    </RadzenRequiredValidator>
+                                                    <RadzenLabel Component="textBox1" style="margin-top: 20px; width: 100%" Text="Settlement Value">
+                                                    </RadzenLabel>
+                                                    <RadzenLabel Component="textBox1" style="color: rgba(100, 101, 103, 0.72); font-size: 14px; width: 611.59375px" Text="(best estimate of what insurer will ultimately pay to settle this claim) ">
+                                                    </RadzenLabel>
+                                                    <RadzenTextBox style="width: 100%" @bind-Value="@(report.EstimatedIndemnity)" Name="TextboxSettlementValue">
+                                                    </RadzenTextBox>
+                                                    <RadzenRequiredValidator Component="TextboxSettlementValue" style="display: block" Text="Settlement value is required">
+                                                    </RadzenRequiredValidator>
+                                                    <RadzenLabel Component="textBox1" style="margin-top: 20px; width: 100%" Text="Possible Subrogation/Recovery">
+                                                    </RadzenLabel>
+                                                    <RadzenTextBox style="width: 100%" @bind-Value="@(report.PossibleSubrogation)" Name="TextboxPossibleSubrogation">
+                                                    </RadzenTextBox>
+                                                    <RadzenRequiredValidator Component="TextboxPossibleSubrogation" style="display: block" Text="Possible subrogation is required">
+                                                    </RadzenRequiredValidator>
+                                                </ChildContent>
+                                            </RadzenTabsItem>
+                                            <RadzenTabsItem Selected="false" Text="Update">
+                                                <ChildContent>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <RadzenHtmlEditor style="height: 350px" UploadUrl="upload/image" @bind-Value="@(report.ActionPlan)" Name="ActionPlan" Visible="false">
+                                                            </RadzenHtmlEditor>
+                                                            <RadzenHtml>
+                                                                <RichTextEditor Height="350px" Data="@(report.ActionPlan)" DataChanged="@ActionPlanChanged" EnableResize="true" @ref="rteActionPlan"></RichTextEditor>
+                                                            </RadzenHtml>
+                                                        </div>
+                                                    </div>
+                                                    <RadzenPanel AllowCollapse="true" Collapsed="true" Text="Previous Update(s)">
+                                                        <ChildContent>
+                                                            <RadzenDataGrid @ref="datagrid5" Data="@previousActionPlans" TItem="RecoCms6.Models.RecoDb.ClaimReportDetail">
+                                                                <Columns>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="ActionPlan" Title="Update">
+                                                                        <Template Context="data">
+                                                                            <span style="white-space: pre-wrap">@((MarkupString)data.ActionPlan)</span>
+                                                                        </Template>
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" FormatString="{0:d}" Property="DateSubmitted" Title="Date Submitted" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="SubmittedBy" Title="Submitted By" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                </Columns>
+                                                            </RadzenDataGrid>
+                                                        </ChildContent>
+                                                    </RadzenPanel>
+                                                </ChildContent>
+                                            </RadzenTabsItem>
+                                            <RadzenTabsItem Selected="false" Text="Recommendations">
+                                                <ChildContent>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <RadzenHtmlEditor style="height: 350px" UploadUrl="upload/image" @bind-Value="@(report.Recommendations)" Name="Recommendations" Visible="false">
+                                                            </RadzenHtmlEditor>
+                                                           <RadzenHtml>
+                                                                <RichTextEditor Height="350px" Data="@(report.Recommendations)" DataChanged="@RecommendationsChanged" EnableResize="true" @ref="rteRecommendations"></RichTextEditor>
+                                                            </RadzenHtml>
+                                                        </div>
+                                                    </div>
+                                                    <RadzenPanel AllowCollapse="true" Collapsed="true" Text="Previous Recommendations">
+                                                        <ChildContent>
+                                                            <RadzenDataGrid @ref="datagrid4" Data="@previousRecommendations" TItem="RecoCms6.Models.RecoDb.ClaimReportDetail">
+                                                                <Columns>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="Recommendations" Title="Recommendations">
+                                                                        <Template Context="data">
+                                                                            <span style="white-space: pre-wrap">@((MarkupString?)data?.Recommendations)</span>
+                                                                        </Template>
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" FormatString="{0:d}" Property="DateSubmitted" Title="Date Submitted" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                    <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="SubmittedBy" Title="Submitted By" Width="150px">
+                                                                    </RadzenDataGridColumn>
+                                                                </Columns>
+                                                            </RadzenDataGrid>
+                                                        </ChildContent>
+                                                    </RadzenPanel>
+                                                </ChildContent>
+                                            </RadzenTabsItem>
+                                        </Tabs>
+                                    </RadzenTabs>
+                                    <div style="display: flex" class="row">
+                                        <div class="col-md-6 text-md-center">
+                                            <RadzenButton ButtonType="ButtonType.Button" Icon="save" style="display: block; float: left" Text="Save Claim Report" Click="@ButtonSaveClick">
+                                            </RadzenButton>
+                                        </div>
+                                        <div class="col-md-6  text-md-center">
+                                            <RadzenButton ButtonType="ButtonType.Submit" Icon="save_alt" style="display: block; float: right" Text="Submit Claim Report" Click="@ButtonSubmitClick">
+                                            </RadzenButton>
+                                        </div>
+                                    </div>
+                                </ChildContent>
+                            </RadzenTemplateForm>
+                        </div>
+                    </ChildContent>
+                </RadzenTabsItem>
+                <RadzenTabsItem Selected="false" Text="Email" Visible="@(!((Security?.IsInRole("Accountant") ?? false) || (Security?.IsInRole("Auditor") ?? false) || (Security?.IsInRole("Coverage Counsel")  ?? false)))">
+                    <ChildContent>
+                        <RadzenTemplateForm Data="@newRecoMail" TItem="RecoCms6.Models.RecoMail" InvalidSubmit="@TemplateFormEmailInvalidSubmit" Submit="@TemplateFormEmailSubmit">
+                            <ChildContent>
+                                <div style="margin-bottom: " class="row">
+                                    <div class="col-md-1 justify-content-end d-flex text-md-right">
+                                        <RadzenLabel Component="textBox1" style="width: 100%" Text="To">
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="text-md-left col-md-9">
+                                        <RadzenTextBox AutoComplete="false" style="width: 100%" Visible="false" Name="TextboxTo" Change="@TextboxToChange">
+                                        </RadzenTextBox>
+                                        <RadzenHtml>
+                                            <MultiSelect Data="@ToAddresses" DataSource="@standardEmails" DataChanged="@ToAddressChanged"></MultiSelect>
+                                        </RadzenHtml>
+                                        <RadzenLabel style="color: rgb(249, 119, 127)" Text="At least 1 email is required" Visible="@(!isToEmailsFilled && isClaimEmailSubmit)">
+                                        </RadzenLabel>
+                                        <RadzenLabel style="color: rgb(249, 119, 127)" Text="Some emails are not valid" Visible="@(!isToEmailsValid && isClaimEmailSubmit)">
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="col-md-1 text-md-left">
+                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" style="margin-left: 10px; position: absolute" Text="Add Email" Click="@ButtonAddToClick">
+                                        </RadzenButton>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: ; padding-bottom: 0.25em" class="row">
+                                    <div class="col-md-1 text-md-right">
+                                        <RadzenLabel Component="textBox1" style="width: 100%" Text="CC">
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <RadzenTextBox AutoComplete="false" style="width: 100%" Visible="false" Name="TextboxCC" Change="@TextboxCcChange">
+                                        </RadzenTextBox>
+                                        <RadzenHtml>
+                                            <MultiSelect Data="@CCAddresses" DataSource="@standardEmails" DataChanged="@CCAddressChanged"></MultiSelect>
+                                        </RadzenHtml>
+                                        <RadzenLabel style="color: rgb(249, 119, 127)" Text="Some emails are not valid" Visible="@(!isCcEmailsValid && isClaimEmailSubmit)">
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="col-md-1 text-md-left">
+                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" style="margin-left: 10px; position: absolute" Text="Add Email" Click="@ButtonAddCcClick">
+                                        </RadzenButton>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: ; padding-bottom: 0.25em" class="row">
+                                    <div class="col-md-1 text-md-right">
+                                        <RadzenLabel Component="textBox1" style="width: 100%" Text="BCC">
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <RadzenTextBox AutoComplete="false" style="width: 100%" Visible="false" Name="TextboxBCC" Change="@TextboxBccChange">
+                                        </RadzenTextBox>
+                                        <RadzenHtml>
+                                            <MultiSelect Data="@BCCAddresses" DataSource="@standardEmails" DataChanged="@BCCAddressChanged"></MultiSelect>
+                                        </RadzenHtml>
+                                        <RadzenLabel style="color: rgb(249, 119, 127)" Text="Some emails are not valid" Visible="@(!isBccEmailsValid && isClaimEmailSubmit)">
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="col-md-1 text-md-left">
+                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" style="margin-left: 10px; position: absolute" Text="Add Email" Click="@ButtonAddBccClick">
+                                        </RadzenButton>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <RadzenDropDown AllowFiltering="true" Data="@getEmailTemplateResults" Placeholder="Choose Template" style="width: 98%" TextProperty="Title" @bind-Value="@TemplateID" ValueProperty="DiaryTemplateID" Name="Dropdown2" Change="@Dropdown2Change">
+                                        </RadzenDropDown>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <RadzenLabel Component="textBox1" style="width: 100%" Text="Subject">
+                                        </RadzenLabel>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <RadzenTextBox Disabled="false" style="display: inline-block; width: 100%" @bind-Value="@(newRecoMail.Subject)" Name="TextboxSubject">
+                                        </RadzenTextBox>
+                                        <RadzenRequiredValidator Component="TextboxSubject" Text="Subject is required">
+                                        </RadzenRequiredValidator>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 1rem" class="row">
+                                    <div class="col-md-12">
+                                        <RadzenHtmlEditor style="height: 400px; padding-bottom: 0.25em; padding-left: ; width: 100%" UploadUrl="upload/image" @bind-Value="@(newRecoMail.Message)" Name="HtmlEditor1">
+                                        </RadzenHtmlEditor>
+                                        <div class="row justify-content-center" style="margin-bottom: 1rem">
+                                            <div class="col-md-4">
+                                            </div>
+                                            <div class="col-md-2 text-md-right justify-content-end d-flex">
+                                                <RadzenLabel style="margin-right: 2px" Text="Attach To Claim">
+                                                </RadzenLabel>
+                                                <RadzenCheckBox @bind-Value="@bAttachToClaim" Name="CheckboxAttachToClaim">
+                                                </RadzenCheckBox>
+                                            </div>
+                                            <div class="col-md-4" style="padding-top: 0.25em">
+                                                <RadzenButton ButtonType="ButtonType.Submit" Disabled="@showprogressbar" Icon="mail" Text="Send">
+                                                </RadzenButton>
+                                                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@ButtonClearEmailClick">
+                                                </RadzenButton>
+                                            </div>
+                                            <div class="col-md-1">
+                                            </div>
+                                        </div>
+                                        <RadzenFieldset AllowCollapse="true" Collapsed="false" Text="Attachments">
+                                            <ChildContent>
+                                                <div style="margin-bottom: 1rem" class="row">
+                                                    <div class="col-md-1">
+                                                        <RadzenLabel Component="textBox1" style="width: 100%" Text="Claim Files">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <RadzenDataGrid @ref="datagridClaimFiles" AllowColumnResize="false" Data="@(newRecoMail?.ClaimFiles)" TItem="RecoCms6.Models.RecoDb.File">
+                                                            <Columns>
+                                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" FormatString="{0:d}" Property="EntryDate" Title="Entry Date">
+                                                                </RadzenDataGridColumn>
+                                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" Property="Filename" Title="Filename">
+                                                                </RadzenDataGridColumn>
+                                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" Width="50px">
+                                                                    <Template Context="recoCms6ModelsRecoDbFile">
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <RadzenButton Icon="clear" Size="ButtonSize.Small" Click="@((args) =>ButtonDeleteFileClick(args, recoCms6ModelsRecoDbFile))">
+                                                                                </RadzenButton>
+                                                                            </div>
+                                                                        </div>
+                                                                    </Template>
+                                                                </RadzenDataGridColumn>
+                                                            </Columns>
+                                                        </RadzenDataGrid>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" style="margin-left: 10px; position: absolute" Text="Add Files" Click="@ButtonAddAttachmentsClick">
+                                                        </RadzenButton>
+                                                    </div>
+                                                </div>
+                                                <div style="margin-bottom: 1rem" class="row">
+                                                    <div class="col-md-1">
+                                                        <RadzenLabel Component="textBox1" style="width: 100%" Text="Notes">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <RadzenDataGrid @ref="datagridNotes" AllowColumnResize="false" Data="@(newRecoMail?.Notes)" TItem="RecoCms6.Models.RecoDb.ClaimActivityLog">
+                                                            <Columns>
+                                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" FormatString="{0:d}" Property="EntryDate" Title="Entry Date">
+                                                                </RadzenDataGridColumn>
+                                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Property="Subject" Title="Subject">
+                                                                </RadzenDataGridColumn>
+                                                                <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Width="50px">
+                                                                    <Template Context="recoCms6ModelsRecoDbClaimActivityLog">
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <RadzenButton Icon="clear" Size="ButtonSize.Small" Click="@((args) =>ButtonDeleteNoteClick(args, recoCms6ModelsRecoDbClaimActivityLog))">
+                                                                                </RadzenButton>
+                                                                            </div>
+                                                                        </div>
+                                                                    </Template>
+                                                                </RadzenDataGridColumn>
+                                                            </Columns>
+                                                        </RadzenDataGrid>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Size="ButtonSize.Small" style="margin-left: 10px; position: absolute" Text="Add Notes" Click="@ButtonAddNotesClick">
+                                                        </RadzenButton>
+                                                    </div>
+                                                </div>
+                                                <div style="margin-bottom: 1rem" class="row">
+                                                    <div class="col-md-1">
+                                                        <RadzenLabel Component="textBox1" style="width: 100%" Text="Attachments">
+                                                        </RadzenLabel>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <RadzenListBox AllowFiltering="false" Data="@(newRecoMail?.Files)" ReadOnly="true" style="width: 100%" TextProperty="Name" @bind-Value="@selectedFile" ValueProperty="Name" Name="ListboxFiles">
+                                                        </RadzenListBox>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <RadzenButton Icon="clear" Size="ButtonSize.Small" Click="@ButtonRemoveFileClick">
+                                                        </RadzenButton>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                    </div>
+                                                </div>
+                                            </ChildContent>
+                                        </RadzenFieldset>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </RadzenTemplateForm>
+                    </ChildContent>
+                </RadzenTabsItem>
+            </Tabs>
+        </RadzenTabs>
+    </ChildContent>
+</RadzenContent>

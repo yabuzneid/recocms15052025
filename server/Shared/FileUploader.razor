@@ -1,0 +1,14 @@
+﻿@inherits RecoCms6.Shared.FileUploaderComponent
+
+@using Syncfusion.Blazor.Inputs
+
+<SfUploader AutoUpload="false" Multiple="true" @ref="FileUploader" >
+    <UploaderAsyncSettings SaveUrl="@Url" ></UploaderAsyncSettings>
+    <UploaderEvents Success="UploadCompleted" FileSelected="OnChange" OnClear="OnClear"></UploaderEvents>
+</SfUploader>
+
+<style>
+    .e-upload-actions {
+        display: none;
+    }
+</style>

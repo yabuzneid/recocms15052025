@@ -1,0 +1,37 @@
+﻿@page "/current-diary-report"
+@layout MainLayout
+@inherits RecoCms6.Pages.CurrentDiaryReportComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-2">
+        <RadzenButton Icon="save" Text="Run" Visible="false" Click="@Button0Click">
+        </RadzenButton>
+      </div>
+      <RadzenButton Icon="get_app" Text="Export" Click="@ButtonExportClick">
+      </RadzenButton>
+    </div>
+    <div  class="row">
+      <div class="col-md-12">
+        <RadzenPanel  Text="Current Diary Report">
+          <ChildContent>
+            <div class="row">
+              <div class="col-md-12">
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenPanel>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

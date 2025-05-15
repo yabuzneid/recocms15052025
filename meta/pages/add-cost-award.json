@@ -1,0 +1,295 @@
+{
+  "access": "Authenticated",
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "CostAward1",
+                              "name": "CostAward1Label",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Cost Award",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "format": "c",
+                              "name": "CostAward1",
+                              "showUpDown": false,
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${costaward.CostAward1}",
+                              "valueType": "decimal"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "CostAwardDate",
+                              "name": "CostAwardDateLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Cost Award Date",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "name": "CostAwardDate",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "datepicker",
+                              "value": "${costaward.CostAwardDate}",
+                              "valueType": "DateTime"
+                            },
+                            {
+                              "component": "CostAwardDate",
+                              "name": "CostAwardDateRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Cost Award Date is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Paid",
+                              "name": "label0",
+                              "text": "Paid",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "Paid",
+                              "type": "checkbox",
+                              "value": "${costaward.Paid}",
+                              "valueType": "bool?"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "style": {
+                                "marginLeft": "1rem"
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${costaward}",
+                  "events": {
+                    "submit": [
+                      {
+                        "condition": "${CostAwardID == 0}",
+                        "error": [
+                          {
+                            "detail": "Unable to create new CostAward!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.createCostAward",
+                        "parameters": [
+                          {
+                            "name": "CostAward",
+                            "value": "${costaward}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${costaward}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to save changes!",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.updateCostAward",
+                        "parameters": [
+                          {
+                            "name": "CostAwardID",
+                            "value": "${costaward.CostAwardID}"
+                          },
+                          {
+                            "name": "CostAward",
+                            "value": "${costaward}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${costaward}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.CostAward",
+                  "name": "form0",
+                  "style": {
+                    "textAlign": "left"
+                  },
+                  "type": "template-form",
+                  "visible": "${costaward != null}"
+                }
+              ],
+              "style": {
+                "textAlign": "left"
+              },
+              "type": "col"
+            }
+          ],
+          "style": {
+            "textAlign": "left"
+          },
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "condition": "${CostAwardID == 0}",
+        "name": "costaward",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.CostAward(){}",
+        "valueType": "RecoCms6.Models.RecoDb.CostAward"
+      },
+      {
+        "condition": "${CostAwardID == 0}",
+        "name": "costaward.ClaimID",
+        "type": "set",
+        "value": "${(int)parameters.ClaimID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "${CostAwardID > 0}",
+        "name": "RECODb.getCostAwards",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "CostAwardID",
+                "type": "integer",
+                "value": "${CostAwardID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "costaward",
+            "type": "set",
+            "value": "${result.First()}",
+            "valueType": "RecoCms6.Models.RecoDb.CostAward"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Cost Award"
+}

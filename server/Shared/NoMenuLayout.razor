@@ -1,0 +1,42 @@
+﻿@inherits RecoCms6.Layouts.NoMenuLayoutComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using RecoCms6.Pages
+<RadzenDialog />
+<RadzenNotification />
+<RadzenTooltip />
+<RadzenContextMenu />
+
+<RadzenHeader>
+  <ChildContent>
+    <div class="row justify-content-start align-items-center">
+      <div class="col-md-6 d-flex align-items-center">
+        <RadzenSidebarToggle>
+        </RadzenSidebarToggle>
+      </div>
+      <div class="col-md-6 text-lg-right">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+      </div>
+    </div>
+  </ChildContent>
+</RadzenHeader>
+<RadzenBody @ref="body0" style="margin-left: 5%; margin-right: 5%">
+  <ChildContent>
+    <RadzenContentContainer Name="main">
+    @Body
+    </RadzenContentContainer>
+  </ChildContent>
+</RadzenBody>
+<RadzenFooter>
+  <ChildContent>
+    <RadzenLabel Text="XLG Solutions, Copyright Ⓒ 2022">
+    </RadzenLabel>
+  </ChildContent>
+</RadzenFooter>

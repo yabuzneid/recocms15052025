@@ -1,0 +1,57 @@
+﻿@page "/dialog-select-file/{ClaimID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.DialogSelectFileComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenDataGrid @ref="datagrid0" AllowColumnReorder="false" AllowColumnResize="true" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@claimFiles"  Responsive="true" SelectionMode="DataGridSelectionMode.Multiple" style="margin-bottom: 0.25em" TItem="RecoCms6.Models.RecoDb.File" @bind-Value="@ChosenFiles">
+      <Columns>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" Width="50px">
+          <Template Context="recoCms6ModelsRecoDbFile">
+            <RadzenCheckBox Value="@(ChosenFiles != null && ChosenFiles.Contains(recoCms6ModelsRecoDbFile))" Name="Checkbox0" TValue="bool">
+            </RadzenCheckBox>
+          </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" FormatString="{0:g}" Property="EntryDate" Title="Entry Date" Width="150px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" Property="Subject" Title="Subject">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" Property="FileDescription" Title="Description">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" Property="Filesize2" Title="Filesize" Width="100px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" Width="150px">
+          <Template Context="recoCms6ModelsRecoDbFile">
+            <div class="col-md-12">
+              <RadzenButton ButtonStyle="ButtonStyle.Secondary" ButtonType="ButtonType.Button" Icon="open_in_new" Size="ButtonSize.Small" Text="Download" Visible="@(!docExtensions.Contains(recoCms6ModelsRecoDbFile.Extension.ToLower()) && !imageExtensions.Contains(recoCms6ModelsRecoDbFile.Extension.ToLower()))" Click="@((args) =>Button0Click(args, recoCms6ModelsRecoDbFile))">
+              </RadzenButton>
+              <RadzenImage Path="@(string.Format("{0}download/file/FileID={1}", Globals.Uri, recoCms6ModelsRecoDbFile.ID))" style="height: 50px" Visible="@(recoCms6ModelsRecoDbFile.Extension.ToLower()==".jpg" || recoCms6ModelsRecoDbFile.Extension.ToLower()==".jpeg" || recoCms6ModelsRecoDbFile.Extension.ToLower()==".png" || recoCms6ModelsRecoDbFile.Extension.ToLower()==".gif")">
+              </RadzenImage>
+              <RadzenLink Icon="open_in_new" Path="@($"image-viewer/{recoCms6ModelsRecoDbFile.ID}")" style="float: left; vertical-align: baseline" Target="_blank" Text="View Image" Visible="@(imageExtensions.Contains(recoCms6ModelsRecoDbFile.Extension.ToLower()))">
+              </RadzenLink>
+              <RadzenLink Icon="open_in_new" Path="@($"file-viewer/{recoCms6ModelsRecoDbFile.ID}")" style="float: left; vertical-align: baseline" Target="_blank" Text="View File" Visible="@(docExtensions.Contains(recoCms6ModelsRecoDbFile.Extension.ToLower()))">
+              </RadzenLink>
+            </div>
+          </Template>
+        </RadzenDataGridColumn>
+      </Columns>
+    </RadzenDataGrid>
+    <div style="margin-top: 0.25em" class="row">
+      <div class="col-md-12 justify-content-center d-flex">
+        <RadzenButton ButtonStyle="ButtonStyle.Primary" style="float: none" Text="Add" Click="@ButtonAddClick">
+        </RadzenButton>
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@ButtonCancekClick">
+        </RadzenButton>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

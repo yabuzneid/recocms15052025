@@ -1,0 +1,102 @@
+﻿@page "/param-type"
+@layout MainLayout
+@inherits RecoCms6.Pages.ParamTypeComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Param Type">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-2 offset-md-10">
+        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Size="ButtonSize.Small" Text="New Type" Click="@ButtonNewParamTypeClick">
+        </RadzenButton>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenGrid @ref="grid0" AllowColumnResize="true" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getParamTypesResult" EditMode="DataGridEditMode.Single" TItem="RecoCms6.Models.RecoDb.ParamType" PageSize="5" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ParamType" Property="ParamTypeID" Title="Param Type ID" Visible="false">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ParamType" Property="ParamTypeDesc" Title="Param Type">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ParamType" Property="ParamType1.ParamTypeDesc" Title="Parent Type" >
+              <Template Context="RecoCms6ModelsRecoDbParamType">
+                <RadzenDropDown AllowFiltering="true" Data="@getParamTypesResult" TextProperty="ParamTypeDesc" @bind-Value="@(RecoCms6ModelsRecoDbParamType.ParentParamTypeID)" ValueProperty="ParamTypeID" Name="Dropdown1">
+                </RadzenDropDown>
+              </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ParamType" Width="100px">
+              <Template Context="RecoCms6ModelsRecoDbParamType">
+                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="note_add" Size="ButtonSize.Small" Click="@((args) =>Button1Click(args, RecoCms6ModelsRecoDbParamType))">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="create" Size="ButtonSize.Small" style="margin-right: 15px" Click="@((args) =>Button0Click(args, RecoCms6ModelsRecoDbParamType))">
+                </RadzenButton>
+              </Template>
+              <EditTemplate Context="RecoCms6ModelsRecoDbParamType">
+                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="save" Size="ButtonSize.Small"  Click="@((args) =>SaveButton01Click(args, RecoCms6ModelsRecoDbParamType))">
+                </RadzenButton>
+                <RadzenButton Icon="clear" Size="ButtonSize.Small"  Click="@((args) =>CancelButton01Click(args, RecoCms6ModelsRecoDbParamType))">
+                </RadzenButton>
+              </EditTemplate>
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+        <RadzenHeading Size="H1" Text="Parameters">
+        </RadzenHeading>
+        <RadzenGrid @ref="grid1" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@Parameters" TItem="RecoCms6.Models.RecoDb.Parameter" >
+          <Columns>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Parameter" FilterProperty="ParamType.ParamTypeDesc" Property="ParamTypeID" SortProperty="ParamType.ParamTypeDesc" Title="Param Type">
+              <Template Context="data">
+              @(data.ParamType?.ParamTypeDesc)
+              </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Parameter" Property="ParameterID" Title="Parameter ID" Visible="false">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Parameter" Property="ParamAbbrev" Title="Param Abbrev">
+              <EditTemplate Context="RecoCms6ModelsRecoDbParameter">
+                <RadzenTextBox MaxLength="5" @bind-Value="@(RecoCms6ModelsRecoDbParameter.ParamAbbrev)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Parameter" Property="ParamDesc" Title="Param Desc">
+              <EditTemplate Context="RecoCms6ModelsRecoDbParameter">
+                <RadzenTextBox @bind-Value="@(RecoCms6ModelsRecoDbParameter.ParamDesc)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Parameter" Property="ParamValue" Title="Param Value" Visible="@(!bShowParentID)">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Parameter" Format="decimal" Property="ParamValue" Title="Parent Parameter" Visible="@bShowParentID" Type="number">
+              <Template Context="RecoCms6ModelsRecoDbParameter">
+                <RadzenDropDown Data="@getParentParameterList" TextProperty="ParamDesc" @bind-Value="@(RecoCms6ModelsRecoDbParameter.ParamValue)" ValueProperty="ParamIDAsValue" Name="Dropdown0">
+                </RadzenDropDown>
+              </Template>
+              <EditTemplate Context="RecoCms6ModelsRecoDbParameter">
+                <RadzenDropDown Data="@getParentParameterList" TextProperty="ParamDesc" @bind-Value="@(RecoCms6ModelsRecoDbParameter.ParamValue)" ValueProperty="ParamIDAsValue" Name="Dropdown2">
+                </RadzenDropDown>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Parameter">
+              <Template Context="RecoCms6ModelsRecoDbParameter">
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="create" Size="ButtonSize.Small" style="margin-right: 15px" Click="@((args) =>Button2Click(args, RecoCms6ModelsRecoDbParameter))">
+                </RadzenButton>
+                <RadzenButton Icon="remove_circle_outline" Size="ButtonSize.Small" style="margin-right: 15px; padding-right: " Click="@((args) =>ButtonDeleteRowClick(args, RecoCms6ModelsRecoDbParameter))">
+                </RadzenButton>
+              </Template>
+              <EditTemplate Context="RecoCms6ModelsRecoDbParameter">
+                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="save" Size="ButtonSize.Small" style="margin-right: 15px" Click="@((args) =>SaveButtonClick(args, RecoCms6ModelsRecoDbParameter))">
+                </RadzenButton>
+                <RadzenButton Icon="clear" Size="ButtonSize.Small" style="padding-left: 4px; padding-right: 4px; width: 20px" Click="@((args) =>CancelButtonClick(args, RecoCms6ModelsRecoDbParameter))">
+                </RadzenButton>
+              </EditTemplate>
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

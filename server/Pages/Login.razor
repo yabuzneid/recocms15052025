@@ -1,0 +1,20 @@
+﻿@page "/login"
+@layout LoginLayout
+@inherits RecoCms6.Pages.LoginComponent
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Login">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Action="@($"account/login?redirectUrl={redirectUrl}")" Data="@("login")" Method="post">
+          <ChildContent>
+            <RadzenLogin AllowResetPassword="true" Register="@Login0Register" ResetPassword="@Login0ResetPassword" AllowRegister="false">
+            </RadzenLogin>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

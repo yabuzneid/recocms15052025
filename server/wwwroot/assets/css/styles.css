@@ -1,0 +1,12 @@
+/*
+  You can add custom CSS rules or import files here.
+*/
+
+
+/* Import the Radzen CSS files */
+@import './styles-generated.css';
+
+.rz-chkbox-box {
+    border: 1px solid #949494;
+    border-radius: 0.25rem;
+}

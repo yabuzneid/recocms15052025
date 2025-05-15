@@ -1,0 +1,30 @@
+﻿@using Syncfusion.Blazor.Grids
+@using Radzen.Blazor
+
+@typeparam TItem
+@typeparam TEntity
+@typeparam TOpenDialog
+<!--div class="row">
+    <div class="col-md-12">
+        <RadzenDropDown Data="@PageSizeList" Placeholder="Page Size" style="width: 118px" TextProperty="ParamDesc" Value="5" ValueProperty="ParamValue" Name="Dropdown" TValue="dynamic" Change="@Dropdown0Change">
+        </RadzenDropDown>
+    </div>
+</div-->
+
+<SfGrid Width="100%" DataSource="@Items" AllowRowDragAndDrop="true" AllowPaging="true" AllowResizing="true" AllowTextWrap="true">
+    <GridEvents RowDropped="RowDropHandler" RowSelected="RowSelectHandler" TValue="TItem"></GridEvents>
+    <GridPageSettings PageSize="@PageSize"></GridPageSettings>
+    <GridColumns>
+        @foreach (var prop in typeof(TItem).GetProperties())
+        {
+            <GridColumn Field="@prop.Name" IsPrimaryKey="@(prop.Name == "ID" || prop.Name == "TradeID" || prop.Name == "ExpertID")" AllowEditing="@prop.CanWrite" HeaderText="@GetHeaderText(prop)" Visible="@(prop.Name != "ID" && !HiddenColumns.Contains(prop.Name) && prop.Name != "TradeID" && prop.Name != "ExpertID")"></GridColumn>
+        }
+        <GridColumn>
+            <Template Context="item">
+                @{
+                    <RadzenButton Icon="delete_outline" Click="@((args) =>ButtonDeleteRowClick(args, item))"  @onclick:stopPropagation="true"></RadzenButton>
+                }
+            </Template>
+        </GridColumn>
+    </GridColumns>
+</SfGrid>

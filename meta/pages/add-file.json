@@ -1,0 +1,571 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "action": "",
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label1",
+                              "text": "Standard Filename",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col2",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "allowFiltering": true,
+                              "data": "${getStandardFilenames}",
+                              "events": {
+                                "change": [
+                                  {
+                                    "condition": "${String.IsNullOrEmpty(file.Subject)}",
+                                    "name": "file.Subject",
+                                    "type": "set",
+                                    "value": "${standardfilename}",
+                                    "valueType": "string"
+                                  }
+                                ]
+                              },
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "dropdownStandardFilename",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${standardfilename}",
+                              "valueProperty": "ParamDesc",
+                              "valueType": "int"
+                            }
+                          ],
+                          "name": "col3",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Subject",
+                              "name": "SubjectLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Subject",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 255,
+                              "name": "Subject",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${file.Subject}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "Subject",
+                              "name": "SubjectRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Subject is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "FileTypeID",
+                              "name": "FileTypeIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "File Type",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-6",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getFileTypeList}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "FileTypeID",
+                              "placeholder": "Choose File Type",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${file.FileTypeID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            },
+                            {
+                              "name": "requiredValidator0",
+                              "text": "File Type is Required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Sticky",
+                              "name": "StickyLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Keep At Top",
+                              "type": "label",
+                              "visible": "${Security.IsInRole(\"Program Manager\") || Security.IsInRole(\"Adjuster\")}"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "Sticky",
+                              "type": "checkbox",
+                              "value": "${file.Sticky}",
+                              "valueType": "bool",
+                              "visible": "${Security.IsInRole(\"Program Manager\") || Security.IsInRole(\"Adjuster\")}"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "LargeLoss",
+                              "name": "LargeLossLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Large Loss",
+                              "type": "label",
+                              "visible": "${Security.IsInRole(\"Program Manager\") || Security.IsInRole(\"Adjuster\")}"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "LargeLoss",
+                              "type": "checkbox",
+                              "value": "${file.LargeLoss}",
+                              "valueType": "bool",
+                              "visible": "${Security.IsInRole(\"Program Manager\") || Security.IsInRole(\"Adjuster\")}"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label2",
+                              "text": "Privileged & Confidential",
+                              "type": "label",
+                              "visible": "${Security.IsInRole(\"Program Manager\") || Security.IsInRole(\"Adjuster\")}"
+                            }
+                          ],
+                          "name": "col9",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "checkbox0",
+                              "type": "checkbox",
+                              "value": "${file.Confidential}",
+                              "valueType": "bool?",
+                              "visible": "${Security.IsInRole(\"Program Manager\") || Security.IsInRole(\"Adjuster\")}"
+                            }
+                          ],
+                          "name": "col10",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label3",
+                              "text": "Visible To Counsel",
+                              "type": "label",
+                              "visible": "${Security.IsInRole(\"Program Manager\") || Security.IsInRole(\"Adjuster\")}"
+                            }
+                          ],
+                          "name": "col11",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "checkbox1",
+                              "type": "checkbox",
+                              "value": "${file.VisibleToCounsel}",
+                              "valueType": "bool?",
+                              "visible": "${Security.IsInRole(\"Program Manager\") || Security.IsInRole(\"Adjuster\")}"
+                            }
+                          ],
+                          "name": "col12",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "0.25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "StoredDocument",
+                              "name": "StoredDocumentLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Document",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col4",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-8",
+                          "components": [
+                            {
+                              "attributes": [],
+                              "content": "<FileUploader @ref=\"fileUploader\" Url=@($\"upload/file/{${ClaimID}}/{@Security.User.Id}\") UploadCompletedEvent=\"@UploadCompleted\"/>",
+                              "name": "html0",
+                              "type": "html"
+                            }
+                          ],
+                          "name": "col5",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label4",
+                              "text": "Description",
+                              "type": "label",
+                              "visible": "${file.FileTypeID != getClaimReportID}"
+                            }
+                          ],
+                          "name": "col17",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-10",
+                          "components": [
+                            {
+                              "name": "FileDescription",
+                              "placeholder": "",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textarea",
+                              "value": "${file.FileDescription}",
+                              "visible": "${file.FileTypeID != getClaimReportID}"
+                            }
+                          ],
+                          "name": "col18",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row5",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label0",
+                              "text": "Summary",
+                              "type": "label",
+                              "visible": "${file.FileTypeID == getClaimReportID}"
+                            }
+                          ],
+                          "name": "col6",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-10",
+                          "components": [
+                            {
+                              "name": "htmlEditor0",
+                              "style": {
+                                "height": "400px"
+                              },
+                              "type": "html-editor",
+                              "uploadUrl": "upload/image",
+                              "value": "${file.Comments}",
+                              "visible": "${file.FileTypeID == getClaimReportID}"
+                            }
+                          ],
+                          "name": "col7",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row2",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "button",
+                              "events": {
+                                "click": [
+                                  {
+                                    "code": "await UploadFiles()",
+                                    "then": [],
+                                    "type": "execute"
+                                  }
+                                ]
+                              },
+                              "icon": "save",
+                              "name": "buttonSave",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginTop": "20px"
+                      },
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${file}",
+                  "events": {
+                    "submit": []
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.File",
+                  "method": "",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${file != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "roles",
+        "type": "set",
+        "value": "new List<Role>()",
+        "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Role>"
+      },
+      {
+        "name": "RECODb.getClaims",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${ClaimID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "claim",
+            "type": "set",
+            "value": "${result.First()}",
+            "valueType": "RecoCms6.Models.RecoDb.Claim"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"File Type\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Standard Filename\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getFileTypeList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"File Type\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getStandardFilenames",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Standard Filename\" && p.ParamValue==claim.ProgramID)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getClaimReportID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(pd=>pd.ParamDesc==\"Claim Report\").ParameterID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "file",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.File()",
+        "valueType": "RecoCms6.Models.RecoDb.File"
+      },
+      {
+        "name": "fileInfo",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      },
+      {
+        "name": "standardfilename",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add File"
+}

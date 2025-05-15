@@ -1,0 +1,97 @@
+﻿@page "/edit-diary-template/{DiaryTemplateID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.EditDiaryTemplateComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@diarytemplate" TItem="RecoCms6.Models.RecoDb.DiaryTemplate" Visible="@(diarytemplate != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Title" style="width: 100%" Text="Title">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="50" style="display: block; width: 100%" @bind-Value="@(diarytemplate.Title)" Name="Title">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Title" style="position: absolute" Text="Title is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Subject" style="width: 100%" Text="Subject">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="125" style="width: 100%" @bind-Value="@(diarytemplate.Subject)" Name="Subject">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="TemplateText" style="width: 100%" Text="Template Text">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenHtmlEditor style="height: 350px" UploadUrl="upload/image" @bind-Value="@(diarytemplate.TemplateText)" Name="TemplateText">
+                </RadzenHtmlEditor>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="DisplayOrder" style="width: 100%" Text="Display Order">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenNumeric style="width: 100%" @bind-Value="@(diarytemplate.DisplayOrder)" Name="DisplayOrder">
+                </RadzenNumeric>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="DefaultSendToID" style="width: 100%" Text="Default Send To">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@getDefaultSendToList" TextProperty="ParamDesc" @bind-Value="@(diarytemplate.DefaultSendToID)" ValueProperty="ParameterID" Name="Dropdown0">
+                </RadzenDropDown>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Template Type">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenDropDown Data="@getTemplateTypeList" style="display: block" TextProperty="ParamDesc" @bind-Value="@(diarytemplate.TemplateTypeID)" ValueProperty="ParameterID" Name="TemplateTypeID">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="TemplateTypeID" Text="Template Type is Required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

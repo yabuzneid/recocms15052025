@@ -1,0 +1,2683 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "allowColumnResize": true,
+          "columns": [
+            {
+              "formatString": "{0:C}",
+              "property": "IndemnityReserve",
+              "title": "Indemnity Reserve"
+            },
+            {
+              "formatString": "{0:C}",
+              "property": "IndemnityPayment",
+              "title": "Indemnity Payment"
+            },
+            {
+              "formatString": "{0:C}",
+              "property": "AdjustingReserve",
+              "title": "Adjusting Reserve",
+              "visible": "${(bool)Globals.generalsettings.ShowAdjusting}"
+            },
+            {
+              "formatString": "{0:C}",
+              "property": "AdjustingPayment",
+              "title": "Adjusting Payment",
+              "visible": "${(bool)Globals.generalsettings.ShowAdjusting}"
+            },
+            {
+              "formatString": "{0:C}",
+              "property": "LegalReserve",
+              "title": "Legal Reserve",
+              "visible": "${(bool)Globals.generalsettings.ShowLegal}"
+            },
+            {
+              "formatString": "{0:C}",
+              "property": "LegalPayment",
+              "title": "Legal Payment",
+              "visible": "${(bool)Globals.generalsettings.ShowLegal}"
+            },
+            {
+              "format": "decimal",
+              "formatString": "{0:C}",
+              "property": "ExpenseReserve",
+              "title": "Expense Reserve",
+              "type": "number",
+              "visible": "${(bool)Globals.generalsettings.ShowExpense}"
+            },
+            {
+              "format": "decimal",
+              "formatString": "{0:C}",
+              "property": "ExpensePayment",
+              "title": "Expense Payment",
+              "type": "number",
+              "visible": "${(bool)Globals.generalsettings.ShowExpense}"
+            },
+            {
+              "formatString": "{0:C}",
+              "property": "Deductible",
+              "title": "Deductible",
+              "visible": "${(bool)Globals.generalsettings.ShowRecovery}"
+            },
+            {
+              "formatString": "{0:C}",
+              "property": "Subrogation",
+              "title": "${Globals.generalsettings.SubrogationName}",
+              "visible": "${(bool)Globals.generalsettings.ShowRecovery}"
+            },
+            {
+              "formatString": "{0:C}",
+              "property": "TotalIncurred",
+              "title": "Total Incurred"
+            }
+          ],
+          "data": "${getTotalIncurredResult}",
+          "itemType": "RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory",
+          "name": "gridTotalIncurred",
+          "type": "grid"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2 text-md-right",
+                          "components": [
+                            {
+                              "component": "IncurredCategoryID",
+                              "name": "IncurredCategoryIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Category",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getAvailableIncurredCategoryList}",
+                              "disabled": "${bReadOnly}",
+                              "events": {
+                                "change": [
+                                  {
+                                    "name": "RECODb.getParameters",
+                                    "parameters": [
+                                      {
+                                        "name": "$filter",
+                                        "operator": "and",
+                                        "value": [
+                                          {
+                                            "operation": "eq",
+                                            "property": "ParameterID",
+                                            "type": "integer",
+                                            "value": "${transaction.IncurredCategoryID}"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "then": [
+                                      {
+                                        "name": "selectedCategory",
+                                        "type": "set",
+                                        "value": "${result.First()}",
+                                        "valueType": "RecoCms6.Models.RecoDb.Parameter"
+                                      }
+                                    ],
+                                    "type": "invoke"
+                                  },
+                                  {
+                                    "name": "RECODb.getAvailableIncurredTypes",
+                                    "parameters": [
+                                      {
+                                        "name": "$filter",
+                                        "operator": "and",
+                                        "value": [
+                                          {
+                                            "operation": "eq",
+                                            "property": "ParamTypeDesc",
+                                            "type": "string",
+                                            "value": "\"Incurred Type\""
+                                          },
+                                          {
+                                            "format": "decimal",
+                                            "operation": "eq",
+                                            "property": "ParamValue",
+                                            "type": "number",
+                                            "value": "${selectedCategory.ParamValue}"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "name": "$orderby",
+                                        "value": [
+                                          {
+                                            "direction": "asc",
+                                            "property": "ParamDesc"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "then": [
+                                      {
+                                        "name": "getAvailableIncurredTypeList",
+                                        "type": "set",
+                                        "value": "${result}",
+                                        "valueType": "IEnumerable<RecoCms6.Models.RecoDb.AvailableIncurredType>"
+                                      }
+                                    ],
+                                    "type": "invoke"
+                                  }
+                                ]
+                              },
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "IncurredCategoryID",
+                              "placeholder": "Choose Category",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${transaction.IncurredCategoryID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "IncurredCategoryID",
+                              "defaultValue": "0",
+                              "name": "requiredValidator0",
+                              "style": {
+                                "display": "inline-block",
+                                "position": "relative"
+                              },
+                              "text": "Category Is Required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "text-md-right col-md-2",
+                          "components": [
+                            {
+                              "component": "IncurredTypeID",
+                              "name": "IncurredTypeIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Type",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col3",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getAvailableIncurredTypeList}",
+                              "disabled": "${bReadOnly}",
+                              "events": {
+                                "change": [
+                                  {
+                                    "name": "RECODb.getParameterByParameterID",
+                                    "parameters": [
+                                      {
+                                        "name": "ParameterID",
+                                        "value": "${transaction.IncurredTypeID}"
+                                      }
+                                    ],
+                                    "then": [
+                                      {
+                                        "name": "incurredTypeDesc",
+                                        "type": "set",
+                                        "value": "${result.ParamDesc}",
+                                        "valueType": "string"
+                                      }
+                                    ],
+                                    "type": "invoke"
+                                  }
+                                ]
+                              },
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "IncurredTypeID",
+                              "placeholder": "Choose Type",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${transaction.IncurredTypeID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "IncurredTypeID",
+                              "defaultValue": "0",
+                              "name": "IncurredTypeIDRequiredValidator",
+                              "style": {
+                                "position": "relative"
+                              },
+                              "text": "Type is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "name": "col4",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2 text-md-right",
+                          "components": [
+                            {
+                              "name": "label8",
+                              "text": "Legal Expense",
+                              "type": "label",
+                              "visible": "${transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getLegalID}"
+                            }
+                          ],
+                          "name": "col42",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "disabled": "${bReadOnly}",
+                              "events": {
+                                "change": [
+                                  {
+                                    "name": "transaction.Disbursements",
+                                    "type": "set",
+                                    "value": "null",
+                                    "valueType": "dynamic"
+                                  },
+                                  {
+                                    "condition": "${bLegalExpense}",
+                                    "name": "transaction.Disbursements",
+                                    "type": "set",
+                                    "value": "${transaction.Amount}",
+                                    "valueType": "decimal"
+                                  }
+                                ]
+                              },
+                              "name": "checkbox0",
+                              "type": "checkbox",
+                              "value": "${bLegalExpense}",
+                              "valueType": "bool",
+                              "visible": "${transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getLegalID}"
+                            }
+                          ],
+                          "name": "col43",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "0.25em",
+                        "marginTop": "0.25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2 text-md-right",
+                          "components": [
+                            {
+                              "component": "TransactionDate",
+                              "name": "TransactionDateLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Transaction Date",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col40",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "dateFormat": "yyyy-MM-dd",
+                              "disabled": "${bReadOnly}",
+                              "name": "TransactionDate",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "datepicker",
+                              "value": "${transaction.TransactionDate}",
+                              "valueType": "DateTime"
+                            },
+                            {
+                              "component": "TransactionDate",
+                              "name": "TransactionDateRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Transaction Date is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "name": "col41",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2 text-md-right",
+                          "components": [
+                            {
+                              "name": "label2",
+                              "text": "Reserve Reason",
+                              "type": "label",
+                              "visible": "${transaction.IncurredCategoryID == getReserveID && Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                            }
+                          ],
+                          "name": "col32",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getReserveReasonList}",
+                              "disabled": "${bReadOnly}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "ReserveTypeID",
+                              "placeholder": "Choose Reason For Reserve",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${transaction.ReserveTypeID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?",
+                              "visible": "${transaction.IncurredCategoryID == getReserveID && Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                            }
+                          ],
+                          "name": "col33",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row12",
+                      "style": {
+                        "marginBottom": "0.25em",
+                        "paddingBottom": "0.25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2 text-md-right",
+                          "components": [
+                            {
+                              "component": "Amount",
+                              "name": "AmountLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Amount",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "disabled": "",
+                              "events": {
+                                "change": [
+                                  {
+                                    "name": "transaction.Disbursements",
+                                    "type": "set",
+                                    "value": "null",
+                                    "valueType": "dynamic"
+                                  },
+                                  {
+                                    "condition": "${bLegalExpense}",
+                                    "name": "transaction.Disbursements",
+                                    "type": "set",
+                                    "value": "${transaction.Amount}",
+                                    "valueType": "decimal"
+                                  }
+                                ]
+                              },
+                              "format": "N2",
+                              "name": "Amount",
+                              "readOnly": "${bReadOnly}",
+                              "showUpDown": false,
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${transaction.Amount}",
+                              "valueType": "decimal"
+                            },
+                            {
+                              "component": "Amount",
+                              "name": "AmountRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Amount is required",
+                              "type": "required-validator"
+                            },
+                            {
+                              "component": "Amount",
+                              "name": "compareValidator1",
+                              "operator": "CompareOperator.GreaterThan",
+                              "text": "Amount Must Be Greater Than Zero",
+                              "type": "compare-validator",
+                              "value": "${zeroamount}",
+                              "visible": "${Globals.generalsettings.ApplicationName==\"REIX CMS\"}"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2 text-md-right",
+                          "components": [
+                            {
+                              "component": "ApplicableDeductible",
+                              "name": "ApplicableDeductibleLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Applicable Deductible",
+                              "type": "label",
+                              "visible": "${transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getIndemnityID && (bool)Globals.generalsettings.ShowRecovery}"
+                            }
+                          ],
+                          "name": "col11",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "disabled": "",
+                              "format": "0.00",
+                              "name": "ApplicableDeductible",
+                              "readOnly": "${bReadOnly}",
+                              "showUpDown": false,
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${transaction.ApplicableDeductible}",
+                              "valueType": "decimal?",
+                              "visible": "${transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getIndemnityID && (bool)Globals.generalsettings.ShowRecovery}"
+                            },
+                            {
+                              "component": "ApplicableDeductible",
+                              "name": "compareValidator0",
+                              "operator": "CompareOperator.LessThanEqual",
+                              "text": "Deductible Cannot be Larger Than Amount",
+                              "type": "compare-validator",
+                              "value": "${transaction.Amount}",
+                              "visible": "${transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getIndemnityID && (bool)Globals.generalsettings.ShowRecovery}"
+                            }
+                          ],
+                          "name": "col12",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2 text-md-right",
+                          "components": [
+                            {
+                              "component": "ApplicableDeductible",
+                              "name": "label9",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Total Payable",
+                              "type": "label",
+                              "visible": "${transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getIndemnityID && (bool)Globals.generalsettings.ShowRecovery}"
+                            }
+                          ],
+                          "name": "col45",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "disabled": "",
+                              "format": "0.00",
+                              "name": "numeric0",
+                              "readOnly": true,
+                              "showUpDown": false,
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${transaction.Amount - transaction.ApplicableDeductible}",
+                              "valueType": "RecoCms6.Pages.AddTransactionComponent",
+                              "visible": "${transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getIndemnityID && (bool)Globals.generalsettings.ShowRecovery}"
+                            }
+                          ],
+                          "name": "col46",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "0.25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "component": "Comments",
+                              "name": "CommentsLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Comments",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col25",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-10",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "maxLength": 255,
+                              "name": "Comments",
+                              "readOnly": "${bReadOnly}",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${transaction.Comments}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "name": "col26",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row9",
+                      "style": {
+                        "marginBottom": "0.25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "FirmID",
+                                  "name": "FirmIDLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Firm",
+                                  "type": "label",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col13",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-6",
+                              "components": [
+                                {
+                                  "allowFiltering": true,
+                                  "data": "${getFirmsResult}",
+                                  "disabled": "${bReadOnly}",
+                                  "events": {
+                                    "change": [
+                                      {
+                                        "condition": "${Globals.generalsettings.ApplicationName==\"REIX CMS\"}",
+                                        "name": "RECODb.getFirms",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "FirmID",
+                                                "type": "integer",
+                                                "value": "${transaction.FirmID}"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "transaction.PayableTo",
+                                            "type": "set",
+                                            "value": "${result.First().Name}",
+                                            "valueType": "string"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      },
+                                      {
+                                        "name": "RECODb.getServiceProviderDetails",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "FirmID",
+                                                "type": "integer",
+                                                "value": "${transaction.FirmID}"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "NameandFirm"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getServiceProviderList",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ]
+                                  },
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "name": "FirmID",
+                                  "placeholder": "Choose Firm",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "textProperty": "Name",
+                                  "type": "dropdown",
+                                  "value": "${transaction.FirmID}",
+                                  "valueProperty": "FirmID",
+                                  "valueType": "int?",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col14",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "buttonStyle": "secondary",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "path": "add-firm",
+                                        "then": [
+                                          {
+                                            "condition": "${result != null}",
+                                            "name": "transaction.FirmID",
+                                            "type": "set",
+                                            "value": "${result.FirmID}",
+                                            "valueType": "int"
+                                          },
+                                          {
+                                            "condition": "${result != null}",
+                                            "name": "RECODb.getServiceProviderDetails",
+                                            "parameters": [
+                                              {
+                                                "name": "$filter",
+                                                "operator": "and",
+                                                "value": [
+                                                  {
+                                                    "operation": "eq",
+                                                    "property": "FirmID",
+                                                    "type": "integer",
+                                                    "value": "${transaction.FirmID}"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "name": "$orderby",
+                                                "value": [
+                                                  {
+                                                    "direction": "asc",
+                                                    "property": "Name"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "getServiceProviderList",
+                                                "type": "set",
+                                                "value": "${result}",
+                                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail>"
+                                              },
+                                              {
+                                                "name": "transaction.ServiceProviderID",
+                                                "type": "set",
+                                                "value": "0",
+                                                "valueType": "int"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          },
+                                          {
+                                            "name": "RECODb.getFirms",
+                                            "parameters": [
+                                              {
+                                                "name": "$orderby",
+                                                "value": [
+                                                  {
+                                                    "direction": "asc",
+                                                    "property": "Name"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "getFirmsResult",
+                                                "type": "set",
+                                                "value": "${result}",
+                                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Firm>"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          }
+                                        ],
+                                        "type": "popup",
+                                        "width": 800
+                                      }
+                                    ]
+                                  },
+                                  "icon": "add_circle_outline",
+                                  "name": "buttonNewFirm",
+                                  "text": "New",
+                                  "type": "button",
+                                  "visible": "${!bReadOnly}"
+                                }
+                              ],
+                              "name": "col30",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row5",
+                          "style": {},
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "name": "label1",
+                                  "text": "Service Provider",
+                                  "type": "label",
+                                  "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col2",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-6",
+                              "components": [
+                                {
+                                  "allowFiltering": true,
+                                  "data": "${getServiceProviderList}",
+                                  "disabled": "${bReadOnly}",
+                                  "events": {
+                                    "change": [
+                                      {
+                                        "name": "RECODb.getServiceProviderDetails",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ServiceProviderID",
+                                                "type": "integer",
+                                                "value": "${event}"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "condition": "${Globals.generalsettings.ApplicationName==\"REIX CMS\"}",
+                                            "name": "transaction.PayableTo",
+                                            "type": "set",
+                                            "value": "${result.First().NameandFirm}",
+                                            "valueType": "string"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ]
+                                  },
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "name": "ServiceProviderID",
+                                  "placeholder": "Choose Service Provider",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "template": "",
+                                  "textProperty": "NameandFirm",
+                                  "type": "dropdown",
+                                  "value": "${transaction.ServiceProviderID}",
+                                  "valueProperty": "ServiceProviderID",
+                                  "valueType": "int?",
+                                  "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col29",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "buttonStyle": "secondary",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "path": "add-service-provider",
+                                        "then": [
+                                          {
+                                            "condition": "${result != null}",
+                                            "name": "transaction.ServiceProviderID",
+                                            "type": "set",
+                                            "value": "${result.ServiceProviderID}",
+                                            "valueType": "int"
+                                          },
+                                          {
+                                            "condition": "${result != null}",
+                                            "name": "RECODb.getServiceProviderDetails",
+                                            "parameters": [
+                                              {
+                                                "name": "$orderby",
+                                                "value": [
+                                                  {
+                                                    "direction": "asc",
+                                                    "property": "Name"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "name": "$orderby",
+                                                "value": [
+                                                  {
+                                                    "direction": "asc",
+                                                    "property": "Name"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "getServiceProviderList",
+                                                "type": "set",
+                                                "value": "${result}",
+                                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail>"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          }
+                                        ],
+                                        "title": "",
+                                        "type": "popup",
+                                        "width": 800
+                                      }
+                                    ]
+                                  },
+                                  "icon": "add_circle_outline",
+                                  "name": "buttonNewServiceProvider",
+                                  "text": "New",
+                                  "type": "button",
+                                  "visible": "${!bReadOnly && Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col31",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row11",
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "PayableTo",
+                                  "name": "PayableToLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Payable To",
+                                  "type": "label",
+                                  "visible": "${transaction.IncurredCategoryID == getPaymentID}"
+                                }
+                              ],
+                              "name": "col23",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-6",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "disabled": "",
+                                  "maxLength": 255,
+                                  "name": "PayableTo",
+                                  "readOnly": "${bReadOnly}",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${transaction.PayableTo}",
+                                  "valueType": "string",
+                                  "visible": true
+                                }
+                              ],
+                              "name": "col24",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row8",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "InvoiceNum",
+                                  "name": "InvoiceNumLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Invoice Date",
+                                  "type": "label",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col15",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "dateFormat": "yyyy-MM-dd",
+                                  "disabled": "${bReadOnly}",
+                                  "name": "InvoiceDate",
+                                  "placeholder": "",
+                                  "showTimeOkButton": false,
+                                  "type": "datepicker",
+                                  "value": "${transaction.InvoiceDate}"
+                                }
+                              ],
+                              "name": "col39",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "InvoiceNum",
+                                  "name": "label7",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Invoice Num",
+                                  "type": "label",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col38",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "disabled": "",
+                                  "maxLength": 25,
+                                  "name": "InvoiceNum",
+                                  "readOnly": "${bReadOnly}",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${transaction.InvoiceNum}",
+                                  "valueType": "string",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col16",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "ChequeNum",
+                                  "name": "ChequeNumLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Cheque Num",
+                                  "type": "label",
+                                  "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                                }
+                              ],
+                              "name": "col0",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "maxLength": 50,
+                                  "name": "ChequeNum",
+                                  "readOnly": "${bReadOnly}",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${transaction.ChequeNum}",
+                                  "valueType": "string",
+                                  "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                                }
+                              ],
+                              "name": "col1",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row4",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "name": "label3",
+                                  "text": "Period Start Date",
+                                  "type": "label",
+                                  "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col34",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "dateFormat": "yyyy-MM-dd",
+                                  "disabled": "${bReadOnly}",
+                                  "name": "datepicker0",
+                                  "placeholder": "",
+                                  "type": "datepicker",
+                                  "value": "${transaction.InvoicePeriodStartDate}",
+                                  "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col37",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "name": "label5",
+                                  "text": "Period End Date",
+                                  "type": "label",
+                                  "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col36",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "dateFormat": "yyyy-MM-dd",
+                                  "disabled": "${bReadOnly}",
+                                  "name": "datepicker1",
+                                  "placeholder": "",
+                                  "type": "datepicker",
+                                  "value": "${transaction.InvoicePeriodEndDate}",
+                                  "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col35",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row13",
+                          "style": {
+                            "paddingBottom": "0.15em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "name": "label0",
+                                  "text": "Sending Instructions",
+                                  "type": "label",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col27",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-10",
+                              "components": [
+                                {
+                                  "name": "textarea0",
+                                  "placeholder": "",
+                                  "readOnly": "${bReadOnly}",
+                                  "rows": 3,
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textarea",
+                                  "value": "${transaction.SendingInstructions}",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col28",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row10",
+                          "style": {
+                            "paddingBottom": "0.15em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "textBox1",
+                                  "name": "label6",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Notes",
+                                  "type": "label",
+                                  "visible": "${Globals.generalsettings.ApplicationName==\"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col19",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-8",
+                              "components": [
+                                {
+                                  "disabled": false,
+                                  "name": "textarea1",
+                                  "placeholder": "",
+                                  "readOnly": true,
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textarea",
+                                  "value": "${Notes}",
+                                  "visible": "${Globals.generalsettings.ApplicationName==\"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col20",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "buttonStyle": "secondary",
+                                  "disabled": "",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "parameters": [
+                                          {
+                                            "name": "ClaimID",
+                                            "value": "${ClaimID}"
+                                          }
+                                        ],
+                                        "path": "dialog-select-note",
+                                        "then": [
+                                          {
+                                            "name": "newRecoMail.Notes",
+                                            "type": "set",
+                                            "value": "dialogResult",
+                                            "valueType": "dynamic"
+                                          }
+                                        ],
+                                        "title": "Claim Notes",
+                                        "type": "popup"
+                                      },
+                                      {
+                                        "code": "${Notes = newRecoMail.NoteSubjects()}",
+                                        "type": "execute"
+                                      }
+                                    ]
+                                  },
+                                  "name": "buttonAddNotes",
+                                  "style": {
+                                    "marginLeft": "10px",
+                                    "position": "absolute"
+                                  },
+                                  "text": "Add",
+                                  "type": "button",
+                                  "visible": "${!bReadOnly && Globals.generalsettings.ApplicationName==\"REIX CMS\"}"
+                                }
+                              ],
+                              "name": "col22",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row7",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "textBox1",
+                                  "name": "label4",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Claim Files",
+                                  "type": "label",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col17",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-8",
+                              "components": [
+                                {
+                                  "allowColumnResize": false,
+                                  "columns": [
+                                    {
+                                      "format": "date-time",
+                                      "formatString": "{0:g}",
+                                      "property": "EntryDate",
+                                      "title": "Entry Date",
+                                      "type": "string",
+                                      "width": "150px"
+                                    },
+                                    {
+                                      "format": "",
+                                      "property": "Subject",
+                                      "title": "Subject",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "headerTemplate": "",
+                                      "template": [
+                                        {
+                                          "class": "col-md-12",
+                                          "components": [
+                                            {
+                                              "buttonStyle": "secondary",
+                                              "buttonType": "button",
+                                              "events": {
+                                                "click": [
+                                                  {
+                                                    "name": "DownloadFileAsync",
+                                                    "parameters": [
+                                                      {
+                                                        "name": "file",
+                                                        "type": "RecoCms6.Models.RecoDb.File",
+                                                        "value": "${data}"
+                                                      }
+                                                    ],
+                                                    "schema": {
+                                                      "$ref": "#/definitions/Task",
+                                                      "dotnetType": "System.Threading.Tasks.Task"
+                                                    },
+                                                    "type": "invoke-method"
+                                                  }
+                                                ]
+                                              },
+                                              "icon": "open_in_new",
+                                              "name": "button0",
+                                              "size": "sm",
+                                              "template": "",
+                                              "text": "Download",
+                                              "type": "button",
+                                              "visible": "${!docExtensions.Contains(data.Extension.ToLower()) && !imageExtensions.Contains(data.Extension.ToLower())}"
+                                            },
+                                            {
+                                              "name": "image0",
+                                              "path": "${string.Format(\"{0}download/file/FileID={1}\", Globals.Uri, data.ID)}",
+                                              "style": {
+                                                "height": "50px"
+                                              },
+                                              "type": "image",
+                                              "visible": "${data.Extension.ToLower()==\".jpg\" || data.Extension.ToLower()==\".jpeg\" || data.Extension.ToLower()==\".png\" || data.Extension.ToLower()==\".gif\"}"
+                                            },
+                                            {
+                                              "icon": "open_in_new",
+                                              "name": "link1",
+                                              "parameters": [
+                                                {
+                                                  "name": "ID",
+                                                  "value": "${data.ID}"
+                                                }
+                                              ],
+                                              "path": "image-viewer",
+                                              "style": {
+                                                "float": "left",
+                                                "verticalAlign": "baseline"
+                                              },
+                                              "target": "_blank",
+                                              "text": "View Image",
+                                              "type": "link",
+                                              "visible": "${imageExtensions.Contains(data.Extension.ToLower())}"
+                                            },
+                                            {
+                                              "icon": "open_in_new",
+                                              "name": "link3",
+                                              "parameters": [
+                                                {
+                                                  "name": "ID",
+                                                  "value": "${data.ID}"
+                                                }
+                                              ],
+                                              "path": "file-viewer",
+                                              "style": {
+                                                "float": "left",
+                                                "verticalAlign": "baseline"
+                                              },
+                                              "target": "_blank",
+                                              "text": "View File",
+                                              "type": "link",
+                                              "visible": "${docExtensions.Contains(data.Extension.ToLower())}"
+                                            }
+                                          ],
+                                          "name": "col44",
+                                          "type": "col"
+                                        }
+                                      ],
+                                      "width": "100px"
+                                    },
+                                    {
+                                      "template": [
+                                        {
+                                          "components": [
+                                            {
+                                              "class": "col-md-12",
+                                              "components": [
+                                                {
+                                                  "events": {
+                                                    "click": [
+                                                      {
+                                                        "code": "newRecoMail.ClaimFiles.Remove(${data})",
+                                                        "condition": "await DialogService.Confirm(\"Are you sure you want to remove this file?\") == true",
+                                                        "then": [],
+                                                        "type": "execute"
+                                                      },
+                                                      {
+                                                        "code": "await datagridClaimFiles.Reload()",
+                                                        "type": "execute"
+                                                      },
+                                                      {
+                                                        "name": "Attachments",
+                                                        "type": "set",
+                                                        "value": "${newRecoMail.Filenames()}",
+                                                        "valueType": "string"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "icon": "clear",
+                                                  "name": "buttonDeleteFile",
+                                                  "size": "sm",
+                                                  "text": "",
+                                                  "type": "button"
+                                                }
+                                              ],
+                                              "name": "col25",
+                                              "type": "col"
+                                            }
+                                          ],
+                                          "name": "row11",
+                                          "type": "row"
+                                        }
+                                      ],
+                                      "visible": false,
+                                      "width": "50px"
+                                    }
+                                  ],
+                                  "data": "${newRecoMail.ClaimFiles}",
+                                  "itemType": "RecoCms6.Models.RecoDb.File",
+                                  "name": "datagridClaimFiles",
+                                  "type": "datagrid"
+                                }
+                              ],
+                              "name": "col18",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "buttonStyle": "secondary",
+                                  "disabled": "",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "parameters": [
+                                          {
+                                            "name": "ClaimID",
+                                            "value": "${ClaimID}"
+                                          }
+                                        ],
+                                        "path": "dialog-select-file",
+                                        "resizable": true,
+                                        "then": [
+                                          {
+                                            "code": "${newRecoMail.ClaimFiles = dialogResult}",
+                                            "then": [],
+                                            "type": "execute"
+                                          }
+                                        ],
+                                        "title": "Claim Documents",
+                                        "type": "popup",
+                                        "width": "${\"75%\"}"
+                                      },
+                                      {
+                                        "name": "Attachments",
+                                        "type": "set",
+                                        "value": "${newRecoMail.Filenames()}",
+                                        "valueType": "string"
+                                      }
+                                    ]
+                                  },
+                                  "name": "buttonAddAttachments",
+                                  "style": {
+                                    "marginLeft": "10px",
+                                    "position": "absolute"
+                                  },
+                                  "text": "Add",
+                                  "type": "button",
+                                  "visible": "${!bReadOnly || Security.IsInRole(\"Program Manager\")}"
+                                }
+                              ],
+                              "name": "col21",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row6",
+                          "style": {},
+                          "type": "row"
+                        }
+                      ],
+                      "name": "fieldset1",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "text": "Payment Details",
+                      "type": "fieldset",
+                      "visible": "${transaction.IncurredCategoryID == getPaymentID}"
+                    },
+                    {
+                      "components": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-1",
+                              "components": [
+                                {
+                                  "component": "Fees",
+                                  "name": "FeesLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Fees",
+                                  "type": "label",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col5",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "format": "c",
+                                  "name": "Fees",
+                                  "readOnly": "true",
+                                  "showUpDown": true,
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "numeric",
+                                  "value": "${transaction.Fees}",
+                                  "valueType": "decimal?",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col6",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "Disbursements",
+                                  "name": "DisbursementsLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Disbursements",
+                                  "type": "label",
+                                  "visible": "${transaction.IncurredCategoryID == getPaymentID}"
+                                }
+                              ],
+                              "name": "col7",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "format": "c",
+                                  "name": "Disbursements",
+                                  "readOnly": "true",
+                                  "showUpDown": false,
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "numeric",
+                                  "value": "${transaction.Disbursements}",
+                                  "valueType": "decimal?",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col8",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-1",
+                              "components": [
+                                {
+                                  "component": "Taxes",
+                                  "name": "TaxesLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Taxes",
+                                  "type": "label",
+                                  "visible": "true"
+                                }
+                              ],
+                              "name": "col9",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "format": "c",
+                                  "name": "Taxes",
+                                  "readOnly": "true",
+                                  "showUpDown": false,
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "numeric",
+                                  "value": "${transaction.Taxes}",
+                                  "valueType": "decimal?",
+                                  "visible": "${transaction.IncurredCategoryID == getPaymentID}"
+                                }
+                              ],
+                              "name": "col10",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row1",
+                          "style": {},
+                          "type": "row"
+                        }
+                      ],
+                      "name": "fieldset0",
+                      "style": {
+                        "marginBottom": "0.25em"
+                      },
+                      "text": "Legal/Adjusting Details",
+                      "type": "fieldset",
+                      "visible": "${transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getLegalID && Globals.generalsettings.ApplicationName==\"RECO CMS\"}"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button",
+                              "visible": "${!bReadOnly}"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button",
+                              "visible": "${!bReadOnly}"
+                            },
+                            {
+                              "buttonStyle": "secondary",
+                              "events": {
+                                "click": [
+                                  {
+                                    "error": [],
+                                    "name": "SendLimitIncreaseRequest",
+                                    "schema": {
+                                      "$ref": "#/definitions/Task",
+                                      "dotnetType": "System.Threading.Tasks.Task"
+                                    },
+                                    "type": "invoke-method"
+                                  }
+                                ]
+                              },
+                              "icon": "",
+                              "name": "buttonRequestIncrease",
+                              "text": "Request Increase",
+                              "type": "button",
+                              "visible": "${bRequestIncrease}"
+                            },
+                            {
+                              "events": {
+                                "click": [
+                                  {
+                                    "error": [
+                                      {
+                                        "summary": "Request Failed To Be Sent",
+                                        "type": "notify"
+                                      }
+                                    ],
+                                    "name": "SendInvoice",
+                                    "schema": {
+                                      "$ref": "#/definitions/Void",
+                                      "dotnetType": "void"
+                                    },
+                                    "type": "invoke-method"
+                                  },
+                                  {
+                                    "result": "${transaction}",
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "icon": "",
+                              "name": "buttonResendInvoice",
+                              "text": "Resend Payment Request",
+                              "type": "button",
+                              "visible": "${bReadOnly && Security.IsInRole(\"Program Manager\") && transaction.IncurredCategoryID==getPaymentID}"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${transaction}",
+                  "events": {
+                    "submit": [
+                      {
+                        "name": "totalReserve",
+                        "type": "set",
+                        "value": "(decimal?)0.0",
+                        "valueType": "decimal?"
+                      },
+                      {
+                        "name": "totalPayment",
+                        "type": "set",
+                        "value": "(decimal?)0.0",
+                        "valueType": "decimal?"
+                      },
+                      {
+                        "name": "bProcessPayment",
+                        "type": "set",
+                        "value": "false",
+                        "valueType": "bool"
+                      },
+                      {
+                        "condition": "${transaction.IncurredCategoryID == getPaymentID && transaction.ApplicableDeductible == null}",
+                        "name": "transaction.ApplicableDeductible",
+                        "type": "set",
+                        "value": "0",
+                        "valueType": "int"
+                      },
+                      {
+                        "name": "RECODb.getClaimCurrentReserves",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "operation": "eq",
+                                "property": "ClaimID",
+                                "type": "integer",
+                                "value": "${transaction.ClaimID}"
+                              },
+                              {
+                                "operation": "eq",
+                                "property": "IncurredTypeID",
+                                "type": "integer",
+                                "value": "${transaction.IncurredTypeID}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "condition": "${result != null && result.FirstOrDefault() != null}",
+                            "name": "totalReserve",
+                            "type": "set",
+                            "value": "${result.FirstOrDefault().TotalReserve}",
+                            "valueType": "decimal?"
+                          },
+                          {
+                            "condition": "${result == null || result.FirstOrDefault() == null}",
+                            "name": "totalReserve",
+                            "type": "set",
+                            "value": "0",
+                            "valueType": "decimal?"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "name": "RECODb.getClaimCurrentPayments",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "operation": "eq",
+                                "property": "ClaimID",
+                                "type": "integer",
+                                "value": "${transaction.ClaimID}"
+                              },
+                              {
+                                "operation": "eq",
+                                "property": "IncurredTypeID",
+                                "type": "integer",
+                                "value": "${transaction.IncurredTypeID}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "condition": "${result != null && result.FirstOrDefault() != null}",
+                            "name": "totalPayment",
+                            "type": "set",
+                            "value": "${result.FirstOrDefault().TotalPayment}",
+                            "valueType": "decimal?"
+                          },
+                          {
+                            "condition": "${result == null || result.FirstOrDefault() == null}",
+                            "name": "totalPayment",
+                            "type": "set",
+                            "value": "0",
+                            "valueType": "decimal?"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "name": "CheckTransactionLimits",
+                        "schema": {
+                          "$ref": "#/definitions/Void",
+                          "dotnetType": "void"
+                        },
+                        "type": "invoke-method"
+                      },
+                      {
+                        "code": "return;",
+                        "condition": "${!bProcessPayment}",
+                        "type": "execute"
+                      },
+                      {
+                        "condition": "${(transaction.IncurredCategoryID == getPaymentID && claimlist.MasterFileID == null) || (transaction.IncurredCategoryID == getPaymentID && claimlist.MasterFileID != null && transaction.IncurredTypeID == getIndemnityID)}",
+                        "name": "RECODb.getClaimCurrentReserves",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "operation": "eq",
+                                "property": "ClaimID",
+                                "type": "integer",
+                                "value": "${transaction.ClaimID}"
+                              },
+                              {
+                                "operation": "eq",
+                                "property": "IncurredTypeID",
+                                "type": "integer",
+                                "value": "${transaction.IncurredTypeID}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "getCurrentReserve",
+                            "type": "set",
+                            "value": "${result.FirstOrDefault()}",
+                            "valueType": "RecoCms6.Models.RecoDb.ClaimCurrentReserf"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${(transaction.IncurredCategoryID == getPaymentID && claimlist.MasterFileID != null && transaction.IncurredTypeID != getIndemnityID)}",
+                        "name": "RECODb.getClaimCurrentReserves",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "operation": "eq",
+                                "property": "ClaimID",
+                                "type": "integer",
+                                "value": "${claimlist.MasterFileID}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "getCurrentReserve",
+                            "type": "set",
+                            "value": "${result.FirstOrDefault()}",
+                            "valueType": "RecoCms6.Models.RecoDb.ClaimCurrentReserf"
+                          },
+                          {
+                            "name": "transaction.ClaimID",
+                            "type": "set",
+                            "value": "${(int)claimlist.MasterFileID}",
+                            "valueType": "int"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "transaction.IncurredCategoryID == getPaymentID && (getCurrentReserve == null || getCurrentReserve.TotalReserve < (transaction.Amount-transaction.ApplicableDeductible))",
+                        "detail": "There are insufficient reserves for the payment to be processed",
+                        "severity": "error",
+                        "summary": "Insufficient Reserve",
+                        "then": [
+                          {
+                            "code": "return;",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "notify"
+                      },
+                      {
+                        "name": "transaction.ID",
+                        "type": "set",
+                        "value": "Guid.NewGuid()",
+                        "valueType": "Guid"
+                      },
+                      {
+                        "condition": "${transaction.Firm != null}",
+                        "name": "transaction.FirmID",
+                        "type": "set",
+                        "value": "${transaction.Firm.FirmID}",
+                        "valueType": "int"
+                      },
+                      {
+                        "name": "transaction.Disbursements",
+                        "type": "set",
+                        "value": "null",
+                        "valueType": "dynamic"
+                      },
+                      {
+                        "condition": "${bLegalExpense}",
+                        "name": "transaction.Disbursements",
+                        "type": "set",
+                        "value": "${transaction.Amount}",
+                        "valueType": "decimal"
+                      },
+                      {
+                        "error": [
+                          {
+                            "detail": "${result.error.message}",
+                            "severity": "error",
+                            "summary": "Unable to create new Transaction",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.createTransaction",
+                        "parameters": [
+                          {
+                            "name": "Transaction",
+                            "value": "${transaction}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "condition": "${transaction.IncurredCategoryID} == ${getPaymentID}",
+                            "error": [],
+                            "name": "RECODb.ProcessPayments",
+                            "parameters": [
+                              {
+                                "name": "TransactionID",
+                                "value": "${transaction.TransactionID}"
+                              }
+                            ],
+                            "then": [
+                              {
+                                "condition": "${transaction.ApplicableDeductible == null}",
+                                "name": "transaction.ApplicableDeductible",
+                                "type": "set",
+                                "value": "0",
+                                "valueType": "int"
+                              },
+                              {
+                                "condition": "${(transaction.Amount - transaction.ApplicableDeductible) > 0}",
+                                "name": "SendInvoice",
+                                "schema": {
+                                  "$ref": "#/definitions/Void",
+                                  "dotnetType": "void"
+                                },
+                                "type": "invoke-method"
+                              },
+                              {
+                                "condition": "${transaction.IncurredCategoryID==getPaymentID && transaction.IncurredTypeID==getIndemnityID}",
+                                "name": "RECODb.getFindOpenFilesForRegistrants",
+                                "parameters": [
+                                  {
+                                    "name": "ClaimID",
+                                    "value": "${transaction.ClaimID}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "name": "getOpenFileList",
+                                    "type": "set",
+                                    "value": "${result}",
+                                    "valueType": "IEnumerable<RecoCms6.Models.RecoDb.FindOpenFilesForRegistrant>"
+                                  },
+                                  {
+                                    "condition": "${result != null}",
+                                    "name": "SendIndemnityMessage",
+                                    "schema": {
+                                      "$ref": "#/definitions/Task",
+                                      "dotnetType": "System.Threading.Tasks.Task"
+                                    },
+                                    "type": "invoke-method"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ],
+                            "type": "invoke"
+                          },
+                          {
+                            "name": "RECODb.UpdateJournalEntryNumbers",
+                            "parameters": [
+                              {
+                                "name": "TransactionID",
+                                "value": "${transaction.TransactionID}"
+                              },
+                              {
+                                "name": "UserID",
+                                "value": "${serviceprovider.Name}"
+                              }
+                            ],
+                            "then": [],
+                            "type": "invoke"
+                          },
+                          {
+                            "result": "${transaction}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Transaction",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${transaction != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "style": {},
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getClaims",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${ClaimID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getClaimsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Claim>"
+          },
+          {
+            "name": "getProgramID",
+            "type": "set",
+            "value": "${result.First().ProgramID}",
+            "valueType": "int"
+          },
+          {
+            "name": "RECODb.getClaimLists",
+            "parameters": [
+              {
+                "name": "$filter",
+                "operator": "and",
+                "value": [
+                  {
+                    "operation": "eq",
+                    "property": "ClaimID",
+                    "type": "integer",
+                    "value": "${ClaimID}"
+                  }
+                ]
+              }
+            ],
+            "then": [
+              {
+                "name": "claimlist",
+                "type": "set",
+                "value": "${result.First()}",
+                "valueType": "RecoCms6.Models.RecoDb.ClaimList"
+              }
+            ],
+            "type": "invoke"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Incurred Type\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"ProgramID\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Contract Year\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Incurred Category\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Reserve Type\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Note Type\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"File Type\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getParametersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getPaymentID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Incurred Category\" && p.ParamDesc==\"Payment\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getEOProgramID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\" && p.ParamAbbrev==\"EO\").First().ParameterID}",
+            "valueType": "dynamic"
+          },
+          {
+            "name": "getIndemnityID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Incurred Type\" && p.ParamDesc==\"Indemnity\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getLegalID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Incurred Type\" && p.ParamDesc==\"Legal\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getAdjustingID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Incurred Type\" && p.ParamDesc==\"Adjusting\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "global": false,
+            "name": "getContractYear",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParameterID == getClaimsResult.First().ContractYearID).First().ParamDesc}",
+            "valueType": "string"
+          },
+          {
+            "name": "getReserveID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Incurred Category\" && p.ParamDesc==\"Reserve\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getReserveReasonList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Reserve Type\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getDeductibleID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p=>p.ParamTypeDesc==\"Incurred Type\" && p.ParamDesc==\"Deductible\").ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getSubrogationID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p=>p.ParamTypeDesc==\"Incurred Type\" && p.ParamAbbrev==\"OthRec\").ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getDefaultNoteTypeID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p=>p.ParamTypeDesc==\"Note Type\" && p.ParamDesc==\"Note\").ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getPaymentRequestFileID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p=>p.ParamTypeDesc==\"File Type\" && p.ParamDesc==\"Payment Request\").ParameterID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getFirms",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getFirmsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Firm>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "transaction",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Transaction(){}",
+        "valueType": "RecoCms6.Models.RecoDb.Transaction"
+      },
+      {
+        "name": "transaction.ClaimID",
+        "type": "set",
+        "value": "${ClaimID}",
+        "valueType": "int"
+      },
+      {
+        "name": "transaction.TransactionDate",
+        "type": "set",
+        "value": "DateTime.Today",
+        "valueType": "DateTime"
+      },
+      {
+        "name": "RECODb.getServiceProviderDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "UserID",
+                "type": "string",
+                "value": "${Security.User.Id}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "serviceprovider",
+            "type": "set",
+            "value": "${result.First()}",
+            "valueType": "RecoCms6.Models.RecoDb.ServiceProviderDetail"
+          },
+          {
+            "name": "transaction.EnteredByID",
+            "type": "set",
+            "value": "${serviceprovider.Name}",
+            "valueType": "string"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "isEOProgram",
+        "type": "set",
+        "value": "${getProgramID == getEOProgramID}",
+        "valueType": "bool"
+      },
+      {
+        "name": "RECODb.getClaimTotalIncurredByCategories",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${ClaimID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getTotalIncurredResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "newRecoMail",
+        "type": "set",
+        "value": "new RecoMail()",
+        "valueType": "RecoMail"
+      },
+      {
+        "name": "Attachments",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      },
+      {
+        "name": "Notes",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      },
+      {
+        "name": "RECODb.getSystemTemplates",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "TemplateName",
+                "type": "string",
+                "value": "\"Invoice\""
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "generatedinvoicetemplate",
+            "type": "set",
+            "value": "${result.First()}",
+            "valueType": "RecoCms6.Models.RecoDb.SystemTemplate"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getServiceProviderDetails",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "NameandFirm"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getServiceProviderList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail>"
+          },
+          {
+            "name": "getPrimeProgramManager",
+            "type": "set",
+            "value": "${result.FirstOrDefault(sp=>sp.PrimeUser==true && sp.ServiceProviderRole==\"Program Manager\")}",
+            "valueType": "RecoCms6.Models.RecoDb.ServiceProviderDetail"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "zeroamount",
+        "type": "set",
+        "value": "0",
+        "valueType": "decimal"
+      },
+      {
+        "name": "RECODb.getAvailableIncurredCategories",
+        "parameters": [
+          {}
+        ],
+        "then": [
+          {
+            "condition": "${Globals.userdetails.SubmitPayments == true}",
+            "name": "getAvailableIncurredCategoryList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.AvailableIncurredCategory>"
+          },
+          {
+            "condition": "${Globals.userdetails.SubmitPayments == null || Globals.userdetails.SubmitPayments == false}",
+            "name": "getAvailableIncurredCategoryList",
+            "type": "set",
+            "value": "${result.Where(cat=>cat.ParamDesc != \"Payment\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.AvailableIncurredCategory>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getAvailableIncurredTypes",
+        "then": [
+          {
+            "name": "getAvailableIncurredTypeList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.AvailableIncurredType>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getUserDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "Role",
+                "type": "string",
+                "value": "\"Accountant\""
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "accountantList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.UserDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "bReadOnly",
+        "type": "set",
+        "value": "${parameters.TransactionID != 0}",
+        "valueType": "bool"
+      },
+      {
+        "condition": "${parameters.TransactionID != 0}",
+        "name": "RECODb.getTransactions",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "TransactionID",
+                "type": "integer",
+                "value": "${parameters.TransactionID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "transaction",
+            "type": "set",
+            "value": "${result.First()}",
+            "valueType": "RecoCms6.Models.RecoDb.Transaction"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "bLegalExpense",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "docExtensions",
+        "type": "set",
+        "value": "new List<string>{\".pdf\",\".xls\",\".xlsx\",\".doc\",\".docx\"}",
+        "valueType": "List<string>"
+      },
+      {
+        "name": "imageExtensions",
+        "type": "set",
+        "value": "new List<string>{\".png\",\".jpeg\",\".jpg\",\".gif\"}",
+        "valueType": "List<string>"
+      },
+      {
+        "name": "avExtensions",
+        "type": "set",
+        "value": "new List<string>{\".avi\",\".mov\",\".mp4\",\".mp3\",\".m4a\",\".wav\"}",
+        "valueType": "List<string>"
+      },
+      {
+        "name": "bRequestIncrease",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Transaction"
+}

@@ -1,0 +1,378 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "ProgramID",
+                              "name": "ProgramIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Program",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getProgramList}",
+                              "name": "ProgramID",
+                              "placeholder": "Choose Program",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "textProperty": "ParamAbbrev",
+                              "type": "dropdown",
+                              "value": "${autoreserving.ProgramID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "ProgramID",
+                              "defaultValue": "0",
+                              "name": "ProgramIDRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Program is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "ClaimInitiationID",
+                              "name": "ClaimInitiationIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Claim Initiation",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getClaimInitiationList}",
+                              "name": "ClaimInitiationID",
+                              "placeholder": "Choose Claim Initiation",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${autoreserving.ClaimInitiationID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "ClaimInitiationID",
+                              "defaultValue": "0",
+                              "name": "ClaimInitiationIDRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Claim Initiation is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "ClaimOrIncident",
+                              "name": "ClaimOrIncidentLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Claim Or Incident",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "ClaimOrIncident",
+                              "type": "checkbox",
+                              "value": "${autoreserving.ClaimOrIncident}",
+                              "valueType": "bool"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "AdjusterReserve",
+                              "name": "AdjusterReserveLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Adjuster Reserve",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "format": "c",
+                              "name": "AdjusterReserve",
+                              "showUpDown": false,
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${autoreserving.AdjusterReserve}",
+                              "valueType": "decimal?"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "LegalReserve",
+                              "name": "LegalReserveLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Legal Reserve",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "name": "LegalReserve",
+                              "showUpDown": false,
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${autoreserving.LegalReserve}",
+                              "valueType": "decimal?"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${autoreserving}",
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "${result.error.message}",
+                            "severity": "error",
+                            "summary": "Unable to create new Auto Reserve",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.createAutoReserving",
+                        "parameters": [
+                          {
+                            "name": "AutoReserving",
+                            "value": "${autoreserving}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${autoreserving}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.AutoReserving",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${autoreserving != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"ProgramID\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Claim Initiation\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getProgramList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getClaimInitiationList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Claim Initiation\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "autoreserving",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.AutoReserving(){}",
+        "valueType": "RecoCms6.Models.RecoDb.AutoReserving"
+      },
+      {
+        "name": "autoreserving.ClaimOrIncident",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Auto Reserving"
+}

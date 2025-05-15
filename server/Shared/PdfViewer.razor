@@ -1,0 +1,24 @@
+﻿@inherits RecoCms6.Shared.PdfViewerComponent
+
+@using Syncfusion.Blazor.PdfViewerServer
+@using Syncfusion.Blazor.PdfViewer
+
+<SfPdfViewerServer DocumentPath="@DocumentPath" Height="768px" Width="100%" EnableDownload="false" EnableNavigationToolbar="false" @ref="pdfViewer" ToolbarSettings="@ToolbarSettings" EnableToolbar="true">
+</SfPdfViewerServer>
+
+@code{
+
+    public PdfViewerToolbarSettings ToolbarSettings = new PdfViewerToolbarSettings()
+    {
+        ToolbarItems = new List<ToolbarItem>()
+        {
+                ToolbarItem.PageNavigationTool,
+                ToolbarItem.MagnificationTool,
+                ToolbarItem.CommentTool,
+                ToolbarItem.SelectionTool,
+                ToolbarItem.PanTool,
+                ToolbarItem.SearchOption,
+                ToolbarItem.PrintOption
+            }
+    };
+}

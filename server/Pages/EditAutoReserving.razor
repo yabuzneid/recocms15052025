@@ -1,0 +1,87 @@
+﻿@page "/edit-auto-reserving/{ProgramID}/{ClaimInitiationID}/{ClaimOrIncident}"
+@layout MainLayout
+@inherits RecoCms6.Pages.EditAutoReservingComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@autoreserving" TItem="RecoCms6.Models.RecoDb.AutoReserving" Visible="@(autoreserving != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="ProgramID" style="width: 100%" Text="Program">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenDropDown Data="@getProgramList" Placeholder="Choose Program" style="display: block; width: 100%" TextProperty="ParamAbbrev" @bind-Value="@(autoreserving.ProgramID)" ValueProperty="ParameterID" Name="ProgramID">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="ProgramID" DefaultValue="0" style="position: absolute" Text="Program is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="ClaimInitiationID" style="width: 100%" Text="Claim Initiation">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenDropDown Data="@getClaimInitiationList" Placeholder="Choose Claim Initiation" style="display: block; width: 100%" TextProperty="ParamDesc" @bind-Value="@(autoreserving.ClaimInitiationID)" ValueProperty="ParameterID" Name="ClaimInitiationID">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="ClaimInitiationID" DefaultValue="0" style="position: absolute" Text="Claim Initiation is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="ClaimOrIncident" style="width: 100%" Text="Claim Or Incident">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenCheckBox @bind-Value="@(autoreserving.ClaimOrIncident)" Name="ClaimOrIncident">
+                </RadzenCheckBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="AdjusterReserve" style="width: 100%" Text="Adjuster Reserve">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenNumeric AutoComplete="false" ShowUpDown="false" style="width: 100%" @bind-Value="@(autoreserving.AdjusterReserve)" Name="AdjusterReserve">
+                </RadzenNumeric>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="LegalReserve" style="width: 100%" Text="Legal Reserve">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenNumeric AutoComplete="false" ShowUpDown="false" style="width: 100%" @bind-Value="@(autoreserving.LegalReserve)" Name="LegalReserve">
+                </RadzenNumeric>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

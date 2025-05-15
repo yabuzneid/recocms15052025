@@ -1,0 +1,115 @@
+﻿@page "/add-builder"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddBuilderComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@builder" TItem="RecoCms6.Models.RecoDb.Builder" Visible="@(builder != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Name" style="width: 100%" Text="Name">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="100" style="display: block; width: 100%" @bind-Value="@(builder.Name)" Name="Name">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Name" style="position: absolute" Text="Name is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Address" style="width: 100%" Text="Address">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="450" style="width: 100%" @bind-Value="@(builder.Address)" Name="Address">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="ProvinceID" style="width: 100%" Text="Province">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-6">
+                <RadzenDropDown Data="@getProvinceList" Placeholder="Choose Province" style="width: 100%" TextProperty="ParamAbbrev" @bind-Value="@(builder.ProvinceID)" ValueProperty="ParameterID" Name="ProvinceID">
+                </RadzenDropDown>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="City" style="width: 100%" Text="City">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-6">
+                <RadzenTextBox MaxLength="100" style="width: 100%" @bind-Value="@(builder.City)" Name="City">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="PostalCode" style="width: 100%" Text="Postal Code">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenTextBox MaxLength="7" style="width: 100%" @bind-Value="@(builder.PostalCode)" Name="PostalCode">
+                </RadzenTextBox>
+                <RadzenRegexValidator Component="PostalCode" Pattern="([ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ])\ ?([0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])" style="display: block; position: absolute; width: 100%" Text="Not a valid postal code">
+                </RadzenRegexValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="EmailAddress" style="width: 100%" Text="Email Address">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="450" style="width: 100%" @bind-Value="@(builder.EmailAddress)" Name="EmailAddress">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="BusinessPhoneNum" style="width: 100%" Text="Business Phone Num">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenMask Mask="(***) ***-****" Pattern="[^0-9]" Placeholder="(000) 000-0000" @bind-Value="@(builder.BusinessPhoneNum)" Name="BusinessPhoneNum">
+                </RadzenMask>
+              </div>
+              <div class="col-md-3">
+                <RadzenLabel Component="CellPhoneNum" style="width: 100%" Text="Cell Phone Num">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenMask Mask="(***) ***-****" Pattern="[^0-9]" Placeholder="(000) 000-0000" @bind-Value="@(builder.CellPhoneNum)" Name="CellPhoneNum">
+                </RadzenMask>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

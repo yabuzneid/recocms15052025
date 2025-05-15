@@ -1,0 +1,39 @@
+﻿@page "/param-types"
+@layout MainLayout
+@inherits RecoCms6.Pages.ParamTypesComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="ParamTypes">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" FilterMode="Radzen.FilterMode.Advanced" AllowPaging="true" AllowSorting="true" Data="@getParamTypesResult" TItem="RecoCms6.Models.RecoDb.ParamType" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ParamType" Property="ParamTypeID" Title="Param Type ID">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ParamType" Property="ParamTypeDesc" Title="Param Type Desc">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ParamType" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+              <Template Context="RecoCms6ModelsRecoDbParamType">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, RecoCms6ModelsRecoDbParamType))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

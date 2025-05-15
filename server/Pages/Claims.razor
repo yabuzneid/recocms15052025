@@ -1,0 +1,100 @@
+﻿@page "/"
+@page "/claims/{ProgramID}/{ExcludeClaimID}/{SelectClaim}"
+@layout MainLayout
+@inherits RecoCms6.Pages.ClaimsComponent
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-3" style="visibility: visible">
+        <RadzenTextBox AutoComplete="false" Placeholder="Search" style="margin-bottom: 0.25em; margin-top: 0.25em; width: 80%" @bind-Value="@search" Name="TxtSearch" Change="@TxtSearchChange" @oninput="@Reload" @ref="txtSearch">
+        </RadzenTextBox>
+        <RadzenCheckBox @bind-Value="@bAuto" Name="Checkbox0">
+        </RadzenCheckBox>
+        <RadzenLabel Text="Auto">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-2">
+        <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getStatusList" Placeholder="Status Filter" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@filterStatus" ValueProperty="ParameterID" Name="DropdownStatusFilter" Change="@DropdownStatusFilterChange" @ref="dropdownStatusFilter" TValue="int">
+        </RadzenDropDown>
+      </div>
+      <div class="col-md-3">
+                <RadzenDropDown AllowClear="true" Data="@getProgramList" Placeholder="Select Program" TextProperty="ParamDesc" @bind-Value="@(Globals.selectedProgramID)" ValueProperty="ParameterID" Name="DropdownChangeFilter2" Change="@DropdownChangeProgramFilterChange" ref="dropdownChangeFilter1">
+        </RadzenDropDown>
+      </div>
+      <div class="col-md-2">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="New Claim" Visible="@showNewClaimButtons" Click="@Button0Click">
+        </RadzenButton>
+      </div>
+      <div class="col-md-2">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="New CD/CP Claim" Visible="@showNewClaimButtons" Click="@ButtonAddCommissionClaimClick">
+        </RadzenButton>
+      </div>
+    </div>
+    <div style="margin-bottom: 10px; margin-top: 10px" class="row">
+    
+      <div class="col-md-2">
+        <RadzenCheckBox style="margin-bottom: 5px; margin-top: 5px" TriState="false" @bind-Value="@filterCoverageIssue" TValue="bool" Visible="@(!Security.IsInRole("Defense Counsel"))" Name="ChkCoverageIssue" Change="@ChkCoverageIssueChange" @ref="chkCoverageIssue">
+        </RadzenCheckBox>
+        <RadzenLabel Component="chkCoverageIssue" style="margin-bottom: 5px; margin-left: 8px; margin-top: 5px" Text="Coverage Issue" Visible="@(!Security.IsInRole("Defense Counsel"))">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-3">
+        <RadzenDropDown AllowClear="true" Data="@getClaimOrIncidentList" Placeholder="Claim Or Incident" TextProperty="ParamDesc" ValueProperty="ParamValue" Name="DropdownClaimOrIncident" TValue="dynamic" Change="@DropdownChangeFilter2Change" @ref="dropdownClaimOrIncident">
+        </RadzenDropDown>
+      </div>
+      <div class="text-md-right col-md-1">
+        <RadzenDropDown Data="@(new List<int>() { 10, 25, 50, 100, 200 })" Placeholder="Page Size" style="width: 113.33333587646484px" @bind-Value="@pagesize" Name="Dropdown0" Change="@Dropdown0Change">
+        </RadzenDropDown>
+      </div>
+    </div>
+    <RadzenDataGrid @ref="datagrid0" AllowColumnReorder="true" AllowColumnResize="true" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getClaimListsResult" IsLoading="@isLoading" TItem="RecoCms6.Models.RecoDb.ClaimSearchList" PageSize="@pagesize" PageSizeOptions="@(new int[] { 5,10,25,50,100 })" Responsive="true" ShowExpandColumn="false" Visible="@(!Security.IsInRole("Actuary"))" RowSelect="@Datagrid0RowSelect">
+      <Columns>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="Program" Title="Program" Visible="@(Globals.selectedProgramID == 0)" Width="225px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="ClaimNo" Title="Claim #" Width="150px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="CounselFileNo" Title="Counsel File #" Visible="@(Security.IsInRole("Defense Counsel"))" Width="125px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="AdjusterClaimNo" Title="Adjuster File #" Visible="@(Security.IsInRole("Adjuster"))">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="NoticeOfClaimRefNum" Title="Notice Ref #" Visible="false" Width="175px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="Address" Title="Address" Width="200px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="Insureds" Title="Insureds" Width="200px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="Claimants" Title="Claimants" Width="200px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="Brokerage1" Title="Brokerage 1" Width="150px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="FileHandler" Title="File Handler" Width="200px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="DefenceCounsel" Title="Defence Counsel" Width="200px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="Status" Title="Status" Width="150px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="Broker1" Title="Broker of Record" Width="175px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="Adjuster" Title="Adjuster" Visible="@(Security.IsInRole("Adjuster"))" Width="150px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="Occurences" Title="Occurence" Visible="@(Globals.selectedProgramID != getEOProgramID)" Width="150px">
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="Builder1" Title="Builder" Visible="@(Globals.selectedProgramID != getEOProgramID)" Width="150px">
+        </RadzenDataGridColumn>
+      </Columns>
+    </RadzenDataGrid>
+    <div style="margin-top: 0.5em" class="row">
+      <div class="col-md-12 text-md-center">
+        <RadzenButton Icon="done_all" Text="Select" Visible="@(SelectClaim == true)" Click="@ButtonSelectClaimClick">
+        </RadzenButton>
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="clear" Text="Cancel" Visible="@(SelectClaim == true)" Click="@ButtonCancelSelectClick">
+        </RadzenButton>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

@@ -1,0 +1,287 @@
+{
+  "access": "Authenticated",
+  "components": [
+    {
+      "components": [
+        {
+          "name": "pageTitle",
+          "size": "H1",
+          "text": "Consolidate Claimants",
+          "type": "heading"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "name": "label0",
+                  "text": "Select Claimant To Consolidate To",
+                  "type": "label"
+                }
+              ],
+              "name": "col2",
+              "type": "col"
+            },
+            {
+              "class": "col-md-6",
+              "components": [
+                {
+                  "columns": [
+                    {
+                      "property": "ClaimantDisplay",
+                      "title": "Claimant Display"
+                    }
+                  ],
+                  "data": "${claimantlist}",
+                  "itemType": "RecoCms6.Models.RecoDb.OccurrenceClaimant",
+                  "name": "dropdownDatagrid0",
+                  "selectedValue": "",
+                  "style": {
+                    "width": "100%"
+                  },
+                  "textProperty": "ClaimantDisplay",
+                  "type": "dropdown-datagrid",
+                  "value": "${chosenclaimant}",
+                  "valueProperty": "ClaimantID",
+                  "valueType": "int"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "allowColumnResize": true,
+                  "allowFiltering": "true",
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "attributes": [
+                    {
+                      "name": "bind-Value",
+                      "value": "${selectedclaimants}"
+                    }
+                  ],
+                  "columns": [
+                    {
+                      "filterable": false,
+                      "groupable": false,
+                      "headerTemplate": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "TValue",
+                              "value": "bool"
+                            }
+                          ],
+                          "events": {
+                            "change": [
+                              {
+                                "code": "${selectedclaimants = event ? claimantlist.ToList() : null}",
+                                "type": "execute"
+                              }
+                            ]
+                          },
+                          "name": "checkbox6",
+                          "type": "checkbox",
+                          "value": "${claimantlist.Any(i=>selectedclaimants != null && selectedclaimants.Contains(i))}",
+                          "valueType": "bool"
+                        }
+                      ],
+                      "property": "",
+                      "reorderable": false,
+                      "resizable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "TValue",
+                              "value": "bool"
+                            }
+                          ],
+                          "events": {
+                            "change": [
+                              {
+                                "condition": "${selectedclaimants == null}",
+                                "name": "selectedclaimants",
+                                "type": "set",
+                                "value": "new List<OccurrenceClaimant>()",
+                                "valueType": "List<RecoCms6.Models.RecoDb.OccurrenceClaimant>"
+                              },
+                              {
+                                "code": "selectedclaimants.Add(${data})",
+                                "type": "execute"
+                              }
+                            ]
+                          },
+                          "name": "checkbox2",
+                          "type": "checkbox",
+                          "value": "${selectedclaimants != null && selectedclaimants.Contains(data)}",
+                          "valueType": "dynamic"
+                        }
+                      ],
+                      "width": "50px"
+                    },
+                    {
+                      "format": "",
+                      "property": "ClaimantDisplay",
+                      "title": "Claimant Display",
+                      "type": "string"
+                    }
+                  ],
+                  "data": "${claimantlist}",
+                  "events": {
+                    "rowExpand": []
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.OccurrenceClaimant",
+                  "name": "datagridClaimants",
+                  "pageSize": 10,
+                  "pageSizeOptions": [
+                    5,
+                    10,
+                    25,
+                    100
+                  ],
+                  "selectionMode": "DataGridSelectionMode.Multiple",
+                  "template": "",
+                  "type": "datagrid"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            }
+          ],
+          "name": "row1",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12 justify-content-center d-flex",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "condition": "${selectedclaimants == null || selectedclaimants.Count == 0}",
+                        "severity": "warn",
+                        "summary": "Please select more than one claimant to consolidate",
+                        "then": [],
+                        "type": "notify"
+                      },
+                      {
+                        "condition": "${chosenclaimant == 0}",
+                        "severity": "warn",
+                        "summary": "Must select a main claimant to consolidate to",
+                        "type": "notify"
+                      },
+                      {
+                        "condition": "${selectedclaimants != null && selectedclaimants.Count > 0 && chosenclaimant > 0}",
+                        "name": "ConsolidateClaimants",
+                        "schema": {
+                          "$ref": "#/definitions/Void",
+                          "dotnetType": "void"
+                        },
+                        "type": "invoke-method"
+                      },
+                      {
+                        "condition": "${selectedclaimants != null && selectedclaimants.Count > 0 && chosenclaimant > 0}",
+                        "result": "${chosenclaimant}",
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "name": "buttonConsolidate",
+                  "template": "",
+                  "text": "Consolidate",
+                  "type": "button"
+                },
+                {
+                  "buttonStyle": "light",
+                  "events": {
+                    "click": [
+                      {
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "name": "button1",
+                  "text": "Cancel",
+                  "type": "button"
+                }
+              ],
+              "name": "col3",
+              "type": "col"
+            }
+          ],
+          "name": "row2",
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getOccurrenceClaimants",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "MasterFileID",
+                "type": "integer",
+                "value": "${ClaimID}"
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "claimantlist",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.OccurrenceClaimant>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "selectedclaimants",
+        "type": "set",
+        "value": "new List<OccurrenceClaimant>()",
+        "valueType": "List<RecoCms6.Models.RecoDb.OccurrenceClaimant>"
+      },
+      {
+        "name": "chosenclaimant",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Consolidate Claimants"
+}

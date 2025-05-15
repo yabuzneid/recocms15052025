@@ -1,0 +1,45 @@
+﻿@page "/diary-templates"
+@layout MainLayout
+@inherits RecoCms6.Pages.DiaryTemplatesComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Diary Templates">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getDiaryTemplatesResult" TItem="RecoCms6.Models.RecoDb.TemplateDetail" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.TemplateDetail" Property="Title" Title="Title">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.TemplateDetail" Property="Subject" Title="Subject">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.TemplateDetail" Property="DisplayOrder" Title="Display Order">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.TemplateDetail" Property="DefaultSendTo" Title="Default Send To" Type="string">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.TemplateDetail" Property="TemplateType" Title="Template Type" Type="string">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.TemplateDetail" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="RecoCms6ModelsRecoDbTemplateDetail">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, RecoCms6ModelsRecoDbTemplateDetail))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

@@ -1,0 +1,293 @@
+{
+  "access": "Authenticated",
+  "components": [
+    {
+      "components": [
+        {
+          "allowColumnReorder": false,
+          "allowColumnResize": true,
+          "allowFiltering": true,
+          "allowPaging": true,
+          "allowSorting": true,
+          "attributes": [
+            {
+              "name": "TItem",
+              "value": "RecoCms6.Models.RecoDb.File"
+            },
+            {
+              "name": "@bind-Value",
+              "value": "${ChosenFiles}"
+            }
+          ],
+          "columns": [
+            {
+              "template": [
+                {
+                  "attributes": [
+                    {
+                      "name": "TValue",
+                      "value": "bool"
+                    }
+                  ],
+                  "name": "checkbox0",
+                  "type": "checkbox",
+                  "value": "${ChosenFiles != null && ChosenFiles.Contains(data)}",
+                  "valueType": "RecoCms6.Pages.DialogSelectFileComponent"
+                }
+              ],
+              "width": "50px"
+            },
+            {
+              "filterTemplate": "",
+              "format": "date-time",
+              "formatString": "{0:g}",
+              "property": "EntryDate",
+              "title": "Entry Date",
+              "type": "string",
+              "width": "150px"
+            },
+            {
+              "format": "",
+              "property": "Subject",
+              "title": "Subject",
+              "type": "string"
+            },
+            {
+              "format": "",
+              "property": "FileDescription",
+              "title": "Description",
+              "type": "string"
+            },
+            {
+              "format": "",
+              "property": "Filesize2",
+              "title": "Filesize",
+              "type": "string",
+              "width": "100px"
+            },
+            {
+              "template": [
+                {
+                  "class": "col-md-12",
+                  "components": [
+                    {
+                      "buttonStyle": "secondary",
+                      "buttonType": "button",
+                      "events": {
+                        "click": [
+                          {
+                            "name": "DownloadFileAsync",
+                            "parameters": [
+                              {
+                                "name": "file",
+                                "type": "RecoCms6.Models.RecoDb.File",
+                                "value": "${data}"
+                              }
+                            ],
+                            "schema": {
+                              "$ref": "#/definitions/Task",
+                              "dotnetType": "System.Threading.Tasks.Task"
+                            },
+                            "type": "invoke-method"
+                          }
+                        ]
+                      },
+                      "icon": "open_in_new",
+                      "name": "button0",
+                      "size": "sm",
+                      "template": "",
+                      "text": "Download",
+                      "type": "button",
+                      "visible": "${!docExtensions.Contains(data.Extension.ToLower()) && !imageExtensions.Contains(data.Extension.ToLower())}"
+                    },
+                    {
+                      "name": "image0",
+                      "path": "${string.Format(\"{0}download/file/FileID={1}\", Globals.Uri, data.ID)}",
+                      "style": {
+                        "height": "50px"
+                      },
+                      "type": "image",
+                      "visible": "${data.Extension.ToLower()==\".jpg\" || data.Extension.ToLower()==\".jpeg\" || data.Extension.ToLower()==\".png\" || data.Extension.ToLower()==\".gif\"}"
+                    },
+                    {
+                      "icon": "open_in_new",
+                      "name": "link1",
+                      "parameters": [
+                        {
+                          "name": "ID",
+                          "value": "${data.ID}"
+                        }
+                      ],
+                      "path": "image-viewer",
+                      "style": {
+                        "float": "left",
+                        "verticalAlign": "baseline"
+                      },
+                      "target": "_blank",
+                      "text": "View Image",
+                      "type": "link",
+                      "visible": "${imageExtensions.Contains(data.Extension.ToLower())}"
+                    },
+                    {
+                      "icon": "open_in_new",
+                      "name": "link3",
+                      "parameters": [
+                        {
+                          "name": "ID",
+                          "value": "${data.ID}"
+                        }
+                      ],
+                      "path": "file-viewer",
+                      "style": {
+                        "float": "left",
+                        "verticalAlign": "baseline"
+                      },
+                      "target": "_blank",
+                      "text": "View File",
+                      "type": "link",
+                      "visible": "${docExtensions.Contains(data.Extension.ToLower())}"
+                    }
+                  ],
+                  "name": "col1",
+                  "type": "col"
+                }
+              ],
+              "width": "150px"
+            }
+          ],
+          "data": "${claimFiles}",
+          "itemType": "RecoCms6.Models.RecoDb.File",
+          "name": "datagrid0",
+          "responsive": true,
+          "selectionMode": "DataGridSelectionMode.Multiple",
+          "style": {
+            "marginBottom": "0.25em"
+          },
+          "type": "datagrid"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12 justify-content-center d-flex",
+              "components": [
+                {
+                  "buttonStyle": "primary",
+                  "events": {
+                    "click": [
+                      {
+                        "result": "${ChosenFiles}",
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "name": "buttonAdd",
+                  "style": {
+                    "float": "none"
+                  },
+                  "text": "Add",
+                  "type": "button"
+                },
+                {
+                  "buttonStyle": "light",
+                  "events": {
+                    "click": [
+                      {
+                        "result": "new List<File>()",
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "name": "buttonCancek",
+                  "text": "Cancel",
+                  "type": "button"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "style": {
+            "marginTop": "0.25em"
+          },
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "error": [],
+        "name": "RECODb.getFiles",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${parameters.ClaimID}"
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "desc",
+                "property": "EntryDate"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "claimFiles",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.File>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "global": false,
+        "name": "SelectedFiles",
+        "type": "set",
+        "value": "Enumerable.Empty<int>();",
+        "valueType": "IEnumerable<int>"
+      },
+      {
+        "name": "ChosenFiles",
+        "type": "set",
+        "value": "new List<RecoCms6.Models.RecoDb.File>()",
+        "valueType": "IList<RecoCms6.Models.RecoDb.File>"
+      },
+      {
+        "name": "docExtensions",
+        "type": "set",
+        "value": "new List<string>{\".pdf\", \".xls\", \".xlsx\", \".doc\", \".docx\"}",
+        "valueType": "List<string>"
+      },
+      {
+        "name": "imageExtensions",
+        "type": "set",
+        "value": "new List<string>{ \".png\", \".jpeg\", \".jpg\", \".gif\" }",
+        "valueType": "IEnumerable<string>"
+      },
+      {
+        "name": "avExtensions",
+        "type": "set",
+        "value": "new List<string>{ \".avi\", \".mov\", \".mp4\", \".mp3\", \".m4a\", \".wav\" }",
+        "valueType": "IEnumerable<string>"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "DialogSelectFile"
+}

@@ -1,0 +1,49 @@
+﻿@page "/service-providers"
+@layout MainLayout
+@inherits RecoCms6.Pages.ServiceProvidersComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb;
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Service Providers">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-4">
+            <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="@buttonTitle" Click="@ButtonAddOutsideSpClick">
+            </RadzenButton>
+          </div>
+          <div class="col-md-4">
+          </div>
+          <div class="col-md-4">
+            <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add Internal Service Provider" Visible=true Click="@ButtonAddInternalSpClick">
+            </RadzenButton>
+          </div>
+        </div>
+        <RadzenGrid @ref="grid0" AllowColumnResize="true" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getServiceProvidersResult" TItem="RecoCms6.Models.RecoDb.ServiceProviderDetail" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ServiceProviderDetail" Property="Name" Title="Name">
+            </RadzenGridColumn>
+                        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ServiceProviderDetail" Property="SystemRole" Title="Service Provider Role">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ServiceProviderDetail" Property="FirmName" Title="Firm">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ServiceProviderDetail" Property="EmailAddress" Title="Email Address">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ServiceProviderDetail" Property="BusinessPhoneNum" Title="Business Phone Num">
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

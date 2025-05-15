@@ -1,0 +1,201 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-2",
+              "components": [],
+              "name": "col4",
+              "type": "col"
+            },
+            {
+              "class": "col-md-3",
+              "components": [],
+              "name": "col5",
+              "type": "col"
+            },
+            {
+              "class": "col-md-2",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "name": "RECODb.getNoActiveDiaryBordereaus",
+                        "parameters": [],
+                        "then": [
+                          {
+                            "name": "getDataList",
+                            "type": "set",
+                            "value": "${result}",
+                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.NoActiveDiaryBordereau>"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "icon": "save",
+                  "name": "button0",
+                  "text": "Run",
+                  "type": "button",
+                  "visible": false
+                }
+              ],
+              "name": "col6",
+              "type": "col"
+            },
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "name": "DownloadFileAsync",
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "icon": "get_app",
+                  "name": "button1",
+                  "text": "Export",
+                  "type": "button",
+                  "visible": true
+                }
+              ],
+              "name": "col12",
+              "type": "col"
+            }
+          ],
+          "name": "row3",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [],
+                          "name": "col0",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "type": "row"
+                    }
+                  ],
+                  "name": "panel0",
+                  "style": {},
+                  "text": "No Active Diary Report",
+                  "type": "panel"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            }
+          ],
+          "name": "row2",
+          "style": {},
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getParametersResults",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProgramList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getContractYearList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Contract Year\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "PageSizes",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Contract Year\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "selectedProgramID",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "selectedReportDate",
+        "type": "set",
+        "value": "DateTime.Today",
+        "valueType": "DateTime"
+      },
+      {
+        "name": "hiddenColumns",
+        "type": "set",
+        "value": "new List<string>(){ \"ClaimID\", \"OccurrenceID\", \"TradeID\" }",
+        "valueType": "List<string>"
+      },
+      {
+        "condition": "",
+        "name": "RECODb.getNoActiveDiaryBordereaus",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getDataList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.NoActiveDiaryBordereau>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "No Active Diary Report"
+}

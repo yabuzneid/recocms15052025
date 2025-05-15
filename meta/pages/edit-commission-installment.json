@@ -1,0 +1,248 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Amount",
+                              "name": "AmountLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Amount",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "min": 0,
+                              "name": "Amount",
+                              "showUpDown": false,
+                              "step": "100",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${commissioninstallment.Amount}",
+                              "valueType": "decimal"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "DatePaid",
+                              "name": "DatePaidLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Date Paid",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "dateFormat": "yyyy-MM-dd",
+                              "name": "DatePaid",
+                              "showTimeOkButton": false,
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "datepicker",
+                              "value": "${commissioninstallment.DatePaid}",
+                              "valueType": "DateTime?"
+                            }
+                          ],
+                          "style": {},
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label0",
+                              "text": "Details",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "name": "Description",
+                              "placeholder": "",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${commissioninstallment.Description}"
+                            },
+                            {
+                              "component": "Description",
+                              "name": "DescriptionRequiredValidator",
+                              "style": {
+                                "position": "relative"
+                              },
+                              "text": "Description is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${commissioninstallment}",
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to update CommissionInstallment",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.updateCommissionInstallment",
+                        "parameters": [
+                          {
+                            "name": "CommissionInstallmentID",
+                            "value": "${commissioninstallment.CommissionInstallmentID}"
+                          },
+                          {
+                            "name": "CommissionInstallment",
+                            "value": "${commissioninstallment}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${commissioninstallment}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.CommissionInstallment",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${commissioninstallment != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "error": [],
+        "name": "RECODb.getCommissionInstallmentByCommissionInstallmentID",
+        "parameters": [
+          {
+            "name": "CommissionInstallmentID",
+            "value": "${CommissionInstallmentID}"
+          }
+        ],
+        "then": [
+          {
+            "name": "commissioninstallment",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "RecoCms6.Models.RecoDb.CommissionInstallment"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Edit Commission Installment"
+}

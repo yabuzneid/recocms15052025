@@ -1,0 +1,60 @@
+﻿@page "/issue-reporting"
+@layout MainLayout
+@inherits RecoCms6.Pages.IssueReportingComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Issue Reporting">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenSplitButton Icon="get_app" style="margin-bottom: 10px; margin-left: 10px" Text="Export" Click="@Splitbutton0Click">
+          <ChildContent>
+            <RadzenSplitButtonItem Text="Excel" Value="xlsx">
+            </RadzenSplitButtonItem>
+            <RadzenSplitButtonItem Text="CSV" Value="csv">
+            </RadzenSplitButtonItem>
+          </ChildContent>
+        </RadzenSplitButton>
+        <RadzenTextBox Placeholder="Search ..." style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox0" @oninput="@(async(args) => {search = $"{args.Value}";await grid0.GoToPage(0);await Load();})">
+        </RadzenTextBox>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getIssueReportingsResult" FilterMode="Radzen.FilterMode.Advanced" TItem="RecoCms6.Models.RecoDb.IssueReporting" PageSize="25" RowDoubleClick="@Grid0RowDoubleClick">
+          <Columns>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.IssueReporting" FormatString="{0:d}" Property="DateEntered" Title="Date Entered">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.IssueReporting" Property="EnteredById" Title="Entered By Id">
+              <Template Context="RecoCms6ModelsRecoDbIssueReporting">
+                <RadzenDropDown AllowSelectAll="false" Data="@getServiceProviderList" ReadOnly="true" TextProperty="Name" @bind-Value="@(RecoCms6ModelsRecoDbIssueReporting.EnteredById)" ValueProperty="UserID" Name="Dropdown0">
+                </RadzenDropDown>
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.IssueReporting" Property="Subject" Title="Subject">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.IssueReporting" FilterProperty="Parameter.ParamDesc" GroupProperty="Parameter.ParamDesc" Property="IssueStatusID" SortProperty="Parameter.ParamDesc" Title="Status">
+              <Template Context="data">
+              @(data.Parameter?.ParamDesc)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.IssueReporting" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="RecoCms6ModelsRecoDbIssueReporting">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, RecoCms6ModelsRecoDbIssueReporting))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

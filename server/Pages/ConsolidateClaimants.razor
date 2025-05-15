@@ -1,0 +1,61 @@
+﻿@page "/consolidate-claimants/{ClaimID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.ConsolidateClaimantsComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Consolidate Claimants">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-3">
+        <RadzenLabel Text="Select Claimant To Consolidate To">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-6">
+        <RadzenDropDownDataGrid Data="@claimantlist" style="width: 100%" TextProperty="ClaimantDisplay" @bind-Value="@chosenclaimant" ValueProperty="ClaimantID" Name="DropdownDatagrid0">
+          <Columns>
+            <RadzenDropDownDataGridColumn Property="ClaimantDisplay" Title="Claimant Display">
+            </RadzenDropDownDataGridColumn>
+          </Columns>
+        </RadzenDropDownDataGrid>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenDataGrid @ref="datagridClaimants" AllowColumnResize="true" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@claimantlist" TItem="RecoCms6.Models.RecoDb.OccurrenceClaimant" PageSize="10" PageSizeOptions="@(new int[] { 5,10,25,100 })" SelectionMode="DataGridSelectionMode.Multiple" bind-Value="@selectedclaimants">
+          <Columns>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.OccurrenceClaimant" Filterable="false" Groupable="false" Reorderable="false" Resizable="false" Sortable="false" Width="50px">
+              <Template Context="recoCms6ModelsRecoDbOccurrenceClaimant">
+                <RadzenCheckBox Value="@(selectedclaimants != null && selectedclaimants.Contains(recoCms6ModelsRecoDbOccurrenceClaimant))"  Name="Checkbox2" Change="@((args) =>Checkbox2Change(args, recoCms6ModelsRecoDbOccurrenceClaimant))" TValue="bool">
+                </RadzenCheckBox>
+              </Template>
+              <HeaderTemplate>
+                <RadzenCheckBox Value="@(claimantlist.Any(i=>selectedclaimants != null && selectedclaimants.Contains(i)))"  Name="Checkbox6" Change="@Checkbox6Change" TValue="bool">
+                </RadzenCheckBox>
+              </HeaderTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.OccurrenceClaimant" Property="ClaimantDisplay" Title="Claimant Display">
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 justify-content-center d-flex">
+        <RadzenButton Text="Consolidate" Click="@ButtonConsolidateClick">
+        </RadzenButton>
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button1Click">
+        </RadzenButton>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

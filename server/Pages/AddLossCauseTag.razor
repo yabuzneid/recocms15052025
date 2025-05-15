@@ -1,0 +1,69 @@
+﻿@page "/add-loss-cause-tag/{ClaimID}/{LossCauseID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddLossCauseTagComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div style="margin-bottom: 1em" class="row">
+      <div class="col-md-3">
+        <RadzenLabel Component="LossCauseTag" Text="Loss Cause Tag">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-6">
+        <RadzenTextBox style="width: 100%" @bind-Value="@LossCauseText" Visible="@(!Security.IsInRole("Auditor"))" Name="LossCauseTag">
+        </RadzenTextBox>
+      </div>
+      <div class="col-md-3">
+        <RadzenButton Icon="add_circle_outline" Text="Add" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonAddLossCauseTagClick">
+        </RadzenButton>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <RadzenGrid @ref="gridLossCauseTags" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getLossCauseTagList" TItem="RecoCms6.Models.RecoDb.LossCauseTag">
+          <Columns>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.LossCauseTag" Property="LossCauseTag1" Title="Loss Cause Tag" Width="75%">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.LossCauseTag">
+              <Template Context="recoCms6ModelsRecoDbLossCauseTag">
+                <RadzenButton Icon="delete_outline" Visible="@(!Security.IsInRole("Auditor"))" Click="@((args) =>ButtonDeleteClick(args, recoCms6ModelsRecoDbLossCauseTag))">
+                </RadzenButton>
+              </Template>
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+      <div class="col-md-6">
+        <RadzenLabel style="width: 100%" Text="Top 5 Popular Tags">
+        </RadzenLabel>
+        <RadzenListBox Data="@getTop5Tags" Multiple="false" style="width: 100%" TextProperty="LossCauseTag" @bind-Value="@selectedPopularTag" ValueProperty="LossCauseTag" Name="ListboxPopularTags">
+        </RadzenListBox>
+        <div style="padding-top: 1em" class="row">
+          <div class="col-md-12 text-center">
+            <RadzenButton Icon="add_circle_outline" Text="Add Tag" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonAddSelectedTagClick">
+            </RadzenButton>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom: 1em" class="row">
+      <div class="col-md-12">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-md-center">
+        <RadzenButton Text="Close" Click="@ButtonCloseDialogClick">
+        </RadzenButton>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

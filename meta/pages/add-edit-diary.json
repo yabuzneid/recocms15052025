@@ -1,0 +1,1028 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "ClaimID",
+                              "name": "ClaimIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "${getClaimNo}",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "ClaimID",
+                              "name": "label0",
+                              "style": {
+                                "width": "226.765625px"
+                              },
+                              "text": "Template",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getDiaryTemplateResults}",
+                              "disabled": false,
+                              "events": {
+                                "change": [
+                                  {
+                                    "name": "SetFormByTemplateProperties",
+                                    "schema": {
+                                      "async": true,
+                                      "dotnetType": "System.Threading.Tasks.Task<bool>",
+                                      "type": "boolean"
+                                    },
+                                    "type": "invoke-method"
+                                  }
+                                ]
+                              },
+                              "name": "dropdownTemplate",
+                              "placeholder": "Choose a Template",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "Title",
+                              "type": "dropdown",
+                              "value": "${TemplateID}",
+                              "valueProperty": "DiaryTemplateID",
+                              "valueType": "int"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "AbeyanceDate",
+                              "name": "AbeyanceDateLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Abeyance Date",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col2",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "dateFormat": "MM/dd/yyyy",
+                              "name": "AbeyanceDate",
+                              "style": {
+                                "display": "block"
+                              },
+                              "type": "datepicker",
+                              "value": "${diary.AbeyanceDate}",
+                              "valueType": "DateTime"
+                            },
+                            {
+                              "component": "AbeyanceDate",
+                              "name": "AbeyanceDateRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "AbeyanceDate is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "name": "col3",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "EntryDate",
+                              "name": "EntryDateLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Entry Date",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "dateFormat": "MM/dd/yyyy",
+                              "disabled": true,
+                              "name": "EntryDate",
+                              "style": {},
+                              "type": "datepicker",
+                              "value": "${diary.EntryDate}",
+                              "valueType": "DateTime"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Recipients",
+                              "name": "RecipientsLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Recipients",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-6",
+                          "components": [
+                            {
+                              "name": "textareaRecipients",
+                              "placeholder": "",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textarea",
+                              "value": "${diary.Recipients}"
+                            },
+                            {
+                              "component": "textareaRecipients",
+                              "name": "RecipientsRequiredValidator",
+                              "style": {
+                                "float": "left",
+                                "position": "absolute"
+                              },
+                              "text": "Recipients is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "buttonStyle": "success",
+                              "events": {
+                                "click": [
+                                  {
+                                    "code": "return OpenEmailsDialog()",
+                                    "error": [
+                                      {
+                                        "condition": "1 == 2",
+                                        "parameters": [
+                                          {
+                                            "name": "ClaimID",
+                                            "value": "${diary.ClaimID}"
+                                          }
+                                        ],
+                                        "path": "dialog-select-email",
+                                        "type": "popup",
+                                        "width": 700
+                                      }
+                                    ],
+                                    "type": "execute"
+                                  }
+                                ]
+                              },
+                              "icon": "add_circle_outline",
+                              "name": "btnAddEmails",
+                              "style": {
+                                "float": "right"
+                              },
+                              "text": "Add",
+                              "type": "button"
+                            }
+                          ],
+                          "name": "col4",
+                          "style": {
+                            "position": "relative"
+                          },
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Subject",
+                              "name": "SubjectLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Subject",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 255,
+                              "name": "Subject",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${diary.Subject}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "Subject",
+                              "name": "SubjectRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Subject is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Details",
+                              "name": "DetailsLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Details",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "htmlEditor0",
+                              "style": {
+                                "height": "350px"
+                              },
+                              "tools": [
+                                {
+                                  "type": "Undo"
+                                },
+                                {
+                                  "type": "Redo"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "type": "Bold"
+                                },
+                                {
+                                  "type": "Italic"
+                                },
+                                {
+                                  "type": "Underline"
+                                },
+                                {
+                                  "type": "StrikeThrough"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "type": "AlignLeft"
+                                },
+                                {
+                                  "type": "AlignCenter"
+                                },
+                                {
+                                  "type": "AlignRight"
+                                },
+                                {
+                                  "type": "Justify"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "type": "Indent"
+                                },
+                                {
+                                  "type": "Outdent"
+                                },
+                                {
+                                  "type": "UnorderedList"
+                                },
+                                {
+                                  "type": "OrderedList"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "items": [
+                                    {
+                                      "value": "ff2800"
+                                    },
+                                    {
+                                      "value": "fe9300"
+                                    },
+                                    {
+                                      "value": "fefb00"
+                                    },
+                                    {
+                                      "value": "02f900"
+                                    },
+                                    {
+                                      "value": "00fdff"
+                                    },
+                                    {
+                                      "value": "0433ff"
+                                    },
+                                    {
+                                      "value": "ff40ff"
+                                    },
+                                    {
+                                      "value": "942292"
+                                    },
+                                    {
+                                      "value": "aa7942"
+                                    },
+                                    {
+                                      "value": "ffffff"
+                                    },
+                                    {
+                                      "value": "000000"
+                                    },
+                                    {
+                                      "value": "53d5fd"
+                                    },
+                                    {
+                                      "value": "73a7fe"
+                                    },
+                                    {
+                                      "value": "874efe"
+                                    },
+                                    {
+                                      "value": "d357fe"
+                                    },
+                                    {
+                                      "value": "ed719e"
+                                    },
+                                    {
+                                      "value": "ff8c82"
+                                    },
+                                    {
+                                      "value": "ffa57d"
+                                    },
+                                    {
+                                      "value": "ffc677"
+                                    },
+                                    {
+                                      "value": "fff995"
+                                    },
+                                    {
+                                      "value": "ebf38f"
+                                    },
+                                    {
+                                      "value": "b1dd8c"
+                                    }
+                                  ],
+                                  "type": "Color"
+                                },
+                                {
+                                  "items": [
+                                    {
+                                      "value": "ff2800"
+                                    },
+                                    {
+                                      "value": "fe9300"
+                                    },
+                                    {
+                                      "value": "fefb00"
+                                    },
+                                    {
+                                      "value": "02f900"
+                                    },
+                                    {
+                                      "value": "00fdff"
+                                    },
+                                    {
+                                      "value": "0433ff"
+                                    },
+                                    {
+                                      "value": "ff40ff"
+                                    },
+                                    {
+                                      "value": "942292"
+                                    },
+                                    {
+                                      "value": "aa7942"
+                                    },
+                                    {
+                                      "value": "ffffff"
+                                    },
+                                    {
+                                      "value": "000000"
+                                    },
+                                    {
+                                      "value": "53d5fd"
+                                    },
+                                    {
+                                      "value": "73a7fe"
+                                    },
+                                    {
+                                      "value": "874efe"
+                                    },
+                                    {
+                                      "value": "d357fe"
+                                    },
+                                    {
+                                      "value": "ed719e"
+                                    },
+                                    {
+                                      "value": "ff8c82"
+                                    },
+                                    {
+                                      "value": "ffa57d"
+                                    },
+                                    {
+                                      "value": "ffc677"
+                                    },
+                                    {
+                                      "value": "fff995"
+                                    },
+                                    {
+                                      "value": "ebf38f"
+                                    },
+                                    {
+                                      "value": "b1dd8c"
+                                    }
+                                  ],
+                                  "type": "Background"
+                                },
+                                {
+                                  "type": "RemoveFormat"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "type": "Subscript"
+                                },
+                                {
+                                  "type": "Superscript"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "type": "Link"
+                                },
+                                {
+                                  "type": "Unlink"
+                                },
+                                {
+                                  "items": [
+                                    {
+                                      "text": "Arial",
+                                      "value": "Arial"
+                                    },
+                                    {
+                                      "text": "Georgia",
+                                      "value": "Georgia"
+                                    },
+                                    {
+                                      "text": "Helvetica",
+                                      "value": "Helvetica"
+                                    },
+                                    {
+                                      "text": "Monospace",
+                                      "value": "monospace"
+                                    },
+                                    {
+                                      "text": "Segoe UI",
+                                      "value": "'Segoe UI'"
+                                    },
+                                    {
+                                      "text": "Tahoma",
+                                      "value": "Tahoma"
+                                    },
+                                    {
+                                      "text": "Times New Roman",
+                                      "value": "'Times New Roman'"
+                                    },
+                                    {
+                                      "text": "Verdana",
+                                      "value": "Verdana"
+                                    }
+                                  ],
+                                  "type": "FontName"
+                                },
+                                {
+                                  "type": "FontSize"
+                                },
+                                {
+                                  "type": "FormatBlock"
+                                }
+                              ],
+                              "type": "html-editor",
+                              "uploadUrl": "upload/image",
+                              "value": "${diary.Details}"
+                            }
+                          ],
+                          "style": {
+                            "backgroundColor": "rgba(0, 0, 0, 0) "
+                          },
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "DiaryStatusID",
+                              "name": "DiaryStatusIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Status",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getParameterDetailsResult}",
+                              "name": "DiaryStatusID",
+                              "placeholder": "Choose Status",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${diary.DiaryStatusID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "DiaryStatusID",
+                              "defaultValue": "0",
+                              "name": "DiaryStatusIDRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Status is required",
+                              "type": "required-validator",
+                              "visible": true
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "events": {
+                                "click": []
+                              },
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${diary}",
+                  "events": {
+                    "submit": [
+                      {
+                        "code": "return ValidateRecipients()",
+                        "error": [
+                          {
+                            "detail": "${exception0.Message}",
+                            "severity": "error",
+                            "summary": "Invalid Emails",
+                            "type": "notify"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "condition": "!IsEdit",
+                            "error": [
+                              {
+                                "name": "SaveErrorAsync",
+                                "parameters": [
+                                  {
+                                    "name": "exception",
+                                    "type": "System.Exception",
+                                    "value": "${result}"
+                                  }
+                                ],
+                                "schema": {
+                                  "$ref": "#/definitions/Task",
+                                  "dotnetType": "System.Threading.Tasks.Task"
+                                },
+                                "type": "invoke-method"
+                              },
+                              {
+                                "detail": "Cannot create new Diary!",
+                                "severity": "error",
+                                "summary": "Error",
+                                "type": "notify"
+                              }
+                            ],
+                            "name": "RECODb.createDiary",
+                            "parameters": [
+                              {
+                                "name": "Diary",
+                                "value": "${diary}"
+                              }
+                            ],
+                            "then": [
+                              {
+                                "result": "${result}",
+                                "type": "close-popup"
+                              }
+                            ],
+                            "type": "invoke"
+                          },
+                          {
+                            "code": "await UpdateDiary()",
+                            "condition": "IsEdit",
+                            "error": [],
+                            "then": [],
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "execute"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Diary",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${diary != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getClaims",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${ClaimID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getClaimsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Claim>"
+          },
+          {
+            "name": "getClaimNo",
+            "type": "set",
+            "value": "${result.FirstOrDefault().ClaimNo}",
+            "valueType": "string"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Diary Status\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getParameterDetailsResult",
+            "type": "set",
+            "value": "${result.Where(x => x.ParamTypeDesc == \"Diary Status\").ToArray()}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getTemplateDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "TemplateType",
+                "type": "string",
+                "value": "\"<All>\""
+              },
+              {
+                "operation": "eq",
+                "property": "TemplateType",
+                "type": "string",
+                "value": "\"Diary\""
+              },
+              {
+                "operation": "eq",
+                "property": "TemplateType",
+                "type": "string",
+                "value": "\"Diary/Email\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Title"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getDiaryTemplateResults",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.TemplateDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "IsEdit",
+        "type": "set",
+        "value": "DiaryID != null",
+        "valueType": "bool"
+      },
+      {
+        "condition": "!IsEdit",
+        "name": "diary",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Diary(){}",
+        "valueType": "RecoCms6.Models.RecoDb.Diary"
+      },
+      {
+        "condition": "!IsEdit",
+        "name": "diary.DiaryStatusID",
+        "type": "set",
+        "value": "getParameterDetailsResult.FirstOrDefault(x => x.ParamDesc == \"Open\").ParameterID",
+        "valueType": "int"
+      },
+      {
+        "condition": "!IsEdit",
+        "name": "diary.ID",
+        "type": "set",
+        "value": "Guid.NewGuid()",
+        "valueType": "Guid"
+      },
+      {
+        "condition": "!IsEdit",
+        "name": "diary.ClaimID",
+        "type": "set",
+        "value": "${ClaimID}",
+        "valueType": "dynamic"
+      },
+      {
+        "condition": "!IsEdit",
+        "name": "diary.EntryDate",
+        "type": "set",
+        "value": "DateTime.Now",
+        "valueType": "DateTime"
+      },
+      {
+        "condition": "!IsEdit",
+        "name": "diary.EnteredBy",
+        "type": "set",
+        "value": "${Security.User.Id}",
+        "valueType": "dynamic"
+      },
+      {
+        "condition": "!IsEdit",
+        "name": "RECODb.getServiceProviders",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "UserID",
+                "type": "string",
+                "value": "${Security.User.Id}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "diary.EnteredBy",
+            "type": "set",
+            "value": "${result.First().Name}",
+            "valueType": "string"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "Emails",
+        "type": "set",
+        "value": "new List<string>()",
+        "valueType": "IEnumerable<string>"
+      },
+      {
+        "name": "TemplateID",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "condition": "IsEdit",
+        "name": "RECODb.getDiaryByID",
+        "parameters": [
+          {
+            "name": "ID",
+            "value": "(Guid)${parameters.DiaryID}"
+          }
+        ],
+        "then": [
+          {
+            "name": "diary",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "RecoCms6.Models.RecoDb.Diary"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "AddEdit Diary"
+}

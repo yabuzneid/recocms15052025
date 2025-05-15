@@ -1,0 +1,410 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "component": "LossCauseTag",
+                  "name": "labelLossCauseTag",
+                  "text": "Loss Cause Tag",
+                  "type": "label",
+                  "visible": true
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            },
+            {
+              "class": "col-md-6",
+              "components": [
+                {
+                  "name": "LossCauseTag",
+                  "placeholder": "",
+                  "style": {
+                    "width": "100%"
+                  },
+                  "type": "textbox",
+                  "value": "${LossCauseText}",
+                  "visible": "${!Security.IsInRole(\"Auditor\")}"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            },
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "condition": "${getLossCauseTagList.Any(lt=>lt.LossCauseTag1==LossCauseText)}",
+                        "severity": "warn",
+                        "summary": "Loss Cause Already Saved",
+                        "then": [
+                          {
+                            "code": "return;",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "notify"
+                      },
+                      {
+                        "name": "losscausetag.LossCauseTag1",
+                        "type": "set",
+                        "value": "${LossCauseText}",
+                        "valueType": "string"
+                      },
+                      {
+                        "name": "RECODb.createLossCauseTag",
+                        "parameters": [
+                          {
+                            "name": "LossCauseTag",
+                            "value": "${losscausetag}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "code": "await gridLossCauseTags.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "name": "LossCauseText",
+                            "type": "set",
+                            "value": "\"\"",
+                            "valueType": "string"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "buttonAddLossCauseTag",
+                  "text": "Add",
+                  "type": "button",
+                  "visible": "${!Security.IsInRole(\"Auditor\")}"
+                }
+              ],
+              "name": "col2",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "style": {
+            "marginBottom": "1em"
+          },
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-6",
+              "components": [
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "filterTemplate": "",
+                      "property": "LossCauseTag1",
+                      "title": "Loss Cause Tag",
+                      "width": "75%"
+                    },
+                    {
+                      "template": [
+                        {
+                          "events": {
+                            "click": [
+                              {
+                                "condition": "await DialogService.Confirm(\"Are you sure you want to delete this record?\") == true",
+                                "name": "RECODb.deleteLossCauseTag",
+                                "parameters": [
+                                  {
+                                    "name": "ClaimID",
+                                    "value": "${data.ClaimID}"
+                                  },
+                                  {
+                                    "name": "LossCauseTag1",
+                                    "value": "${data.LossCauseTag1}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await gridLossCauseTags.Reload();",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "delete_outline",
+                          "name": "buttonDelete",
+                          "text": "",
+                          "type": "button",
+                          "visible": "${!Security.IsInRole(\"Auditor\")}"
+                        }
+                      ]
+                    }
+                  ],
+                  "data": "${getLossCauseTagList}",
+                  "itemType": "RecoCms6.Models.RecoDb.LossCauseTag",
+                  "name": "gridLossCauseTags",
+                  "type": "grid"
+                }
+              ],
+              "name": "col5",
+              "type": "col"
+            },
+            {
+              "class": "col-md-6",
+              "components": [
+                {
+                  "name": "label0",
+                  "style": {
+                    "width": "100%"
+                  },
+                  "text": "Top 5 Popular Tags",
+                  "type": "label"
+                },
+                {
+                  "data": "${getTop5Tags}",
+                  "multiple": false,
+                  "name": "listboxPopularTags",
+                  "style": {
+                    "width": "100%"
+                  },
+                  "textProperty": "LossCauseTag",
+                  "type": "listbox",
+                  "value": "${selectedPopularTag}",
+                  "valueProperty": "LossCauseTag"
+                },
+                {
+                  "components": [
+                    {
+                      "class": "col-md-12 text-center",
+                      "components": [
+                        {
+                          "events": {
+                            "click": [
+                              {
+                                "condition": "${selectedPopularTag == \"\"}",
+                                "detail": "Please select a tag before adding",
+                                "severity": "warn",
+                                "summary": "Unable to Add Popular Tag",
+                                "then": [
+                                  {
+                                    "code": "return;",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "notify"
+                              },
+                              {
+                                "name": "losscausetag.LossCauseTag1",
+                                "type": "set",
+                                "value": "${selectedPopularTag}",
+                                "valueType": "string"
+                              },
+                              {
+                                "name": "RECODb.createLossCauseTag",
+                                "parameters": [
+                                  {
+                                    "name": "LossCauseTag",
+                                    "value": "${losscausetag}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await gridLossCauseTags.Reload();",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "add_circle_outline",
+                          "name": "buttonAddSelectedTag",
+                          "text": "Add Tag",
+                          "type": "button",
+                          "visible": "${!Security.IsInRole(\"Auditor\")}"
+                        }
+                      ],
+                      "name": "col7",
+                      "type": "col"
+                    }
+                  ],
+                  "name": "row4",
+                  "style": {
+                    "paddingTop": "1em"
+                  },
+                  "type": "row"
+                }
+              ],
+              "name": "col6",
+              "type": "col"
+            }
+          ],
+          "name": "row3",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [],
+              "name": "col3",
+              "type": "col"
+            }
+          ],
+          "name": "row1",
+          "style": {
+            "marginBottom": "1em"
+          },
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12 text-md-center",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "name": "buttonCloseDialog",
+                  "text": "Close",
+                  "type": "button"
+                }
+              ],
+              "name": "col4",
+              "type": "col"
+            }
+          ],
+          "name": "row2",
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "losscausetag",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.LossCauseTag(){}",
+        "valueType": "RecoCms6.Models.RecoDb.LossCauseTag"
+      },
+      {
+        "name": "losscausetag.ClaimID",
+        "type": "set",
+        "value": "${ClaimID}",
+        "valueType": "int"
+      },
+      {
+        "name": "RECODb.getLossCauseTags",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${ClaimID}"
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "LossCauseTag1"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getLossCauseTagList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.LossCauseTag>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "LossCauseText",
+        "type": "set",
+        "value": "\"\"",
+        "valueType": "string"
+      },
+      {
+        "name": "selectedPopularTag",
+        "type": "set",
+        "value": "\"\"",
+        "valueType": "string"
+      },
+      {
+        "name": "RECODb.getLossCauseTagCounts",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "LossCauseID",
+                "type": "integer",
+                "value": "${LossCauseID}"
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "LossCauseTag"
+              }
+            ]
+          },
+          {
+            "name": "$top",
+            "value": "5"
+          }
+        ],
+        "then": [
+          {
+            "name": "getTop5Tags",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.LossCauseTagCount>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Loss Cause Tag"
+}

@@ -1,0 +1,31 @@
+﻿@page "/file-viewer/{ID}"
+@layout NoMenuLayout
+@inherits RecoCms6.Pages.FileViewerComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12" style="padding-top: 40px">
+        <RadzenHtml Visible="@viewerVisible" @ref="divPdfViewer">
+          <PdfViewer DocumentPath=@DocumentPath>
+          </PdfViewer>
+        </RadzenHtml>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-md-center">
+        <RadzenLabel Text="Use Ctrl +/ Ctrl - to zoom in and out of document">
+        </RadzenLabel>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

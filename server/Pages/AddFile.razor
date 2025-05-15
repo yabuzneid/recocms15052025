@@ -1,0 +1,132 @@
+﻿@page "/add-file/{ClaimID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddFileComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@file" TItem="RecoCms6.Models.RecoDb.File" Visible="@(file != null)">
+          <ChildContent>
+            <div class="row">
+              <div class="col-md-2">
+                <RadzenLabel Text="Standard Filename">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getStandardFilenames" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@standardfilename" ValueProperty="ParamDesc" Name="DropdownStandardFilename" Change="@DropdownStandardFilenameChange">
+                </RadzenDropDown>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="Subject" style="width: 100%" Text="Subject">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="255" style="display: block; width: 100%" @bind-Value="@(file.Subject)" Name="Subject">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Subject" style="position: absolute" Text="Subject is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="FileTypeID" style="width: 100%" Text="File Type">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-6">
+                <RadzenDropDown AllowFiltering="true" Data="@getFileTypeList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose File Type" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(file.FileTypeID)" ValueProperty="ParameterID" Name="FileTypeID">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Text="File Type is Required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 0.25em" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="Sticky" style="width: 100%" Text="Keep At Top" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("Adjuster"))">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-1">
+                <RadzenCheckBox @bind-Value="@(file.Sticky)" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("Adjuster"))" Name="Sticky">
+                </RadzenCheckBox>
+              </div>
+              <div class="col-md-2">
+                <RadzenLabel Component="LargeLoss" style="width: 100%" Text="Large Loss" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("Adjuster"))">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-1">
+                <RadzenCheckBox @bind-Value="@(file.LargeLoss)" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("Adjuster"))" Name="LargeLoss">
+                </RadzenCheckBox>
+              </div>
+              <div class="col-md-2">
+                <RadzenLabel Text="Privileged & Confidential" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("Adjuster"))">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-1">
+                <RadzenCheckBox @bind-Value="@(file.Confidential)" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("Adjuster"))" Name="Checkbox0">
+                </RadzenCheckBox>
+              </div>
+              <div class="col-md-2">
+                <RadzenLabel Text="Visible To Counsel" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("Adjuster"))">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-1">
+                <RadzenCheckBox @bind-Value="@(file.VisibleToCounsel)" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("Adjuster"))" Name="Checkbox1">
+                </RadzenCheckBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="StoredDocument" style="width: 100%" Text="Document">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-8">
+                <RadzenHtml>
+                  <FileUploader @ref="fileUploader" Url=@($"upload/file/{@ClaimID}/{@Security.User.Id}") UploadCompletedEvent="@UploadCompleted"/>
+                </RadzenHtml>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <RadzenLabel Text="Description" Visible="@(file.FileTypeID != getClaimReportID)">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-10">
+                <RadzenTextArea style="width: 100%" @bind-Value="@(file.FileDescription)" Visible="@(file.FileTypeID != getClaimReportID)" Name="FileDescription">
+                </RadzenTextArea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <RadzenLabel Text="Summary" Visible="@(file.FileTypeID == getClaimReportID)">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-10">
+                <RadzenHtmlEditor style="height: 400px" UploadUrl="upload/image" @bind-Value="@(file.Comments)" Visible="@(file.FileTypeID == getClaimReportID)" Name="HtmlEditor0">
+                </RadzenHtmlEditor>
+              </div>
+            </div>
+            <div style="margin-top: 20px" class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Button" Icon="save" Text="Save" Click="@ButtonSaveClick">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

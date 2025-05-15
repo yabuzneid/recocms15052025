@@ -1,0 +1,65 @@
+﻿@page "/builders"
+@layout MainLayout
+@inherits RecoCms6.Pages.BuildersComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Builders">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getBuildersResult" TItem="RecoCms6.Models.RecoDb.Builder" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Property="ID" Title="ID">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Property="BuilderID" Title="Builder ID">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Property="Name" Title="Name">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Property="Address" Title="Address">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" FilterProperty="Parameter.ParamAbbrev" Property="ProvinceID" SortProperty="Parameter.ParamAbbrev" Title="Parameter">
+              <Template Context="data">
+              @(data.Parameter?.ParamAbbrev)
+              </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Property="City" Title="City">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Property="PostalCode" Title="Postal Code">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Property="EmailAddress" Title="Email Address">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Property="BusinessPhoneNum" Title="Business Phone Num">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Property="CellPhoneNum" Title="Cell Phone Num">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Property="FaxNum" Title="Fax Num">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" FilterProperty="Parameter1.ParamAbbrev" Property="PreferredCommunicationMethodID" SortProperty="Parameter1.ParamAbbrev" Title="Parameter">
+              <Template Context="data">
+              @(data.Parameter1?.ParamAbbrev)
+              </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Builder" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="recoCms6ModelsRecoDbBuilder">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, recoCms6ModelsRecoDbBuilder))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

@@ -1,0 +1,242 @@
+{
+  "access": "Authenticated",
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "allowColumnResize": true,
+                  "attributes": [
+                    {
+                      "name": "TItem",
+                      "value": "ClaimActivityLog"
+                    }
+                  ],
+                  "columns": [
+                    {
+                      "formatString": "{0:g}",
+                      "property": "EntryDate",
+                      "title": "Entry Date"
+                    },
+                    {
+                      "property": "Subject",
+                      "title": "Subject"
+                    },
+                    {
+                      "filterable": false,
+                      "property": "Details",
+                      "sortable": false,
+                      "template": "@((MarkupString)data.Details)",
+                      "title": "Details"
+                    },
+                    {
+                      "property": "NoteType",
+                      "title": "Note Type"
+                    },
+                    {
+                      "property": "Name",
+                      "title": "Entered By"
+                    }
+                  ],
+                  "events": {
+                    "rowDeselect": [
+                      {
+                        "code": "SelectedNotes.Remove(args)",
+                        "type": "execute"
+                      }
+                    ],
+                    "rowSelect": [
+                      {
+                        "code": "SelectedNotes.Add(args)",
+                        "type": "execute"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.ClaimActivityLog",
+                  "name": "grid0",
+                  "selectionMode": "DataGridSelectionMode.Multiple",
+                  "type": "grid",
+                  "value": "",
+                  "visible": false
+                },
+                {
+                  "allowColumnResize": true,
+                  "allowRowSelectOnRowClick": false,
+                  "attributes": [
+                    {
+                      "name": "TItem",
+                      "value": "RecoCms6.Models.RecoDb.ClaimActivityLog"
+                    },
+                    {
+                      "name": "@bind-Value",
+                      "value": "${SelectedNotes}"
+                    }
+                  ],
+                  "columns": [
+                    {
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "TValue",
+                              "value": "bool"
+                            }
+                          ],
+                          "events": {
+                            "change": [
+                              {
+                                "code": "grid0.SelectRow(data);",
+                                "type": "execute"
+                              }
+                            ]
+                          },
+                          "name": "checkbox0",
+                          "type": "checkbox",
+                          "value": "${SelectedNotes != null && SelectedNotes.Contains(data)}",
+                          "valueType": "bool"
+                        }
+                      ],
+                      "width": "50px"
+                    },
+                    {
+                      "format": "date-time",
+                      "formatString": "{0:d}",
+                      "property": "EntryDate",
+                      "title": "Entry Date",
+                      "type": "string"
+                    },
+                    {
+                      "format": "",
+                      "property": "Subject",
+                      "title": "Subject",
+                      "type": "string"
+                    },
+                    {
+                      "editTemplate": "",
+                      "format": "",
+                      "property": "Details",
+                      "template": "@((MarkupString)data.Details)",
+                      "title": "Details",
+                      "type": "string",
+                      "width": "70%"
+                    }
+                  ],
+                  "data": "${activityLog}",
+                  "itemType": "RecoCms6.Models.RecoDb.ClaimActivityLog",
+                  "name": "datagridNotes",
+                  "type": "datagrid"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            }
+          ],
+          "name": "row1",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "buttonStyle": "primary",
+                  "events": {
+                    "click": [
+                      {
+                        "result": "${SelectedNotes}",
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "name": "button1",
+                  "style": {
+                    "display": "inline-block",
+                    "float": "none"
+                  },
+                  "text": "Add",
+                  "type": "button"
+                },
+                {
+                  "buttonStyle": "light",
+                  "events": {
+                    "click": [
+                      {
+                        "result": "",
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "icon": "",
+                  "name": "buttonCancel",
+                  "text": "Cancel",
+                  "type": "button"
+                }
+              ],
+              "name": "col0",
+              "style": {
+                "textAlign": "center"
+              },
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "SelectedNotes",
+        "type": "set",
+        "value": "new List<ClaimActivityLog>()",
+        "valueType": "IList<RecoCms6.Models.RecoDb.ClaimActivityLog>"
+      },
+      {
+        "name": "RECODb.getClaimActivityLogs",
+        "parameters": [
+          {
+            "name": "ClaimID",
+            "value": "${ClaimID}"
+          },
+          {
+            "name": "UserID",
+            "value": "${Security.User.Id}"
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "desc",
+                "property": "Sticky"
+              },
+              {
+                "direction": "desc",
+                "property": "EntryDate"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "activityLog",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimActivityLog>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "DialogSelectNote"
+}

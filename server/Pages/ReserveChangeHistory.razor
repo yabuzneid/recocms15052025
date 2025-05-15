@@ -1,0 +1,79 @@
+﻿@page "/reserve-change-history"
+@layout MainLayout
+@inherits RecoCms6.Pages.ReserveChangeHistoryComponent
+
+@using Syncfusion.Blazor.Grids
+@using Microsoft.AspNetCore.Authorization
+@using RecoCms6.Models.RecoDb
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-1">
+        <RadzenLabel Text="Program">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-3">
+        <RadzenDropDown Data="@getProgramList" TextProperty="ParamDesc" @bind-Value="@selectedProgram" ValueProperty="ParameterID" Name="Dropdown0">
+        </RadzenDropDown>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-2">
+            <RadzenLabel Text="Start Date">
+            </RadzenLabel>
+          </div>
+          <div class="col-md-2">
+            <RadzenDatePicker DateFormat="d" @bind-Value="@selectedStartDate" Name="Datepicker0">
+            </RadzenDatePicker>
+          </div>
+          <div class="col-md-2">
+            <RadzenLabel Text="End Date">
+            </RadzenLabel>
+          </div>
+          <div class="col-md-2">
+            <RadzenDatePicker DateFormat="d" @bind-Value="@selectedReportDate" Name="Datepicker1">
+            </RadzenDatePicker>
+          </div>
+          <div class="col-md-2">
+            <RadzenButton Icon="update" Text="Run" Click="@ButtonRunClick">
+            </RadzenButton>
+          </div>
+          <div class="col-md-2">
+            <RadzenButton Icon="get_app" Text="Export" Click="@ButtonExportClick">
+            </RadzenButton>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenLabel Text="Reserve Change History">
+        </RadzenLabel>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+          <SfGrid DataSource="@getDataList" TValue="ReserveChangeHistoryModel" AllowPaging="true" Width="100%">
+            <GridScrollSettings Width="auto" />
+            <GridColumns>
+              <GridColumn Width="200" Field="@nameof(ReserveChangeHistoryModel.ClaimNo)" HeaderText="Claim No"></GridColumn>
+              <GridColumn Width="200" Field="@nameof(ReserveChangeHistoryModel.AmountClaimed)" HeaderText="Amount Claimed"></GridColumn>
+              <GridColumn Width="200" Field="@nameof(ReserveChangeHistoryModel.ClaimDate)" HeaderText="Claim Date" Format="d"></GridColumn>
+              <GridColumn Width="200" Field="@nameof(ReserveChangeHistoryModel.TransactionDate)" HeaderText="Transaction Date" Format="G"></GridColumn>
+              <GridColumn Width="200" Field="@nameof(ReserveChangeHistoryModel.IndemnityIncreased)" HeaderText="Indemnity Increased" Format="C2"></GridColumn>
+              <GridColumn Width="200" Field="@nameof(ReserveChangeHistoryModel.IndemnityDecreased)" HeaderText="Indemnity Decreased" Format="C2"></GridColumn>
+              <GridColumn Width="200" Field="@nameof(ReserveChangeHistoryModel.AdjustingIncreased)" HeaderText="Adjusting Increased" Format="C2"></GridColumn>
+              <GridColumn Width="200" Field="@nameof(ReserveChangeHistoryModel.AdjustingDecreased)" HeaderText="Adjusting Decreased" Format="C2"></GridColumn>
+              <GridColumn Width="200" Field="@nameof(ReserveChangeHistoryModel.LegalIncreased)" HeaderText="Legal Increased" Format="C2"></GridColumn>
+              <GridColumn Width="200" Field="@nameof(ReserveChangeHistoryModel.LegalDecreased)" HeaderText="Legal Decreased" Format="C2"></GridColumn>
+            </GridColumns>
+          </SfGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

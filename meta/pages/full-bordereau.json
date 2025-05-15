@@ -1,0 +1,248 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-2",
+              "components": [
+                {
+                  "name": "label2",
+                  "text": "Select Report Date",
+                  "type": "label"
+                }
+              ],
+              "name": "col4",
+              "type": "col"
+            },
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "dateFormat": "d",
+                  "name": "datepicker1",
+                  "placeholder": "",
+                  "showTimeOkButton": true,
+                  "type": "datepicker",
+                  "value": "${selectedReportDate}"
+                }
+              ],
+              "name": "col5",
+              "type": "col"
+            },
+            {
+              "class": "col-md-2",
+              "components": [
+                {
+                  "buttonStyle": "primary",
+                  "buttonType": "button",
+                  "disabled": false,
+                  "events": {
+                    "click": [
+                      {
+                        "name": "RECODb.getFullBordereaus",
+                        "parameters": [
+                          {
+                            "name": "ReportDate",
+                            "value": "${selectedReportDate}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "getDataList",
+                            "type": "set",
+                            "value": "${result}",
+                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.FullBordereau>"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "icon": "save",
+                  "isBusy": false,
+                  "name": "button0",
+                  "text": "Run",
+                  "type": "button",
+                  "visible": false
+                }
+              ],
+              "name": "col6",
+              "type": "col"
+            },
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "disabled": false,
+                  "events": {
+                    "click": [
+                      {
+                        "name": "RECODb.UpdateReportDates",
+                        "parameters": [
+                          {
+                            "name": "ReportDate",
+                            "value": "${selectedReportDate}"
+                          },
+                          {
+                            "name": "UserID",
+                            "value": "${Security.User.Id}"
+                          },
+                          {
+                            "name": "StartDate",
+                            "value": "null"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "name": "DownloadFileAsync",
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "icon": "get_app",
+                  "name": "button1",
+                  "text": "Export",
+                  "type": "button"
+                }
+              ],
+              "name": "col12",
+              "type": "col"
+            }
+          ],
+          "name": "row3",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [],
+                          "name": "col0",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "type": "row"
+                    }
+                  ],
+                  "name": "panel0",
+                  "style": {},
+                  "text": "Full Bordereau",
+                  "type": "panel"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            }
+          ],
+          "name": "row2",
+          "style": {},
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getParametersResults",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProgramList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getContractYearList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Contract Year\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "PageSizes",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Contract Year\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "selectedProgramID",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "selectedReportDate",
+        "type": "set",
+        "value": "DateTime.Today",
+        "valueType": "DateTime"
+      },
+      {
+        "name": "hiddenColumns",
+        "type": "set",
+        "value": "new List<string>(){ \"ClaimID\", \"OccurrenceID\", \"TradeID\" }",
+        "valueType": "List<string>"
+      },
+      {
+        "condition": "${selectedProgramID == -1}",
+        "name": "RECODb.getFullBordereaus",
+        "parameters": [
+          {
+            "name": "ReportDate",
+            "value": "${selectedReportDate}"
+          }
+        ],
+        "then": [
+          {
+            "name": "getDataList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.FullBordereau>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Full Bordereau"
+}

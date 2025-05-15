@@ -1,0 +1,55 @@
+﻿@page "/service-provider-bordereau"
+@layout MainLayout
+@inherits RecoCms6.Pages.ServiceProviderBordereauComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-2">
+        <RadzenLabel Text="Select Report Date">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-2">
+        <RadzenDatePicker DateFormat="d" ShowTimeOkButton="true" @bind-Value="@selectedReportDate" Name="Datepicker1">
+        </RadzenDatePicker>
+      </div>
+      <div class="col-md-2">
+        <RadzenLabel Text="Select Defense Firm (Leave Empty For All Firms)">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-4">
+        <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getFirmList" style="width: 100%" TextProperty="Name" @bind-Value="@selectedFirmID" ValueProperty="FirmID" Name="Dropdown0">
+        </RadzenDropDown>
+      </div>
+      <div class="col-md-2">
+        <RadzenButton Icon="get_app" Text="Export" Click="@Button1Click">
+        </RadzenButton>
+      </div>
+    </div>
+    <div  class="row">
+      <div class="col-md-12">
+        <RadzenPanel  Text="Service Provider Bordereau">
+          <ChildContent>
+            <div class="row">
+              <div class="col-md-10">
+              </div>
+              <div class="col-md-2">
+                <RadzenButton Icon="save" Text="Run" Visible="false" Click="@Button0Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenPanel>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

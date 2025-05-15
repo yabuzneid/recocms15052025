@@ -1,0 +1,280 @@
+{
+  "access": "Authenticated",
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-1",
+              "components": [
+                {
+                  "name": "label0",
+                  "text": "Program",
+                  "type": "label"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            },
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "data": "${getProgramList}",
+                  "name": "dropdown0",
+                  "textProperty": "ParamDesc",
+                  "type": "dropdown",
+                  "value": "${selectedProgram}",
+                  "valueProperty": "ParameterID",
+                  "valueType": "int"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "class": "col-md-2",
+                      "components": [
+                        {
+                          "name": "label1",
+                          "text": "Start Date",
+                          "type": "label"
+                        }
+                      ],
+                      "name": "col2",
+                      "type": "col"
+                    },
+                    {
+                      "class": "col-md-2",
+                      "components": [
+                        {
+                          "dateFormat": "d",
+                          "name": "datepicker0",
+                          "placeholder": "",
+                          "type": "datepicker",
+                          "value": "${selectedStartDate}"
+                        }
+                      ],
+                      "name": "col3",
+                      "type": "col"
+                    },
+                    {
+                      "class": "col-md-2",
+                      "components": [
+                        {
+                          "name": "label2",
+                          "text": "End Date",
+                          "type": "label"
+                        }
+                      ],
+                      "name": "col7",
+                      "type": "col"
+                    },
+                    {
+                      "class": "col-md-2",
+                      "components": [
+                        {
+                          "dateFormat": "d",
+                          "name": "datepicker1",
+                          "placeholder": "",
+                          "type": "datepicker",
+                          "value": "${selectedReportDate}"
+                        }
+                      ],
+                      "name": "col8",
+                      "type": "col"
+                    },
+                    {
+                      "class": "col-md-2",
+                      "components": [
+                        {
+                          "events": {
+                            "click": [
+                              {
+                                "name": "RECODb.getReserveChangeHistories",
+                                "parameters": [
+                                  {
+                                    "name": "EndDate",
+                                    "value": "${selectedReportDate}"
+                                  },
+                                  {
+                                    "name": "ProgramID",
+                                    "value": "${selectedProgram}"
+                                  },
+                                  {
+                                    "name": "StartDate",
+                                    "value": "${selectedStartDate}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "name": "getDataList",
+                                    "type": "set",
+                                    "value": "${result}",
+                                    "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ReserveChangeHistory>"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "update",
+                          "name": "buttonRun",
+                          "text": "Run",
+                          "type": "button"
+                        }
+                      ],
+                      "name": "col4",
+                      "type": "col"
+                    }
+                  ],
+                  "name": "row2",
+                  "type": "row"
+                }
+              ],
+              "name": "col6",
+              "type": "col"
+            }
+          ],
+          "name": "row1",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "name": "label3",
+                  "text": "Reserve Change History",
+                  "type": "label"
+                }
+              ],
+              "name": "col10",
+              "type": "col"
+            }
+          ],
+          "name": "row4",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [],
+              "name": "col9",
+              "type": "col"
+            }
+          ],
+          "name": "row3",
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"ProgramID\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParameterID"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getProgramList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "selectedProgram",
+            "type": "set",
+            "value": "${result.First().ParameterID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "selectedReportDate",
+        "type": "set",
+        "value": "DateTime.Today",
+        "valueType": "DateTime"
+      },
+      {
+        "name": "selectedStartDate",
+        "type": "set",
+        "value": "new DateTime(DateTime.Today.Year, 1, 1)",
+        "valueType": "DateTime"
+      },
+      {
+        "name": "RECODb.getReserveChangeHistories",
+        "parameters": [
+          {
+            "name": "ProgramID",
+            "value": "${selectedProgram}"
+          },
+          {
+            "name": "EndDate",
+            "value": "${selectedReportDate}"
+          },
+          {
+            "name": "StartDate",
+            "value": "${selectedStartDate}"
+          }
+        ],
+        "then": [
+          {
+            "name": "getDataList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ReserveChangeHistory>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "hiddenColumns",
+        "type": "set",
+        "value": "new List<string>(){\"ClaimID\",\"OccurrenceID\",\"TradeID\"}",
+        "valueType": "List<string>"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Reserve Change History"
+}

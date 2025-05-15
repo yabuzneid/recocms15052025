@@ -1,0 +1,344 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-1",
+              "components": [
+                {
+                  "name": "label2",
+                  "text": "From",
+                  "type": "label"
+                }
+              ],
+              "name": "col4",
+              "type": "col"
+            },
+            {
+              "class": "col-md-2",
+              "components": [
+                {
+                  "dateFormat": "d",
+                  "name": "dtFromDate",
+                  "placeholder": "",
+                  "showTimeOkButton": true,
+                  "type": "datepicker",
+                  "value": "${startDate}"
+                },
+                {
+                  "name": "requiredValidator0",
+                  "type": "required-validator"
+                }
+              ],
+              "name": "col5",
+              "type": "col"
+            },
+            {
+              "class": "col-md-1",
+              "components": [
+                {
+                  "name": "label0",
+                  "text": "To",
+                  "type": "label"
+                }
+              ],
+              "name": "col2",
+              "type": "col"
+            },
+            {
+              "class": "col-md-2",
+              "components": [
+                {
+                  "dateFormat": "d",
+                  "name": "dtEndDate",
+                  "placeholder": "",
+                  "showTimeOkButton": true,
+                  "type": "datepicker",
+                  "value": "${selectedReportDate}"
+                },
+                {
+                  "name": "requiredValidator1",
+                  "type": "required-validator"
+                }
+              ],
+              "name": "col12",
+              "type": "col"
+            },
+            {
+              "class": "col-md-4",
+              "components": [
+                {
+                  "allowClear": true,
+                  "allowFiltering": true,
+                  "data": "${getActiveServiceProvidersList}",
+                  "name": "dropdown0",
+                  "placeholder": "Show All",
+                  "style": {
+                    "width": "90%"
+                  },
+                  "textProperty": "NameandFirm",
+                  "type": "dropdown",
+                  "value": "${selectedUser}",
+                  "valueProperty": "UserID",
+                  "valueType": "RecoCms6.Pages.ActiveUserDiaryReportComponent"
+                },
+                {
+                  "name": "requiredValidator2",
+                  "type": "required-validator"
+                }
+              ],
+              "name": "col3",
+              "type": "col"
+            },
+            {
+              "class": "col-md-2",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "condition": "",
+                        "name": "RECODb.getActiveUserDiaryReports",
+                        "parameters": [
+                          {
+                            "name": "ReminderDateTo",
+                            "value": "${selectedReportDate}"
+                          },
+                          {
+                            "name": "UserID",
+                            "value": "${selectedUser}"
+                          },
+                          {
+                            "name": "ReminderDateFrom",
+                            "value": "${startDate}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "getDataList",
+                            "type": "set",
+                            "value": "${result}",
+                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ActiveUserDiaryReport>"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "icon": "save",
+                  "name": "button0",
+                  "text": "Run",
+                  "type": "button"
+                }
+              ],
+              "name": "col6",
+              "type": "col"
+            }
+          ],
+          "name": "row3",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [],
+                          "name": "col0",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "type": "row"
+                    }
+                  ],
+                  "name": "panel0",
+                  "style": {},
+                  "text": "Active User Diaries",
+                  "type": "panel"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            }
+          ],
+          "name": "row2",
+          "style": {},
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          },
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"ProgramID\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Contract Year\""
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getParametersResults",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProgramList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getContractYearList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Contract Year\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "PageSizes",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Contract Year\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "selectedProgramID",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "startDate",
+        "type": "set",
+        "value": "DateTime.Today",
+        "valueType": "DateTime"
+      },
+      {
+        "name": "selectedReportDate",
+        "type": "set",
+        "value": "${startDate.AddYears(1)}",
+        "valueType": "System.DateTime"
+      },
+      {
+        "name": "hiddenColumns",
+        "type": "set",
+        "value": "new List<string>(){ \"ClaimID\", \"OccurrenceID\", \"TradeID\" }",
+        "valueType": "List<string>"
+      },
+      {
+        "name": "RECODb.getServiceProviderDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "Active",
+                "type": "boolean",
+                "value": "true"
+              },
+              {
+                "filters": [
+                  {
+                    "operation": "eq",
+                    "property": "FirmType",
+                    "type": "string",
+                    "value": "\"Adjuster\""
+                  },
+                  {
+                    "operation": "eq",
+                    "property": "FirmType",
+                    "type": "string",
+                    "value": "\"Defense Counsel\""
+                  },
+                  {
+                    "operation": "eq",
+                    "property": "FirmType",
+                    "type": "string",
+                    "value": "\"Claims Manager\""
+                  },
+                  {
+                    "operation": "eq",
+                    "property": "FirmType",
+                    "type": "string",
+                    "value": "\"Program Manager\""
+                  }
+                ],
+                "operator": "or"
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getActiveServiceProvidersList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<ServiceProviderDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "selectedUser",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Active User Diary Report"
+}

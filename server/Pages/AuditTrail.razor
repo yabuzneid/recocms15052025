@@ -1,0 +1,51 @@
+﻿@page "/audit-trail"
+@layout MainLayout
+@inherits RecoCms6.Pages.AuditTrailComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Program Manager, System Admin")]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Audit Trail">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenSplitButton Icon="get_app" style="margin-bottom: 10px; margin-left: 0px" Text="Export" Click="@Splitbutton0Click">
+          <ChildContent>
+            <RadzenSplitButtonItem Text="Excel" Value="xlsx">
+            </RadzenSplitButtonItem>
+            <RadzenSplitButtonItem Text="CSV" Value="csv">
+            </RadzenSplitButtonItem>
+          </ChildContent>
+        </RadzenSplitButton>
+        <div class="row">
+          <div class="col-md-6">
+            <RadzenTextBox Placeholder="Search ..." style="display: block; margin-bottom: 10px; width: 100%" @bind-Value="@search" Name="Textbox0" @oninput="@(async(args) => {search = $"{args.Value}";await Load();})">
+            </RadzenTextBox>
+          </div>
+          <div class="col-md-6">
+          </div>
+        </div>
+        <RadzenGrid @ref="grid0" AllowColumnResize="true" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getAuditTrailDetailsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterMode="Radzen.FilterMode.Advanced" TItem="RecoCms6.Models.RecoDb.AuditTrailDetail" PageSize="100" RowSelect="@Grid0RowSelect" style="height: calc(100vh - 160px)">
+          <Columns>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.AuditTrailDetail" FormatString="{0:d}" Property="AuditTrailDate" Title="Audit Trail Date">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.AuditTrailDetail" Property="ClaimNo" Title="Claim No">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.AuditTrailDetail" Property="RowDetails" Title="Row Details">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.AuditTrailDetail" Property="Name" Title="Updated By">
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

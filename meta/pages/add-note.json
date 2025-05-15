@@ -1,0 +1,889 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label1",
+                              "text": "Select Claim",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col4",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "allowColumnResize": false,
+                              "allowFilteringByAllStringColumns": true,
+                              "columns": [
+                                {
+                                  "property": "Program",
+                                  "title": "Program"
+                                },
+                                {
+                                  "property": "ClaimNo",
+                                  "title": "Claim No"
+                                },
+                                {
+                                  "property": "Address",
+                                  "title": "Address"
+                                },
+                                {
+                                  "property": "Insureds",
+                                  "title": "Insureds"
+                                },
+                                {
+                                  "property": "Claimants",
+                                  "title": "Claimants"
+                                },
+                                {
+                                  "property": "Broker",
+                                  "title": "Broker"
+                                },
+                                {
+                                  "property": "BrokerOfRecord",
+                                  "title": "Broker Of Record"
+                                },
+                                {
+                                  "property": "DefenceCounsel",
+                                  "title": "Defence Counsel"
+                                },
+                                {
+                                  "property": "Status",
+                                  "title": "Status"
+                                }
+                              ],
+                              "data": "${claimList}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "filterDelay": 100,
+                              "itemType": "RecoCms6.Models.RecoDb.ClaimList",
+                              "name": "ClaimID",
+                              "selectedValue": "",
+                              "style": {
+                                "display": "block"
+                              },
+                              "textProperty": "ClaimNo",
+                              "type": "dropdown-datagrid",
+                              "value": "${note.ClaimID}",
+                              "valueProperty": "ClaimID",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "ClaimID",
+                              "name": "requiredValidator1",
+                              "text": "Claim is Required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "name": "col2",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row2",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "NoteTypeID",
+                              "name": "NoteTypeIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Note Type",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getNoteTypeList}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "NoteTypeID",
+                              "placeholder": "Choose Note Type",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${note.NoteTypeID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            },
+                            {
+                              "component": "NoteTypeID",
+                              "name": "requiredValidator0",
+                              "text": "Note Type is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label2",
+                              "text": "Privileged & Confidential",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col9",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "checkbox0",
+                              "type": "checkbox",
+                              "value": "${note.Confidential}",
+                              "valueType": "bool?",
+                              "visible": true
+                            }
+                          ],
+                          "name": "col10",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label3",
+                              "text": "Visible To Counsel",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col11",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "checkbox1",
+                              "type": "checkbox",
+                              "value": "${note.VisibleToCounsel}",
+                              "valueType": "bool?"
+                            }
+                          ],
+                          "name": "col12",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "LargeLoss",
+                              "name": "LargeLossLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Large Loss",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col7",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "LargeLoss",
+                              "type": "checkbox",
+                              "value": "${note.LargeLoss}",
+                              "valueType": "bool"
+                            }
+                          ],
+                          "name": "col8",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Sticky",
+                              "name": "StickyLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Keep At Top",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col5",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "Sticky",
+                              "type": "checkbox",
+                              "value": "${note.Sticky}",
+                              "valueType": "bool"
+                            }
+                          ],
+                          "name": "col6",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Subject",
+                              "name": "SubjectLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Subject",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 255,
+                              "name": "Subject",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${note.Subject}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "Subject",
+                              "name": "SubjectRequiredValidator",
+                              "popup": false,
+                              "style": {
+                                "display": "flex",
+                                "marginBottom": ".25em",
+                                "position": "absolute"
+                              },
+                              "text": "Subject is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1.25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Details",
+                              "name": "DetailsLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Details",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-10",
+                          "components": [
+                            {
+                              "name": "htmlEditor0",
+                              "style": {
+                                "height": "350px"
+                              },
+                              "tools": [
+                                {
+                                  "type": "Undo"
+                                },
+                                {
+                                  "type": "Redo"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "type": "Bold"
+                                },
+                                {
+                                  "type": "Italic"
+                                },
+                                {
+                                  "type": "Underline"
+                                },
+                                {
+                                  "type": "StrikeThrough"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "type": "AlignLeft"
+                                },
+                                {
+                                  "type": "AlignCenter"
+                                },
+                                {
+                                  "type": "AlignRight"
+                                },
+                                {
+                                  "type": "Justify"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "type": "Indent"
+                                },
+                                {
+                                  "type": "Outdent"
+                                },
+                                {
+                                  "type": "UnorderedList"
+                                },
+                                {
+                                  "type": "OrderedList"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "items": [
+                                    {
+                                      "value": "ff2800"
+                                    },
+                                    {
+                                      "value": "fe9300"
+                                    },
+                                    {
+                                      "value": "fefb00"
+                                    },
+                                    {
+                                      "value": "02f900"
+                                    },
+                                    {
+                                      "value": "00fdff"
+                                    },
+                                    {
+                                      "value": "0433ff"
+                                    },
+                                    {
+                                      "value": "ff40ff"
+                                    },
+                                    {
+                                      "value": "942292"
+                                    },
+                                    {
+                                      "value": "aa7942"
+                                    },
+                                    {
+                                      "value": "ffffff"
+                                    },
+                                    {
+                                      "value": "000000"
+                                    },
+                                    {
+                                      "value": "53d5fd"
+                                    },
+                                    {
+                                      "value": "73a7fe"
+                                    },
+                                    {
+                                      "value": "874efe"
+                                    },
+                                    {
+                                      "value": "d357fe"
+                                    },
+                                    {
+                                      "value": "ed719e"
+                                    },
+                                    {
+                                      "value": "ff8c82"
+                                    },
+                                    {
+                                      "value": "ffa57d"
+                                    },
+                                    {
+                                      "value": "ffc677"
+                                    },
+                                    {
+                                      "value": "fff995"
+                                    },
+                                    {
+                                      "value": "ebf38f"
+                                    },
+                                    {
+                                      "value": "b1dd8c"
+                                    }
+                                  ],
+                                  "type": "Color"
+                                },
+                                {
+                                  "items": [
+                                    {
+                                      "value": "ff2800"
+                                    },
+                                    {
+                                      "value": "fe9300"
+                                    },
+                                    {
+                                      "value": "fefb00"
+                                    },
+                                    {
+                                      "value": "02f900"
+                                    },
+                                    {
+                                      "value": "00fdff"
+                                    },
+                                    {
+                                      "value": "0433ff"
+                                    },
+                                    {
+                                      "value": "ff40ff"
+                                    },
+                                    {
+                                      "value": "942292"
+                                    },
+                                    {
+                                      "value": "aa7942"
+                                    },
+                                    {
+                                      "value": "ffffff"
+                                    },
+                                    {
+                                      "value": "000000"
+                                    },
+                                    {
+                                      "value": "53d5fd"
+                                    },
+                                    {
+                                      "value": "73a7fe"
+                                    },
+                                    {
+                                      "value": "874efe"
+                                    },
+                                    {
+                                      "value": "d357fe"
+                                    },
+                                    {
+                                      "value": "ed719e"
+                                    },
+                                    {
+                                      "value": "ff8c82"
+                                    },
+                                    {
+                                      "value": "ffa57d"
+                                    },
+                                    {
+                                      "value": "ffc677"
+                                    },
+                                    {
+                                      "value": "fff995"
+                                    },
+                                    {
+                                      "value": "ebf38f"
+                                    },
+                                    {
+                                      "value": "b1dd8c"
+                                    }
+                                  ],
+                                  "type": "Background"
+                                },
+                                {
+                                  "type": "RemoveFormat"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "type": "Subscript"
+                                },
+                                {
+                                  "type": "Superscript"
+                                },
+                                {
+                                  "type": "Separator"
+                                },
+                                {
+                                  "type": "Link"
+                                },
+                                {
+                                  "type": "Unlink"
+                                },
+                                {
+                                  "items": [
+                                    {
+                                      "text": "Arial",
+                                      "value": "Arial"
+                                    },
+                                    {
+                                      "text": "Georgia",
+                                      "value": "Georgia"
+                                    },
+                                    {
+                                      "text": "Helvetica",
+                                      "value": "Helvetica"
+                                    },
+                                    {
+                                      "text": "Monospace",
+                                      "value": "monospace"
+                                    },
+                                    {
+                                      "text": "Segoe UI",
+                                      "value": "'Segoe UI'"
+                                    },
+                                    {
+                                      "text": "Tahoma",
+                                      "value": "Tahoma"
+                                    },
+                                    {
+                                      "text": "Times New Roman",
+                                      "value": "'Times New Roman'"
+                                    },
+                                    {
+                                      "text": "Verdana",
+                                      "value": "Verdana"
+                                    }
+                                  ],
+                                  "type": "FontName"
+                                },
+                                {
+                                  "type": "FontSize"
+                                },
+                                {
+                                  "type": "FormatBlock"
+                                }
+                              ],
+                              "type": "html-editor",
+                              "uploadUrl": "upload/image",
+                              "value": "${note.Details}"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "events": {
+                                "click": []
+                              },
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginTop": ".25em"
+                      },
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${note}",
+                  "events": {
+                    "submit": [
+                      {
+                        "condition": "${parameters.NoteID == Guid.Empty}",
+                        "name": "note.ID",
+                        "type": "set",
+                        "value": "Guid.NewGuid()",
+                        "valueType": "Guid"
+                      },
+                      {
+                        "name": "RECODb.getServiceProviderDetails",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "operation": "eq",
+                                "property": "UserID",
+                                "type": "string",
+                                "value": "${Security.User.Id}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "note.EnteredByID",
+                            "type": "set",
+                            "value": "${result.First().Name}",
+                            "valueType": "string"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${parameters.NoteID == Guid.Empty}",
+                        "error": [
+                          {
+                            "detail": "Unable to create new Note",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.createNote",
+                        "parameters": [
+                          {
+                            "name": "Note",
+                            "value": "${note}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${note}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${parameters.NoteID != Guid.Empty}",
+                        "error": [
+                          {
+                            "severity": "error",
+                            "summary": "Unable to Save Note",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.updateNote",
+                        "parameters": [
+                          {
+                            "name": "ID",
+                            "value": "${note.ID}"
+                          },
+                          {
+                            "name": "Note",
+                            "value": "${note}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${note}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Note",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${note != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Note Type\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getNoteTypeList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "defaultNoteType",
+            "type": "set",
+            "value": "${result.First(p=>p.ParamDesc==\"Note\").ParameterID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "condition": "${parameters.NoteID == Guid.Empty}",
+        "name": "note",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Note(){}",
+        "valueType": "RecoCms6.Models.RecoDb.Note"
+      },
+      {
+        "condition": "${parameters.NoteID == Guid.Empty}",
+        "name": "note.ClaimID",
+        "type": "set",
+        "value": "${parameters.ClaimID}",
+        "valueType": "int"
+      },
+      {
+        "name": "note.NoteTypeID",
+        "type": "set",
+        "value": "${defaultNoteType}",
+        "valueType": "int"
+      },
+      {
+        "name": "roles",
+        "type": "set",
+        "value": "new List<Role>()",
+        "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Role>"
+      },
+      {
+        "name": "RECODb.getClaimSearchLists",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "desc",
+                "property": "ClaimNo"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "claimList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimSearchList>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "condition": "${parameters.NoteID != Guid.Empty}",
+        "name": "RECODb.getNoteByID",
+        "parameters": [
+          {
+            "name": "ID",
+            "value": "${parameters.NoteID}"
+          }
+        ],
+        "then": [
+          {
+            "name": "note",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "RecoCms6.Models.RecoDb.Note"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Note"
+}

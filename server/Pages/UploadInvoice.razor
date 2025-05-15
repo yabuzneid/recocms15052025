@@ -1,0 +1,129 @@
+﻿@page "/upload-invoice"
+@layout MainLayout
+@inherits RecoCms6.Pages.UploadInvoiceComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Accountant, Program Manager, System Admin")]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H3" Text="Upload Invoice">
+    </RadzenHeading>
+    <RadzenTemplateForm Data="@invoiceuploadfile" TItem="RecoCms6.Models.RecoDb.InvoiceUploadFile" Visible="@(invoiceuploadfile != null)" Submit="@TemplateForm0Submit">
+      <ChildContent>
+        <div class="row">
+          <div class="col-md-2">
+            <RadzenLabel Text="Select Firm">
+            </RadzenLabel>
+          </div>
+          <div class="col-md-4">
+            <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getFirmList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" style="width: 100%" TextProperty="Name" @bind-Value="@selectedFirmID" ValueProperty="FirmID" Name="FirmID" Change="@FirmIdChange">
+            </RadzenDropDown>
+            <RadzenLabel style="color: rgb(249, 119, 127); display: block; font-size: 12px" Text="Must Select a Firm" Visible="@(validationarray.Contains("FirmID"))">
+            </RadzenLabel>
+          </div>
+          <div class="col-md-2 text-md-right">
+            <RadzenLabel Text="Payable To">
+            </RadzenLabel>
+          </div>
+          <div class="col-md-4">
+            <RadzenTextBox style="width: 100%" @bind-Value="@payableTo" Name="PayableTo">
+            </RadzenTextBox>
+            <RadzenLabel style="color: rgb(249, 119, 127); display: block; font-size: 12px" Text="Must enter payable To" Visible="@(validationarray.Contains("PayableTo"))">
+            </RadzenLabel>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <RadzenLabel Text="Select File To Upload">
+            </RadzenLabel>
+          </div>
+          <div class="align-items-center d-flex col-md-10">
+            <RadzenUpload Accept="excel/*.xls" ChooseText="Browse" Url="upload/invoice" Complete="@Upload0Complete">
+            </RadzenUpload>
+            <RadzenLabel Text="@($"{(invoiceuploadfile.Filename)}")">
+            </RadzenLabel>
+            <RadzenLabel style="color: rgb(249, 119, 127); display: block; font-size: 12px" Text="Must Choose a File" Visible="@(validationarray.Contains("InvoiceFile"))">
+            </RadzenLabel>
+          </div>
+        </div>
+        <div style="margin-bottom: 1rem" class="row">
+          <div class="col-md-2">
+            <RadzenLabel Text="Enter Invoice #">
+            </RadzenLabel>
+          </div>
+          <div class="col-md-3">
+            <RadzenTextBox AutoComplete="false" @bind-Value="@invoicenumber" Name="InvoiceNumber">
+            </RadzenTextBox>
+            <RadzenLabel style="color: rgb(249, 119, 127); display: block; font-size: 12px" Text="Must Enter a Invoice Number" Visible="@(validationarray.Contains("InvoiceNumber"))">
+            </RadzenLabel>
+          </div>
+          <div class="col-md-3 text-md-right">
+            <RadzenLabel Text="Invoices Uploaded as of Date">
+            </RadzenLabel>
+          </div>
+          <div class="col-md-4">
+            <RadzenDatePicker DateFormat="yyyy-MM-dd" ShowTimeOkButton="false" @bind-Value="@invoicedate" Name="InvoiceDate">
+            </RadzenDatePicker>
+            <RadzenLabel style="color: rgb(249, 119, 127); display: block; font-size: 12px" Text="Must Enter a Invoice Date" Visible="@(validationarray.Contains("InvoiceDate"))">
+            </RadzenLabel>
+          </div>
+        </div>
+        <div style="margin-bottom: 1rem" class="row">
+          <div class="col-md-2">
+            <RadzenLabel Component="textBox1" style="width: 100%" Text="Comments">
+            </RadzenLabel>
+          </div>
+          <div class="col-md-9">
+            <RadzenTextArea Rows="3" style="width: 80%" @bind-Value="@comments" Name="Comments">
+            </RadzenTextArea>
+          </div>
+        </div>
+        <div style="margin-bottom: 1rem" class="row">
+          <div class="col-md-2">
+            <RadzenLabel Component="textBox1" style="width: 100%" Text="Sending Instructions">
+            </RadzenLabel>
+          </div>
+          <div class="col-md-9">
+            <RadzenTextArea Rows="3" style="width: 80%" @bind-Value="@sendinginstructions" Name="SendingInstructions">
+            </RadzenTextArea>
+          </div>
+        </div>
+        <div style="margin-top: 1rem" class="row">
+          <div class="text-md-center col-md-9">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save_alt" Text="Submit">
+            </RadzenButton>
+          </div>
+          <div class="col-md-3">
+            <RadzenButton Text="Generate Invoice" Visible="@(Security.IsInRole("Program Manager"))" Click="@ButtonGenerateInvoiceClick">
+            </RadzenButton>
+          </div>
+        </div>
+        <RadzenFieldset Text="Errors" Visible="@(uploaderrors != null)">
+          <ChildContent>
+            <div class="row">
+              <div class="col-md-12">
+                <RadzenButton Icon="get_app" Text="Export" Visible="@(uploaderrors != null && uploaderrors.Count() >  0)" Click="@ButtonExportErrorsClick">
+                </RadzenButton>
+              </div>
+            </div>
+            <RadzenGrid @ref="gridErrors" Data="@uploaderrors" TItem="RecoCms6.Models.RecoDb.InvoiceUploadRowError">
+              <Columns>
+                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.InvoiceUploadRowError" Property="RowNumber" Title="Row #" Width="100px">
+                </RadzenGridColumn>
+                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.InvoiceUploadRowError" Property="Problem" Title="Problem">
+                </RadzenGridColumn>
+              </Columns>
+            </RadzenGrid>
+          </ChildContent>
+        </RadzenFieldset>
+      </ChildContent>
+    </RadzenTemplateForm>
+  </ChildContent>
+</RadzenContent>

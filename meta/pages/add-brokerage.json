@@ -1,0 +1,817 @@
+{
+  "access": "Authenticated",
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Name",
+                              "name": "NameLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Brokerage Name",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 100,
+                              "name": "Name",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${brokerage.Name}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "Name",
+                              "name": "NameRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Name is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "BrokerOfRecordID",
+                              "name": "label0",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "${Globals.generalsettings.BrokerOfRecordName}",
+                              "type": "label",
+                              "visible": true
+                            }
+                          ],
+                          "name": "col12",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "maxLength": 100,
+                              "name": "textbox0",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${brokerage.BrokerOfRecordName}",
+                              "valueType": "string",
+                              "visible": "true"
+                            }
+                          ],
+                          "name": "col13",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "style": {
+                        "paddingBottom": "1em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "ContactPerson",
+                              "name": "ContactPersonLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Main Contact",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "maxLength": 100,
+                              "name": "ContactPerson",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${brokerage.ContactPerson}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label1",
+                              "text": "Phone Num",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col6",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "mask0",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "type": "mask",
+                              "value": "${brokerage.ContactPersonPhoneNum}"
+                            }
+                          ],
+                          "name": "col7",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "EmailAddress",
+                              "name": "label2",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Contact Email\n",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col8",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 450,
+                              "name": "textbox1",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${brokerage.ContactPersonEmail}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "name": "col14",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row3",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Street2",
+                              "name": "Street2Label",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Address",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 500,
+                              "name": "Address",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${brokerage.Address}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "City",
+                              "name": "CityLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "City",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "maxLength": 100,
+                              "name": "City",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${brokerage.City}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "component": "ProvinceID",
+                              "name": "ProvinceIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Province",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "data": "${getProvinceList}",
+                              "name": "ProvinceID",
+                              "placeholder": "Choose Province",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamAbbrev",
+                              "type": "dropdown",
+                              "value": "${brokerage.ProvinceID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "component": "PostalCode",
+                              "name": "PostalCodeLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Postal Code",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col10",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "PostalCode",
+                              "placeholder": "A1A 1A1",
+                              "type": "textbox",
+                              "value": "${brokerage.PostalCode}"
+                            },
+                            {
+                              "component": "PostalCode",
+                              "name": "regexValidator0",
+                              "pattern": "([ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ])\\ ?([0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])",
+                              "style": {
+                                "display": "block",
+                                "position": "absolute",
+                                "width": "100%"
+                              },
+                              "text": "Not a valid postal code",
+                              "type": "regex-validator"
+                            }
+                          ],
+                          "name": "col11",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "EmailAddress",
+                              "name": "EmailAddressLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Email Address",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 450,
+                              "name": "EmailAddress",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${brokerage.EmailAddress}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "BusinessPhoneNum",
+                              "name": "BusinessPhoneNumLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Business Phone Num",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "BusinessPhoneNum",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "type": "mask",
+                              "value": "${brokerage.BusinessPhoneNum}"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "CellPhoneNum",
+                              "name": "CellPhoneNumLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Cell Phone Num",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col4",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "CellPhoneNum",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "type": "mask",
+                              "value": "${brokerage.CellPhoneNum}"
+                            }
+                          ],
+                          "name": "col5",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [
+                            {
+                              "allowCollapse": true,
+                              "collapsed": true,
+                              "components": [
+                                {
+                                  "components": [
+                                    {
+                                      "class": "col-md-12",
+                                      "components": [
+                                        {
+                                          "events": {
+                                            "click": [
+                                              {
+                                                "name": "InsertContactRow",
+                                                "schema": {
+                                                  "$ref": "#/definitions/Task",
+                                                  "dotnetType": "System.Threading.Tasks.Task"
+                                                },
+                                                "type": "invoke-method"
+                                              }
+                                            ]
+                                          },
+                                          "icon": "add_circle_outline",
+                                          "name": "buttonAddContact",
+                                          "text": "Add New Contact",
+                                          "type": "button"
+                                        }
+                                      ],
+                                      "name": "col3",
+                                      "type": "col"
+                                    }
+                                  ],
+                                  "name": "row2",
+                                  "type": "row"
+                                },
+                                {
+                                  "attributes": [
+                                    {
+                                      "name": "ref",
+                                      "value": "contactsGrid"
+                                    }
+                                  ],
+                                  "columns": [
+                                    {
+                                      "property": "Name",
+                                      "title": "Name"
+                                    },
+                                    {
+                                      "property": "Email",
+                                      "title": "Email"
+                                    },
+                                    {
+                                      "property": "PhoneNum",
+                                      "title": "Phone #"
+                                    },
+                                    {
+                                      "property": "BrokerageRoleID",
+                                      "template": [
+                                        {
+                                          "data": "${getBrokerageRoleList}",
+                                          "name": "dropdown0",
+                                          "textProperty": "ParamDesc",
+                                          "type": "dropdown",
+                                          "valueProperty": "ParameterID"
+                                        }
+                                      ],
+                                      "title": "Role"
+                                    }
+                                  ],
+                                  "count": "",
+                                  "data": "${brokerage.BrokerageContacts}",
+                                  "itemType": "RecoCms6.Models.RecoDb.BrokerageContact",
+                                  "name": "contactsGrid",
+                                  "type": "datagrid"
+                                }
+                              ],
+                              "name": "fieldset0",
+                              "text": "Additional Contacts",
+                              "type": "fieldset",
+                              "visible": false
+                            }
+                          ],
+                          "name": "col2",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${brokerage}",
+                  "events": {
+                    "submit": [
+                      {
+                        "name": "bDuplicateNumber",
+                        "type": "set",
+                        "value": "false",
+                        "valueType": "bool"
+                      },
+                      {
+                        "name": "RECODb.getBrokerages",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "operation": "eq",
+                                "property": "Name",
+                                "type": "string",
+                                "value": "${brokerage.Name}"
+                              },
+                              {
+                                "operation": "ne",
+                                "property": "BrokerageID",
+                                "type": "integer",
+                                "value": "${brokerage.BrokerageID}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "bDuplicateName",
+                            "type": "set",
+                            "value": "${result.Count() > 0}",
+                            "valueType": "bool"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${Globals.generalsettings.ApplicationName == \"XLG CMS\"}",
+                        "name": "RECODb.getBrokerages",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "operation": "eq",
+                                "property": "RegistrantNo",
+                                "type": "string",
+                                "value": "${brokerage.RegistrantNo}"
+                              },
+                              {
+                                "operation": "ne",
+                                "property": "BrokerageID",
+                                "type": "integer",
+                                "value": "${brokerage.BrokerageID}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "bDuplicateNumber",
+                            "type": "set",
+                            "value": "${result.Count() > 0}",
+                            "valueType": "bool"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${!bDuplicateName && !bDuplicateNumber}",
+                        "error": [
+                          {
+                            "detail": "${result.error.message}",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.createBrokerage",
+                        "parameters": [
+                          {
+                            "name": "Brokerage",
+                            "value": "${brokerage}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${brokerage}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${bDuplicateName}",
+                        "detail": "Brokerage Name Already Exists",
+                        "severity": "warn",
+                        "summary": "Unable to Save",
+                        "type": "notify"
+                      },
+                      {
+                        "condition": "${bDuplicateNumber}",
+                        "detail": "Brokerage Number Already In System",
+                        "severity": "warn",
+                        "summary": "Unable to Save Brokerage",
+                        "type": "notify"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Brokerage",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${brokerage != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Province\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Method of Communication\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Brokerage Role\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getCommunicationMethodsResult",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Method Of Communication\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProvinceList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getBrokerageRoleList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Brokerage Role\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getAdministrators",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getAdministratorsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Administrator>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "brokerage",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Brokerage(){}",
+        "valueType": "RecoCms6.Models.RecoDb.Brokerage"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Brokerage"
+}

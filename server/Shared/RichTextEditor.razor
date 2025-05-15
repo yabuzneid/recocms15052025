@@ -1,0 +1,120 @@
+﻿@using Syncfusion.Blazor
+@using Syncfusion.Blazor.RichTextEditor
+
+<div class="control-section">
+    <SfRichTextEditor Readonly="@Readonly" @bind-Value="@Data" 
+                      ShowCharCount="@ShowCharCount"
+                      EnableResize="@EnableResize" CssClass="SfRichTextEditor" Height="@Height" @ref="RteObj">
+        <ChildContent>
+            <RichTextEditorToolbarSettings Items="@Tools" Type="ToolbarType.Expand"></RichTextEditorToolbarSettings>
+            <RichTextEditorPasteCleanupSettings Prompt="false" PlainText="false" KeepFormat="true" />
+            <RichTextEditorFontColor Mode="Syncfusion.Blazor.Inputs.ColorPickerMode.Picker"></RichTextEditorFontColor>
+            <RichTextEditorBackgroundColor Mode="Syncfusion.Blazor.Inputs.ColorPickerMode.Picker"></RichTextEditorBackgroundColor>
+            <RichTextEditorInlineMode Enable="@InlineMode" ShowOnSelection="@ShowSelection" />
+        </ChildContent>
+    </SfRichTextEditor>
+</div>
+
+<style>
+    .e-code-mirror::before {
+        content: '\e345';
+    }
+
+    .e-html-preview::before {
+        content: '\e350';
+    }
+
+    .CodeMirror-linenumber,
+    .CodeMirror-gutters {
+        display: none;
+    }
+
+    .sb-header {
+        z-index: 100;
+    }
+</style>
+
+@code {
+
+
+    SfRichTextEditor RteObj;
+
+    private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
+{
+        new ToolbarItemModel() { Command = ToolbarCommand.Undo },
+        new ToolbarItemModel() { Command = ToolbarCommand.Redo },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.Bold },
+        new ToolbarItemModel() { Command = ToolbarCommand.Italic },
+        new ToolbarItemModel() { Command = ToolbarCommand.Underline },
+        new ToolbarItemModel() { Command = ToolbarCommand.StrikeThrough },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontName },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
+        new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.LowerCase },
+        new ToolbarItemModel() { Command = ToolbarCommand.UpperCase },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
+        new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.Formats },
+        new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.OrderedList },
+        new ToolbarItemModel() { Command = ToolbarCommand.UnorderedList },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.Outdent },
+        new ToolbarItemModel() { Command = ToolbarCommand.Indent },
+        new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        new ToolbarItemModel() { Command = ToolbarCommand.CreateLink },
+        new ToolbarItemModel() { Command = ToolbarCommand.Image },
+        new ToolbarItemModel() { Command = ToolbarCommand.CreateTable }//,
+        //new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+        //new ToolbarItemModel() { Command = ToolbarCommand.ClearFormat },
+    };
+
+    private string _data = string.Empty;
+
+    [Parameter]
+    public string Data
+    {
+        get => _data;
+        set
+        {
+            if (_data == value) return;
+
+            _data = value;
+            DataChanged.InvokeAsync(_data);
+        }
+    }
+
+    [Parameter]
+    public EventCallback<string> DataChanged { get; set; }
+
+    [Parameter]
+    public string Height { get; set; }
+
+    [Parameter]
+    public bool Readonly { get; set; } = false;
+
+    [Parameter]
+    public bool ShowCharCount { get; set; } = true;
+
+    [Parameter]
+    public bool EnableResize { get; set; } = true;
+
+    [Parameter]
+    public bool InlineMode { get; set; } = false;
+
+    [Parameter]
+    public bool ShowSelection { get; set; } = false;
+
+    public void DialogOpen()
+    {
+        this.RteObj.RefreshUIAsync();
+    }
+}

@@ -1,0 +1,188 @@
+﻿@page "/add-brokerage"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddBrokerageComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@brokerage" TItem="RecoCms6.Models.RecoDb.Brokerage" Visible="@(brokerage != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="Name" style="width: 100%" Text="Name">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="100" style="display: block; width: 100%" @bind-Value="@(brokerage.Name)" Name="Name">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Name" style="position: absolute" Text="Name is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="padding-bottom: 1em" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="BrokerOfRecordID" style="width: 100%" Text="@($"{(Globals.generalsettings.BrokerOfRecordName)}")">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenTextBox MaxLength="100" style="width: 100%" @bind-Value="@(brokerage.BrokerOfRecordName)" Visible="true" Name="Textbox0">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="ContactPerson" style="width: 100%" Text="Main Contact">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenTextBox MaxLength="100" style="width: 100%" @bind-Value="@(brokerage.ContactPerson)" Name="ContactPerson">
+                </RadzenTextBox>
+              </div>
+              <div class="col-md-2">
+                <RadzenLabel Text="Phone Num">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenMask Mask="(***) ***-****" Pattern="[^0-9]" Placeholder="(000) 000-0000" @bind-Value="@(brokerage.ContactPersonPhoneNum)" Name="Mask2">
+                </RadzenMask>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="EmailAddress" style="width: 100%" Text="Contact Email
+                ">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="450" style="width: 100%" @bind-Value="@(brokerage.ContactPersonEmail)" Name="Textbox1">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="UnitNumber" style="width: 100%" Text="Unit Number">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenTextBox MaxLength="20" style="width: 100%" @bind-Value="@(brokerage.UnitNumber)" Name="UnitNumber">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="Street1" style="width: 100%" Text="Street 1">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="500" style="width: 100%" @bind-Value="@(brokerage.Street1)" Name="Street1">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="Street2" style="width: 100%" Text="Street 2">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="500" style="width: 100%" @bind-Value="@(brokerage.Street2)" Name="Street2">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="ProvinceID" style="width: 100%" Text="Province">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-2">
+                <RadzenDropDown Data="@getProvinceList" Placeholder="Choose Province" style="width: 100%" TextProperty="ParamAbbrev" @bind-Value="@(brokerage.ProvinceID)" ValueProperty="ParameterID" Name="ProvinceID">
+                </RadzenDropDown>
+              </div>
+              <div class="col-md-1">
+                <RadzenLabel Component="City" style="width: 100%" Text="City">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenTextBox MaxLength="100" style="width: 100%" @bind-Value="@(brokerage.City)" Name="City">
+                </RadzenTextBox>
+              </div>
+              <div class="col-md-2">
+                <RadzenLabel Component="PostalCode" style="width: 100%" Text="Postal Code">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-2">
+                <RadzenTextBox MaxLength="7" Placeholder="A1A 1A1" style="width: 100%" @bind-Value="@(brokerage.PostalCode)" Name="PostalCode">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="EmailAddress" style="width: 100%" Text="Email Address">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="450" style="width: 100%" @bind-Value="@(brokerage.EmailAddress)" Name="EmailAddress">
+                </RadzenTextBox>
+                <RadzenEmailValidator Component="EmailAddress" Text="Not a valid email">
+                </RadzenEmailValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="BusinessPhoneNum" style="width: 100%" Text="Business Phone Num">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenMask Mask="(***) ***-****" Pattern="[^0-9]" Placeholder="(000) 000-0000" @bind-Value="@(brokerage.BusinessPhoneNum)" Name="Mask0">
+                </RadzenMask>
+              </div>
+              <div class="col-md-3">
+                <RadzenLabel Component="CellPhoneNum" style="width: 100%" Text="Cell Phone Num">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenMask Mask="(***) ***-****" Pattern="[^0-9]" Placeholder="(000) 000-0000" @bind-Value="@(brokerage.CellPhoneNum)" Name="Mask1">
+                </RadzenMask>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="PreferredCommunicationMethodID" style="width: 100%" Text="Preferred Communication Method">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenDropDown Data="@getCommunicationMethodList" Placeholder="Choose Preferred Communication Method" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(brokerage.PreferredCommunicationMethodID)" ValueProperty="ParameterID" Name="PreferredCommunicationMethodID">
+                </RadzenDropDown>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="AdministratorID" style="width: 100%" Text="Administrator">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-6">
+                <RadzenDropDown Data="@getAdministratorsResult" Placeholder="Choose Administrator" style="width: 100%" TextProperty="Name" @bind-Value="@(brokerage.AdministratorID)" ValueProperty="AdministratorID" Name="AdministratorID">
+                </RadzenDropDown>
+              </div>
+              <div class="col-md-3">
+                <RadzenButton Icon="add_circle_outline" Text="New" Click="@ButtonNewAdminstratorClick">
+                </RadzenButton>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button3Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

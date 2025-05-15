@@ -1,0 +1,1267 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "attributes": [
+                    {
+                      "name": "@oninput",
+                      "value": "@Reload"
+                    },
+                    {
+                      "name": "@ref",
+                      "value": "txtSearch"
+                    }
+                  ],
+                  "autoComplete": false,
+                  "events": {
+                    "change": [
+                      {
+                        "name": "TxtSearchChanged",
+                        "parameters": [
+                          {
+                            "name": "args",
+                            "type": "bool",
+                            "value": "${false}"
+                          }
+                        ],
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "name": "txtSearch",
+                  "placeholder": "Search",
+                  "style": {
+                    "marginBottom": "0.25em",
+                    "marginTop": "0.25em",
+                    "width": "80%"
+                  },
+                  "type": "textbox",
+                  "value": "${search}"
+                },
+                {
+                  "name": "checkbox0",
+                  "type": "checkbox",
+                  "value": "${bAuto}",
+                  "valueType": "bool",
+                  "visible": true
+                },
+                {
+                  "name": "label0",
+                  "text": "Auto",
+                  "type": "label"
+                }
+              ],
+              "name": "col5",
+              "style": {
+                "visibility": "visible"
+              },
+              "type": "col"
+            },
+            {
+              "class": "col-md-2",
+              "components": [
+                {
+                  "allowClear": true,
+                  "allowFiltering": true,
+                  "attributes": [
+                    {
+                      "name": "@ref",
+                      "value": "dropdownStatusFilter"
+                    },
+                    {
+                      "name": "TValue",
+                      "value": "int"
+                    }
+                  ],
+                  "data": "${getStatusList}",
+                  "events": {
+                    "change": [
+                      {
+                        "name": "filterStatus",
+                        "type": "set",
+                        "value": "${event}",
+                        "valueType": "int"
+                      },
+                      {
+                        "name": "SelectBarStatusChanged",
+                        "parameters": [
+                          {
+                            "name": "args",
+                            "type": "int",
+                            "value": "${(int)args}"
+                          }
+                        ],
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "name": "dropdownStatusFilter",
+                  "placeholder": "Status Filter",
+                  "style": {
+                    "width": "100%"
+                  },
+                  "textProperty": "ParamDesc",
+                  "type": "dropdown",
+                  "value": "${filterStatus}",
+                  "valueProperty": "ParameterID",
+                  "valueType": "int"
+                }
+              ],
+              "name": "col2",
+              "type": "col"
+            },
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "allowClear": true,
+                  "attributes": [
+                    {
+                      "name": "ref",
+                      "value": "dropdownChangeFilter1"
+                    }
+                  ],
+                  "data": "${getProgramList}",
+                  "events": {
+                    "change": [
+                      {
+                        "name": "TxtSearchChange",
+                        "parameters": [
+                          {
+                            "name": "args",
+                            "type": "string",
+                            "value": "${false}"
+                          }
+                        ],
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "name": "dropdownChangeFilter2",
+                  "placeholder": "Select Program",
+                  "textProperty": "ParamDesc",
+                  "type": "dropdown",
+                  "value": "${Globals.selectedProgramID}",
+                  "valueProperty": "ParameterID",
+                  "valueType": "int",
+                  "visible": ""
+                }
+              ],
+              "name": "col9",
+              "type": "col"
+            },
+            {
+              "class": "col-md-2",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "height": "${\"80%\"}",
+                        "parameters": [],
+                        "path": "add-claim",
+                        "then": [
+                          {
+                            "code": "await datagrid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup",
+                        "width": "${\"80%\"}"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "New Claim",
+                  "type": "button",
+                  "visible": "${showNewClaimButtons}"
+                }
+              ],
+              "name": "col8",
+              "type": "col"
+            },
+            {
+              "class": "col-md-2",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "height": "${\"90%\"}",
+                        "path": "add-commission-claim",
+                        "then": [
+                          {
+                            "code": "await datagrid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup",
+                        "width": "${\"75%\"}"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "buttonAddCommissionClaim",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "template": "",
+                  "text": "New CD/CP Claim",
+                  "type": "button",
+                  "visible": "${showNewClaimButtons}"
+                }
+              ],
+              "name": "col7",
+              "type": "col"
+            }
+          ],
+          "name": "row3",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-5",
+              "components": [
+                {
+                  "allowClear": true,
+                  "attributes": [
+                    {
+                      "name": "@ref",
+                      "value": "dropdownBrokerageOnly"
+                    }
+                  ],
+                  "data": "${getBrokerageOnlyList}",
+                  "events": {
+                    "change": [
+                      {
+                        "name": "SelectBarBrokerageOnlyChanged",
+                        "parameters": [
+                          {
+                            "name": "args",
+                            "type": "int",
+                            "value": "${event.ParameterID}"
+                          }
+                        ],
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "name": "dropdownBrokerageOnly",
+                  "placeholder": "Brokerage Only",
+                  "textProperty": "ParamDesc",
+                  "type": "dropdown",
+                  "valueProperty": "ParameterID"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            },
+            {
+              "class": "col-md-2",
+              "components": [
+                {
+                  "attributes": [
+                    {
+                      "name": "@ref",
+                      "value": "chkCoverageIssue"
+                    },
+                    {}
+                  ],
+                  "events": {
+                    "change": [
+                      {
+                        "name": "ChkCoverageIssueChangeAlt",
+                        "parameters": [
+                          {
+                            "name": "args",
+                            "type": "bool",
+                            "value": "${args}"
+                          }
+                        ],
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "name": "chkCoverageIssue",
+                  "style": {
+                    "marginBottom": "5px",
+                    "marginTop": "5px"
+                  },
+                  "triState": false,
+                  "type": "checkbox",
+                  "value": "${filterCoverageIssue}",
+                  "valueType": "bool",
+                  "visible": "${!Security.IsInRole(\"Defense Counsel\")}"
+                },
+                {
+                  "component": "chkCoverageIssue",
+                  "name": "lblCoverageIssue",
+                  "style": {
+                    "marginBottom": "5px",
+                    "marginLeft": "8px",
+                    "marginTop": "5px"
+                  },
+                  "text": "Coverage Issue",
+                  "type": "label",
+                  "visible": "${!Security.IsInRole(\"Defense Counsel\")}"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            },
+            {
+              "attributes": [],
+              "class": "col-md-3",
+              "components": [
+                {
+                  "allowClear": true,
+                  "attributes": [
+                    {
+                      "name": "@ref",
+                      "value": "dropdownClaimOrIncident"
+                    }
+                  ],
+                  "data": "${getClaimOrIncidentList}",
+                  "events": {
+                    "change": [
+                      {
+                        "name": "SelectBarClaimOrIncidentChanged",
+                        "parameters": [
+                          {
+                            "name": "args",
+                            "type": "int",
+                            "value": "${event.ParamValue}"
+                          }
+                        ],
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "name": "dropdownClaimOrIncident",
+                  "placeholder": "Claim Or Incident",
+                  "textProperty": "ParamDesc",
+                  "type": "dropdown",
+                  "valueProperty": "ParamValue"
+                }
+              ],
+              "name": "col6",
+              "type": "col"
+            },
+            {
+              "class": "text-md-right col-md-1",
+              "components": [
+                {
+                  "data": "@(new List<int>() { 10, 25, 50, 100, 200 })",
+                  "events": {
+                    "change": [
+                      {
+                        "code": "await datagrid0.Reload();",
+                        "type": "execute"
+                      }
+                    ]
+                  },
+                  "name": "dropdown0",
+                  "placeholder": "Page Size",
+                  "style": {
+                    "width": "113.33333587646484px"
+                  },
+                  "template": "",
+                  "type": "dropdown",
+                  "value": "${pagesize}",
+                  "visible": true
+                }
+              ],
+              "name": "col4",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "style": {
+            "marginBottom": "10px",
+            "marginTop": "10px"
+          },
+          "type": "row"
+        },
+        {
+          "allowColumnReorder": true,
+          "allowColumnResize": true,
+          "allowFiltering": true,
+          "allowPaging": true,
+          "allowSorting": true,
+          "columns": [
+            {
+              "filterTemplate": "",
+              "property": "Program",
+              "sortProperty": "",
+              "title": "Program",
+              "visible": "${Globals.selectedProgramID == 0}",
+              "width": "225px"
+            },
+            {
+              "property": "ClaimNo",
+              "title": "Claim #",
+              "width": "150px"
+            },
+            {
+              "property": "CounselFileNo",
+              "sortProperty": "",
+              "title": "Counsel File #",
+              "visible": "${Security.IsInRole(\"Defense Counsel\")}",
+              "width": "125px"
+            },
+            {
+              "property": "AdjusterClaimNo",
+              "title": "Adjuster File #",
+              "visible": "${Security.IsInRole(\"Adjuster\")}"
+            },
+            {
+              "format": "",
+              "property": "NoticeOfClaimRefNum",
+              "sortProperty": "",
+              "title": "Notice Ref #",
+              "type": "string",
+              "visible": false,
+              "width": "175px"
+            },
+            {
+              "property": "Address",
+              "title": "Address",
+              "width": "200px"
+            },
+            {
+              "property": "Insureds",
+              "title": "Insureds",
+              "width": "200px"
+            },
+            {
+              "property": "Claimants",
+              "title": "Claimants",
+              "width": "200px"
+            },
+            {
+              "format": "",
+              "property": "Brokerage1",
+              "title": "Brokerage 1",
+              "type": "string",
+              "width": "150px"
+            },
+            {
+              "property": "FileHandler",
+              "title": "File Handler",
+              "visible": true,
+              "width": "200px"
+            },
+            {
+              "property": "DefenceCounsel",
+              "title": "Defence Counsel",
+              "width": "200px"
+            },
+            {
+              "property": "Status",
+              "title": "Status",
+              "width": "150px"
+            },
+            {
+              "format": "",
+              "property": "Broker1",
+              "title": "Broker of Record",
+              "type": "string",
+              "width": "175px"
+            },
+            {
+              "property": "Adjuster",
+              "title": "Adjuster",
+              "visible": "${Security.IsInRole(\"Adjuster\")}",
+              "width": "150px"
+            },
+            {
+              "format": "",
+              "property": "Occurences",
+              "title": "Occurence",
+              "type": "string",
+              "visible": "${Globals.selectedProgramID != getEOProgramID}",
+              "width": "150px"
+            },
+            {
+              "format": "",
+              "property": "Builder1",
+              "title": "Builder",
+              "type": "string",
+              "visible": "${Globals.selectedProgramID != getEOProgramID}",
+              "width": "150px"
+            }
+          ],
+          "data": "${getClaimListsResult}",
+          "events": {
+            "rowSelect": [
+              {
+                "condition": "${SelectClaim == null}",
+                "name": "isLoading",
+                "type": "set",
+                "value": "true",
+                "valueType": "bool"
+              },
+              {
+                "name": "selectedClaimID",
+                "type": "set",
+                "value": "${event.ClaimID}",
+                "valueType": "int"
+              },
+              {
+                "condition": "${SelectClaim == null}",
+                "name": "RECODb.getClaimLists",
+                "parameters": [
+                  {
+                    "name": "$filter",
+                    "operator": "and",
+                    "value": [
+                      {
+                        "operation": "eq",
+                        "property": "ClaimID",
+                        "type": "integer",
+                        "value": "${event.ClaimID}"
+                      }
+                    ]
+                  }
+                ],
+                "then": [
+                  {
+                    "global": true,
+                    "name": "gblCurrentClaim",
+                    "type": "set",
+                    "value": "${result.First()}",
+                    "valueType": "RecoCms6.Models.RecoDb.ClaimList"
+                  }
+                ],
+                "type": "invoke"
+              },
+              {
+                "name": "randomParam",
+                "type": "set",
+                "value": "String.Empty",
+                "valueType": "string"
+              },
+              {
+                "name": "GenerateRndParameter",
+                "schema": {
+                  "$ref": "#/definitions/Void",
+                  "dotnetType": "void"
+                },
+                "type": "invoke-method"
+              },
+              {
+                "code": "UriHelper.NavigateTo($\"edit-claim/{args.ClaimID.ToBase64()}\");",
+                "condition": "${SelectClaim == null && !Security.IsInRole(\"Defense Counsel\") && event.Program==\"Errors And Omissions\"}",
+                "type": "execute"
+              },
+              {
+                "code": "UriHelper.NavigateTo($\"claim-report/{args.ClaimID.ToBase64()}\");",
+                "condition": "${SelectClaim == null && Security.IsInRole(\"Defense Counsel\")}",
+                "type": "execute"
+              },
+              {
+                "code": "UriHelper.NavigateTo($\"edit-commission-claim/{args.ClaimID.ToBase64()}\");",
+                "condition": "${SelectClaim == null && !Security.IsInRole(\"Defense Counsel\") && event.Program != \"Errors And Omissions\"}",
+                "type": "execute"
+              }
+            ]
+          },
+          "isLoading": "${isLoading}",
+          "itemType": "RecoCms6.Models.RecoDb.ClaimSearchList",
+          "name": "datagrid0",
+          "pageSize": "${pagesize}",
+          "pageSizeOptions": [
+            5,
+            10,
+            25,
+            50,
+            100
+          ],
+          "responsive": true,
+          "showExpandColumn": false,
+          "type": "datagrid",
+          "visible": "${!Security.IsInRole(\"Actuary\")}"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12 text-md-center",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "condition": "${selectedClaimID == 0}",
+                        "detail": "Please Select a Claim First",
+                        "severity": "warn",
+                        "summary": "No Claim Selected",
+                        "type": "notify"
+                      },
+                      {
+                        "condition": "${selectedClaimID > 0}",
+                        "result": "${selectedClaimID}",
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "icon": "done_all",
+                  "name": "buttonSelectClaim",
+                  "text": "Select",
+                  "type": "button",
+                  "visible": "${parameters.SelectClaim == true}"
+                },
+                {
+                  "buttonStyle": "light",
+                  "events": {
+                    "click": [
+                      {
+                        "result": "${selectedClaimID}",
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "icon": "clear",
+                  "name": "buttonCancelSelect",
+                  "text": "Cancel",
+                  "type": "button",
+                  "visible": "${parameters.SelectClaim == true}"
+                }
+              ],
+              "name": "col3",
+              "type": "col"
+            }
+          ],
+          "name": "row1",
+          "style": {
+            "marginTop": "0.5em"
+          },
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "isLoading",
+        "type": "set",
+        "value": "true",
+        "valueType": "bool"
+      },
+      {
+        "condition": "${ExcludeClaimID == null}",
+        "name": "excludedClaimID",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "condition": "${ExcludeClaimID != null}",
+        "name": "excludedClaimID",
+        "type": "set",
+        "value": "Int32.Parse(${ExcludeClaimID.ToString()})",
+        "valueType": "int"
+      },
+      {
+        "name": "RECODb.getServiceProviderDetails",
+        "then": [
+          {
+            "name": "getDefenseCounselList",
+            "type": "set",
+            "value": "${result.Where(sp=>sp.FirmType==\"Defense Counsel\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail>"
+          },
+          {
+            "name": "getFileHandlerList",
+            "type": "set",
+            "value": "${result.Where(sp=>sp.FirmType==\"Adjusters\" || sp.FirmType==\"Managing General Agent\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail>"
+          },
+          {
+            "name": "serviceprovider",
+            "type": "set",
+            "value": "${result.Where(sp=>sp.UserID == Security.User.Id).FirstOrDefault()}",
+            "valueType": "RecoCms6.Models.RecoDb.ServiceProviderDetail"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"ProgramID\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamDesc",
+                "type": "string",
+                "value": "\"Errors And Omissions\""
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getEOProgramID",
+            "type": "set",
+            "value": "${result.FirstOrDefault().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "condition": "${ProgramID == null && Globals.selectedProgramID==0}",
+            "global": true,
+            "name": "selectedProgramID",
+            "type": "set",
+            "value": "${getEOProgramID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "condition": "${ProgramID != null}",
+        "global": true,
+        "name": "selectedProgramID",
+        "type": "set",
+        "value": "${ProgramID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "",
+        "name": "RECODb.getXRefClaims",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "BaseClaimID",
+                "type": "integer",
+                "value": "${excludedClaimID}"
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "XRefClaimID"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "excludedIDs",
+            "type": "set",
+            "value": "new HashSet<int>(${result.Select(p => p.XRefClaimID)})",
+            "valueType": "System.Collections.Generic.HashSet<int>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "condition": "${!Security.IsInRole(\"Defense Counsel\") && 1==0}",
+        "name": "RECODb.getClaimSearchLists",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "desc",
+                "property": "ContractYearID"
+              },
+              {
+                "direction": "desc",
+                "property": "ClaimNo"
+              }
+            ]
+          },
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "ne",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${excludedClaimID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getClaimListsResult",
+            "type": "set",
+            "value": "${result.Where(c=> c.ProgramID == Globals.selectedProgramID && !excludedIDs.Contains(c.ClaimID))}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimSearchList>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "condition": "${Security.IsInRole(\"Defense Counsel\") && 1==0}",
+        "name": "RECODb.getClaimSearchLists",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "DefenseCounselID",
+                "type": "integer",
+                "value": "${serviceprovider.ServiceProviderID}"
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "desc",
+                "property": "ClaimNo"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getClaimListsResult",
+            "type": "set",
+            "value": "${result.Where(c=> c.ProgramID == Globals.selectedProgramID)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimSearchList>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"ProgramID\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamValue"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getProgramList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "filterStatus",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "filterParties",
+        "type": "set",
+        "value": "${true}",
+        "valueType": "bool"
+      },
+      {
+        "name": "filterCoverageIssue",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "search",
+        "type": "set",
+        "value": "\"\"",
+        "valueType": "string"
+      },
+      {
+        "name": "selectedClaimID",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "selectedDefenseCounsel",
+        "type": "set",
+        "value": "\"\"",
+        "valueType": "string"
+      },
+      {
+        "condition": "${Globals.generalsettings == null}",
+        "name": "RECODb.getGeneralSettings",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "Active",
+                "type": "boolean",
+                "value": "true"
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "desc",
+                "property": "Active"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "global": true,
+            "name": "generalsettings",
+            "type": "set",
+            "value": "${result.FirstOrDefault()}",
+            "valueType": "RecoCms6.Models.RecoDb.GeneralSetting"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "selectedClaim",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.ClaimList()",
+        "valueType": "RecoCms6.Models.RecoDb.ClaimList"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Page Size\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Claim Status\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getStatusList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Claim Status\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "PageSizes",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Page Size\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "condition": "",
+        "name": "pagesize",
+        "type": "set",
+        "value": "25",
+        "valueType": "int"
+      },
+      {
+        "condition": "${parameters.SelectClaim == true}",
+        "name": "pagesize",
+        "type": "set",
+        "value": "5",
+        "valueType": "int"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Province\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamDesc",
+                "type": "string",
+                "value": "\"Canada\""
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "global": true,
+            "name": "defaultProvinceID",
+            "type": "set",
+            "value": "${result.First(pd=>pd.ParamTypeDesc==\"Province\" && pd.ParamValue==1).ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "global": true,
+            "name": "defaultCountryID",
+            "type": "set",
+            "value": "${result.First(pd=>pd.ParamDesc==\"Canada\").ParameterID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "isLoading",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"BrokerageOnly\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Claim Status\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "Parameters",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "bAuto",
+        "type": "set",
+        "value": "true",
+        "valueType": "bool"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"BrokerageOnly\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getBrokerageOnlyList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"ClaimOrIncident\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getClaimOrIncidentList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "showNewClaimButtons",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "condition": "${SelectClaim == null && !Security.IsInRole(\"Auditor\") && !Security.IsInRole(\"Defense Counsel\") && Globals.generalsettings.ApplicationName == \"RECO CMS\" && !Security.IsInRole(\"Actuary\")}",
+        "name": "showNewClaimButtons",
+        "type": "set",
+        "value": "true",
+        "valueType": "bool"
+      },
+      {
+        "name": "TxtSearchChanged",
+        "parameters": [
+          {
+            "name": "args",
+            "type": "bool",
+            "value": "${false}"
+          }
+        ],
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Claims"
+}

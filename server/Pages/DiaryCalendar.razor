@@ -1,0 +1,33 @@
+﻿@page "/diary-calendar/{ClaimID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.DiaryCalendarComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Diary Calendar">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenScheduler @ref="scheduler0" Data="@getDiariesResult" EndProperty="AbeyanceDate" TItem="RecoCms6.Models.RecoDb.Diary" SelectedIndex="2" StartProperty="AbeyanceDate" TextProperty="Subject" AppointmentSelect="@Scheduler0AppointmentSelect" SlotSelect="@Scheduler0SlotSelect">
+          <ChildContent>
+            <RadzenDayView>
+            </RadzenDayView>
+            <RadzenWeekView>
+            </RadzenWeekView>
+            <RadzenMonthView>
+            </RadzenMonthView>
+          </ChildContent>
+        </RadzenScheduler>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

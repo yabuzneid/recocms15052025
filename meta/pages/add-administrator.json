@@ -1,0 +1,486 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Name",
+                              "name": "NameLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Name",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 100,
+                              "name": "Name",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${administrator.Name}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "Name",
+                              "name": "NameRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Name is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Address",
+                              "name": "AddressLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Address",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 450,
+                              "name": "Address",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${administrator.Address}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "ProvinceID",
+                              "name": "ProvinceIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Province",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-5",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getProvinceList}",
+                              "name": "ProvinceID",
+                              "placeholder": "Choose Province",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${administrator.ProvinceID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "City",
+                              "name": "CityLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "City",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 100,
+                              "name": "City",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${administrator.City}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "PostalCode",
+                              "name": "PostalCodeLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Postal Code",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "maxLength": 7,
+                              "name": "PostalCode",
+                              "placeholder": "A1A 1A1",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${administrator.PostalCode}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "PostalCode",
+                              "name": "regexValidator0",
+                              "pattern": "([ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ])\\ ?([0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])",
+                              "style": {
+                                "display": "block",
+                                "position": "absolute",
+                                "width": "100%"
+                              },
+                              "text": "Not a valid postal code",
+                              "type": "regex-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "EmailAddress",
+                              "name": "EmailAddressLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Email Address",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 450,
+                              "name": "EmailAddress",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${administrator.EmailAddress}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "EmailAddress",
+                              "name": "emailValidator0",
+                              "text": "Not a valid email address",
+                              "type": "email-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "BusinessPhoneNum",
+                              "name": "BusinessPhoneNumLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Business Phone Num",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "BusinessPhoneNum",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "type": "mask",
+                              "value": "${administrator.BusinessPhoneNum}"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "CellPhoneNum",
+                              "name": "CellPhoneNumLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Cell Phone Num",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "CellPhoneNum",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "type": "mask",
+                              "value": "${administrator.CellPhoneNum}"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${administrator}",
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new Administrator!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.createAdministrator",
+                        "parameters": [
+                          {
+                            "name": "Administrator",
+                            "value": "${administrator}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${administrator}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Administrator",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${administrator != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Province\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Method of Communication\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getCommunicationMethodList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Method of Communication\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProvinceList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "administrator",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Administrator(){}",
+        "valueType": "RecoCms6.Models.RecoDb.Administrator"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Administrator"
+}

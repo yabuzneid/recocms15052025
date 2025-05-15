@@ -1,0 +1,1283 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "action": "",
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "RegistrantID",
+                              "name": "ServiceProviderIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Expert",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-7",
+                          "components": [
+                            {
+                              "allowFilteringByAllStringColumns": true,
+                              "columns": [
+                                {
+                                  "property": "Name",
+                                  "title": "Name"
+                                },
+                                {
+                                  "format": "",
+                                  "property": "FirmName",
+                                  "title": "Firm",
+                                  "type": "string"
+                                },
+                                {
+                                  "format": "",
+                                  "property": "ServiceProviderRole",
+                                  "title": "Expertise",
+                                  "type": "string"
+                                }
+                              ],
+                              "count": "",
+                              "data": "${getServiceProvidersResult}",
+                              "events": {
+                                "change": [
+                                  {
+                                    "name": "RECODb.getServiceProviders",
+                                    "parameters": [
+                                      {
+                                        "name": "$filter",
+                                        "operator": "and",
+                                        "value": [
+                                          {
+                                            "operation": "eq",
+                                            "property": "ServiceProviderID",
+                                            "type": "integer",
+                                            "value": "${expert.ServiceProviderID}"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "name": "$orderby",
+                                        "value": [
+                                          {
+                                            "direction": "asc",
+                                            "property": "Name"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "then": [
+                                      {
+                                        "name": "serviceprovider",
+                                        "type": "set",
+                                        "value": "${result.FirstOrDefault()}",
+                                        "valueType": "RecoCms6.Models.RecoDb.ServiceProvider"
+                                      },
+                                      {
+                                        "name": "expert",
+                                        "type": "set",
+                                        "value": "new Expert()",
+                                        "valueType": "RecoCms6.Models.RecoDb.Expert"
+                                      },
+                                      {
+                                        "condition": "${serviceprovider != null}",
+                                        "name": "expert.ServiceProviderID",
+                                        "type": "set",
+                                        "value": "${serviceprovider.ServiceProviderID}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${serviceprovider != null}",
+                                        "name": "expert.Name",
+                                        "type": "set",
+                                        "value": "${serviceprovider.Name}",
+                                        "valueType": "string"
+                                      },
+                                      {
+                                        "condition": "${serviceprovider != null}",
+                                        "name": "expert.Address",
+                                        "type": "set",
+                                        "value": "${serviceprovider.Address}",
+                                        "valueType": "string"
+                                      },
+                                      {
+                                        "name": "expert.ClaimID",
+                                        "type": "set",
+                                        "value": "${ClaimID}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${serviceprovider != null}",
+                                        "name": "expert.PostalCode",
+                                        "type": "set",
+                                        "value": "${serviceprovider.PostalCode}",
+                                        "valueType": "string"
+                                      },
+                                      {
+                                        "condition": "${serviceprovider != null}",
+                                        "name": "expert.BusinessPhoneNum",
+                                        "type": "set",
+                                        "value": "${serviceprovider.BusinessPhoneNum}",
+                                        "valueType": "string"
+                                      },
+                                      {
+                                        "condition": "${serviceprovider != null}",
+                                        "name": "expert.CellPhoneNum",
+                                        "type": "set",
+                                        "value": "${serviceprovider.CellPhoneNum}",
+                                        "valueType": "string"
+                                      },
+                                      {
+                                        "condition": "${serviceprovider != null}",
+                                        "name": "expert.PreferredCommunicationMethodID",
+                                        "type": "set",
+                                        "value": "${serviceprovider.PreferredCommunicationMethodID}",
+                                        "valueType": "int?"
+                                      },
+                                      {
+                                        "condition": "${serviceprovider != null}",
+                                        "name": "expert.City",
+                                        "type": "set",
+                                        "value": "${serviceprovider.City}",
+                                        "valueType": "string"
+                                      },
+                                      {
+                                        "condition": "${serviceprovider != null}",
+                                        "name": "expert.FirmID",
+                                        "type": "set",
+                                        "value": "${serviceprovider.FirmID}",
+                                        "valueType": "int?"
+                                      },
+                                      {
+                                        "name": "bUpdateExpert",
+                                        "type": "set",
+                                        "value": "false",
+                                        "valueType": "bool"
+                                      }
+                                    ],
+                                    "type": "invoke"
+                                  }
+                                ]
+                              },
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "itemType": "RecoCms6.Models.RecoDb.ServiceProviderDetail",
+                              "name": "ServiceProviderID",
+                              "pageSize": 10,
+                              "placeholder": "Select an Expert",
+                              "responsive": true,
+                              "selectedValue": "",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "textProperty": "NameandFirm",
+                              "type": "dropdown-datagrid",
+                              "value": "${expert.ServiceProviderID}",
+                              "valueProperty": "ServiceProviderID",
+                              "valueType": "int"
+                            },
+                            {
+                              "name": "label2",
+                              "style": {
+                                "color": "rgb(249, 119, 127)",
+                                "fontSize": "12px",
+                                "lineHeight": "18px"
+                              },
+                              "text": "Expert is required",
+                              "type": "label",
+                              "visible": "${rfvExpert}"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "disabled": false,
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "Role",
+                                        "value": "null"
+                                      }
+                                    ],
+                                    "path": "add-service-provider",
+                                    "then": [
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "serviceprovider",
+                                        "type": "set",
+                                        "value": "${result}",
+                                        "valueType": "RecoCms6.Models.RecoDb.ServiceProvider"
+                                      },
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "RECODb.getServiceProviderDetails",
+                                        "parameters": [
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "Name"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getRegistrantsResults",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      },
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "expert.ServiceProviderID",
+                                        "type": "set",
+                                        "value": "${result.ServiceProviderID}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "ServiceProviderIdChange",
+                                        "parameters": [
+                                          {
+                                            "name": "args",
+                                            "type": "dynamic",
+                                            "value": "${args}"
+                                          }
+                                        ],
+                                        "schema": {
+                                          "$ref": "#/definitions/Task",
+                                          "dotnetType": "System.Threading.Tasks.Task"
+                                        },
+                                        "type": "invoke-method"
+                                      },
+                                      {
+                                        "code": "await InvokeAsync(() => { StateHasChanged();});",
+                                        "type": "execute"
+                                      }
+                                    ],
+                                    "title": "Add Expert",
+                                    "type": "popup",
+                                    "width": 1024
+                                  }
+                                ]
+                              },
+                              "icon": "add_circle_outline",
+                              "name": "buttonNewServiceProvider",
+                              "text": "New",
+                              "type": "button"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "ServiceProviderRoleID",
+                              "name": "TransactionRoleIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Role",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getTransactionRoles}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "ServiceProviderRoleID",
+                              "placeholder": "Choose Role",
+                              "style": {
+                                "display": "block"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${expert.ServiceProviderRoleID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int"
+                            },
+                            {
+                              "name": "label3",
+                              "style": {
+                                "color": "rgb(249, 119, 127)",
+                                "fontSize": "12px",
+                                "lineHeight": "18px"
+                              },
+                              "text": "Role is Required",
+                              "type": "label",
+                              "visible": "${rfvRole}"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "allowCollapse": true,
+                      "components": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "name": "label1",
+                                  "text": "Firm",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col3",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "allowFiltering": true,
+                                  "data": "${getFirmsList}",
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "name": "FirmID",
+                                  "placeholder": "Select Firm",
+                                  "textProperty": "Name",
+                                  "type": "dropdown",
+                                  "value": "${expert.FirmID}",
+                                  "valueProperty": "FirmID",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col4",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row0",
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "Name",
+                                  "name": "NameLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Name",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col1",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-5",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "maxLength": 100,
+                                  "name": "Name",
+                                  "style": {
+                                    "display": "block",
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${expert.Name}",
+                                  "valueType": "string"
+                                },
+                                {
+                                  "name": "label4",
+                                  "style": {
+                                    "color": "rgb(249, 119, 127)",
+                                    "fontSize": "12px",
+                                    "lineHeight": "18px"
+                                  },
+                                  "text": "Name is required",
+                                  "type": "label",
+                                  "visible": "${rfvName}"
+                                }
+                              ],
+                              "name": "col2",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row1",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "Address",
+                                  "name": "AddressLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Address",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col5",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "maxLength": 450,
+                                  "name": "Address",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${expert.Address}",
+                                  "valueType": "string"
+                                }
+                              ],
+                              "name": "col13",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row3",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "City",
+                                  "name": "CityLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "City",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col14",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "maxLength": 100,
+                                  "name": "City",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${expert.City}",
+                                  "valueType": "string"
+                                }
+                              ],
+                              "name": "col15",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row4",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "ProvinceID",
+                                  "name": "ProvinceIDLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Province",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col16",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "allowFiltering": true,
+                                  "data": "${getProvinceList}",
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "name": "ProvinceID",
+                                  "placeholder": "Choose Province",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "template": "",
+                                  "textProperty": "ParamDesc",
+                                  "type": "dropdown",
+                                  "value": "${expert.ProvinceID}",
+                                  "valueProperty": "ParameterID",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col17",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "PostalCode",
+                                  "name": "PostalCodeLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Postal Code",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col18",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "maxLength": 7,
+                                  "name": "PostalCode",
+                                  "placeholder": "A1A 1A1",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${expert.PostalCode}",
+                                  "valueType": "string"
+                                },
+                                {
+                                  "component": "PostalCode",
+                                  "name": "regexValidator0",
+                                  "pattern": "([ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy][0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy])\\ ?([0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy][0-9])",
+                                  "style": {
+                                    "display": "block",
+                                    "position": "absolute",
+                                    "width": "100%"
+                                  },
+                                  "text": "Not a valid postal code",
+                                  "type": "regex-validator"
+                                },
+                                {
+                                  "name": "label5",
+                                  "style": {
+                                    "color": "rgb(249, 119, 127)",
+                                    "fontSize": "12px",
+                                    "lineHeight": "18px"
+                                  },
+                                  "text": "Not a valid postal code",
+                                  "type": "label",
+                                  "visible": "${rfvEmail}"
+                                }
+                              ],
+                              "name": "col19",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row5",
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "EmailAddress",
+                                  "name": "EmailAddressLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Email Address",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col20",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "maxLength": 450,
+                                  "name": "EmailAddress",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${expert.EmailAddress}",
+                                  "valueType": "string"
+                                },
+                                {
+                                  "name": "label6",
+                                  "style": {
+                                    "color": "rgb(249, 119, 127)",
+                                    "fontSize": "12px",
+                                    "lineHeight": "18px"
+                                  },
+                                  "text": "Not a valid email address",
+                                  "type": "label",
+                                  "visible": "${rfvEmail}"
+                                }
+                              ],
+                              "name": "col21",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row6",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "BusinessPhoneNum",
+                                  "name": "BusinessPhoneNumLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Business Phone #",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col22",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "mask": "(***) ***-****",
+                                  "name": "BusinessPhoneNum",
+                                  "pattern": "[^0-9]",
+                                  "placeholder": "(000) 000-0000",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "mask",
+                                  "value": "${expert.BusinessPhoneNum}",
+                                  "visible": true
+                                }
+                              ],
+                              "name": "col23",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "CellPhoneNum",
+                                  "name": "CellPhoneNumLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Cell Phone #",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col24",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "mask": "(***) ***-****",
+                                  "name": "CellPhoneNum",
+                                  "pattern": "[^0-9]",
+                                  "placeholder": "(000) 000-0000",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "mask",
+                                  "value": "${expert.CellPhoneNum}",
+                                  "visible": true
+                                }
+                              ],
+                              "name": "col25",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row7",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "name": "label0",
+                                  "text": "Update Expert Details?",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col28",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "name": "checkboxUpdateRegistrant",
+                                  "type": "checkbox",
+                                  "value": "${bUpdateExpert}",
+                                  "valueType": "bool"
+                                }
+                              ],
+                              "name": "col29",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row9",
+                          "type": "row"
+                        }
+                      ],
+                      "name": "panel0",
+                      "text": "Contact Info",
+                      "type": "panel",
+                      "visible": "${serviceprovider != null}"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "events": {
+                                "click": [
+                                  {
+                                    "name": "Form0Submit",
+                                    "parameters": [
+                                      {
+                                        "name": "args",
+                                        "type": "RecoCms6.Models.RecoDb.Expert",
+                                        "value": "${expert}"
+                                      }
+                                    ],
+                                    "schema": {
+                                      "$ref": "#/definitions/Task",
+                                      "dotnetType": "System.Threading.Tasks.Task"
+                                    },
+                                    "type": "invoke-method"
+                                  }
+                                ]
+                              },
+                              "icon": "save",
+                              "name": "buttonSave",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "name": "Validate",
+                        "schema": {
+                          "$ref": "#/definitions/Void",
+                          "dotnetType": "void"
+                        },
+                        "type": "invoke-method"
+                      },
+                      {
+                        "condition": "${bPageIsValid}",
+                        "name": "RECODb.getNextClaimDisplayOrders",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "operation": "eq",
+                                "property": "ClaimID",
+                                "type": "integer",
+                                "value": "${ClaimID}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "condition": "${expert.ExpertID == 0}",
+                            "name": "expert.DisplayOrder",
+                            "type": "set",
+                            "value": "(short)${result.First().NextExpertDisplayOrder}",
+                            "valueType": "short"
+                          },
+                          {
+                            "condition": "",
+                            "name": "serviceprovider.Name",
+                            "type": "set",
+                            "value": "${expert.Name}",
+                            "valueType": "string"
+                          },
+                          {
+                            "condition": "",
+                            "name": "serviceprovider.Address",
+                            "type": "set",
+                            "value": "${expert.Address}",
+                            "valueType": "string"
+                          },
+                          {
+                            "condition": "",
+                            "name": "serviceprovider.CellPhoneNum",
+                            "type": "set",
+                            "value": "${expert.CellPhoneNum}",
+                            "valueType": "string"
+                          },
+                          {
+                            "name": "serviceprovider.BusinessPhoneNum",
+                            "type": "set",
+                            "value": "${expert.BusinessPhoneNum}",
+                            "valueType": "string"
+                          },
+                          {
+                            "name": "serviceprovider.City",
+                            "type": "set",
+                            "value": "${expert.City}",
+                            "valueType": "string"
+                          },
+                          {
+                            "name": "serviceprovider.EmailAddress",
+                            "type": "set",
+                            "value": "${expert.EmailAddress}",
+                            "valueType": "string"
+                          },
+                          {
+                            "name": "serviceprovider.FirmID",
+                            "type": "set",
+                            "value": "${expert.FirmID}",
+                            "valueType": "int?"
+                          },
+                          {
+                            "name": "serviceprovider.PostalCode",
+                            "type": "set",
+                            "value": "${expert.PostalCode}",
+                            "valueType": "string"
+                          },
+                          {
+                            "name": "serviceprovider.PreferredCommunicationMethodID",
+                            "type": "set",
+                            "value": "${expert.PreferredCommunicationMethodID}",
+                            "valueType": "int?"
+                          },
+                          {
+                            "name": "serviceprovider.ProvinceID",
+                            "type": "set",
+                            "value": "${expert.ProvinceID}",
+                            "valueType": "int?"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${bUpdateExpert && bPageIsValid}",
+                        "error": [
+                          {
+                            "detail": "${result.Message}",
+                            "severity": "error",
+                            "summary": "Unable to Update Service Provider Contact Details",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.updateServiceProvider",
+                        "parameters": [
+                          {
+                            "name": "ID",
+                            "value": "${serviceprovider.ID}"
+                          },
+                          {
+                            "name": "ServiceProvider",
+                            "value": "${serviceprovider}"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${expert.ExpertID > 0 && bPageIsValid}",
+                        "error": [
+                          {
+                            "detail": "${result.Message}",
+                            "severity": "error",
+                            "summary": "Unable To Save Expert ",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.updateExpert",
+                        "parameters": [
+                          {
+                            "name": "ExpertID",
+                            "value": "${expert.ExpertID}"
+                          },
+                          {
+                            "name": "Expert",
+                            "value": "${expert}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${result}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${expert.ExpertID == 0 && bPageIsValid}",
+                        "error": [
+                          {
+                            "detail": "${result.Message}",
+                            "severity": "error",
+                            "summary": "Unable To Create Expert ",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.createExpert",
+                        "parameters": [
+                          {
+                            "name": "Expert",
+                            "value": "${expert}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${result}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Expert",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${expert != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getServiceProviderDetails",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getServiceProvidersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Service Provider Role\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Province\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Method of Communication\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getTransactionRoles",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Service Provider Role\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getCommunicationMethodList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Method of Communication\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProvinceList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "intExpertID",
+        "type": "set",
+        "value": "(int)${parameters.ExpertID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "${intExpertID == 0}",
+        "name": "expert",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Expert()",
+        "valueType": "RecoCms6.Models.RecoDb.Expert"
+      },
+      {
+        "condition": "${intExpertID > 0}",
+        "name": "RECODb.getExperts",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ExpertID",
+                "type": "integer",
+                "value": "${intExpertID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "expert",
+            "type": "set",
+            "value": "${result.FirstOrDefault()}",
+            "valueType": "RecoCms6.Models.RecoDb.Expert"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "condition": "${intExpertID == 0}",
+        "name": "expert.ClaimID",
+        "type": "set",
+        "value": "${ClaimID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "${expert.ServiceProviderID > 0}",
+        "name": "RECODb.getServiceProviders",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ServiceProviderID",
+                "type": "integer",
+                "value": "${expert.ServiceProviderID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "serviceprovider",
+            "type": "set",
+            "value": "${result.FirstOrDefault()}",
+            "valueType": "RecoCms6.Models.RecoDb.ServiceProvider"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "bUpdateExpert",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "RECODb.getFirms",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getFirmsList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Firm>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "condition": "${intExpertID == 0}",
+        "name": "expert.ProvinceID",
+        "type": "set",
+        "value": "${Globals.defaultProvinceID}",
+        "valueType": "int"
+      },
+      {
+        "name": "rfvExpert",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvRole",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvName",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvPostalCode",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvEmail",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "bPageIsValid",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Expert"
+}

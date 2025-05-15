@@ -1,0 +1,209 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "name": "pageTitle",
+          "size": "H1",
+          "text": "Administrators",
+          "type": "heading"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "path": "add-administrator",
+                        "then": [
+                          {
+                            "code": "await grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "Add",
+                  "type": "button"
+                },
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "property": "Name",
+                      "title": "Name"
+                    },
+                    {
+                      "filterProperty": "",
+                      "property": "Address",
+                      "sortProperty": "",
+                      "template": "",
+                      "title": "Address"
+                    },
+                    {
+                      "filterProperty": "Parameter.ParamAbbrev",
+                      "property": "ProvinceID",
+                      "sortProperty": "Parameter.ParamAbbrev",
+                      "template": "${data.Parameter?.ParamAbbrev}",
+                      "title": "Parameter"
+                    },
+                    {
+                      "property": "City",
+                      "title": "City"
+                    },
+                    {
+                      "property": "PostalCode",
+                      "title": "Postal Code"
+                    },
+                    {
+                      "property": "EmailAddress",
+                      "title": "Email Address"
+                    },
+                    {
+                      "property": "BusinessPhoneNum",
+                      "title": "Business Phone Num"
+                    },
+                    {
+                      "property": "CellPhoneNum",
+                      "title": "Cell Phone Num"
+                    },
+                    {
+                      "property": "FaxNum",
+                      "title": "Fax Num"
+                    },
+                    {
+                      "filterProperty": "Parameter1.ParamDesc",
+                      "property": "PreferredCommunicationMethodID",
+                      "sortProperty": "Parameter1.ParamDesc",
+                      "template": "${data.Parameter1?.ParamDesc}",
+                      "title": "Preferred Communication Method"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "events": {
+                            "click": [
+                              {
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Administrator",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "RECODb.deleteAdministrator",
+                                "parameters": [
+                                  {
+                                    "name": "ID",
+                                    "value": "${data.ID}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${getAdministratorsResult}",
+                  "events": {
+                    "loadData": [],
+                    "rowSelect": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "ID",
+                            "value": "${event.ID}"
+                          }
+                        ],
+                        "path": "edit-administrator",
+                        "then": [
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Administrator",
+                  "name": "grid0",
+                  "title": "",
+                  "type": "grid"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getAdministrators",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getAdministratorsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Administrator>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Administrators"
+}

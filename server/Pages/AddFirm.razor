@@ -1,0 +1,57 @@
+﻿@page "/add-firm"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddFirmComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@firm" TItem="RecoCms6.Models.RecoDb.Firm" Visible="@(firm != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Name" style="width: 100%" Text="Name">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="100" style="display: block; width: 100%" @bind-Value="@(firm.Name)" Name="Name">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Name" style="position: absolute" Text="Name is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="FirmTypeID" style="width: 100%" Text="Firm Type">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown AllowFiltering="true" Data="@getParametersResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Firm Type" style="display: block; width: 100%" TextProperty="ParamDesc" @bind-Value="@(firm.FirmTypeID)" ValueProperty="ParameterID" Name="FirmTypeID">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="FirmTypeID" DefaultValue="0" style="position: absolute" Text="Firm Type is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

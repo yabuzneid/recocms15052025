@@ -1,0 +1,65 @@
+﻿@page "/add-commission-installment/{TradeID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddCommissionInstallmentComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@commissioninstallment" TItem="RecoCms6.Models.RecoDb.CommissionInstallment" Visible="@(commissioninstallment != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Amount" style="width: 100%" Text="Amount">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenNumeric AutoComplete="false" ShowUpDown="false" style="display: block; width: 100%" @bind-Value="@(commissioninstallment.Amount)" Name="Amount">
+                </RadzenNumeric>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="DatePaid" style="width: 100%" Text="Date Paid">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenDatePicker DateFormat="yyyy-MM-dd" style="width: 100%" @bind-Value="@(commissioninstallment.DatePaid)" Name="DatePaid">
+                </RadzenDatePicker>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Details">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox AutoComplete="false" style="width: 100%" @bind-Value="@(commissioninstallment.Description)" Name="Description">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Description" style="position: relative" Text="Description is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

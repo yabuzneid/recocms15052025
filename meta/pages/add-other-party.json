@@ -1,0 +1,1165 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "OtherPartyTransactionRoleID",
+                              "name": "OtherPartyTransactionRoleIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Transaction Role",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-5",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "allowFiltering": true,
+                              "data": "${getTransactionRoles}",
+                              "name": "OtherPartyTransactionRoleID",
+                              "placeholder": "Choose Transaction Role",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${otherparty.OtherPartyTransactionRoleID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "component": "TransactionRoleOther",
+                              "name": "label3",
+                              "text": "Other",
+                              "type": "label",
+                              "visible": "${otherparty.OtherPartyTransactionRoleID == otherTransactionRoleID}"
+                            }
+                          ],
+                          "name": "col19",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "TransactionRoleOther",
+                              "placeholder": "",
+                              "type": "textbox",
+                              "value": "${otherparty.TransactionRoleOther}",
+                              "visible": "${otherparty.OtherPartyTransactionRoleID == otherTransactionRoleID}"
+                            }
+                          ],
+                          "name": "col18",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Name",
+                              "name": "NameLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Name",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "maxLength": 100,
+                              "name": "Name",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${otherparty.Name}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "Name",
+                              "name": "NameRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Name is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Address",
+                              "name": "AddressLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Address",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "maxLength": 500,
+                              "name": "Address",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${otherparty.Address}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "City",
+                              "name": "CityLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "City",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col9",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "maxLength": 100,
+                              "name": "City",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${otherparty.City}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "name": "col10",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2 text-md-right",
+                          "components": [
+                            {
+                              "component": "PostalCode",
+                              "name": "PostalCodeLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Postal Code",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col4",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "maxLength": 7,
+                              "name": "PostalCode",
+                              "placeholder": "A1A 1A1",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${otherparty.PostalCode}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "PostalCode",
+                              "name": "regexValidator0",
+                              "pattern": "([ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ])\\ ?([0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])",
+                              "style": {
+                                "display": "block",
+                                "position": "absolute",
+                                "width": "100%"
+                              },
+                              "text": "Not a valid postal code",
+                              "type": "regex-validator"
+                            }
+                          ],
+                          "name": "col5",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "ProvinceID",
+                              "name": "ProvinceIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Province",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getProvinceList}",
+                              "name": "ProvinceID",
+                              "placeholder": "Choose Province",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${otherparty.ProvinceID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3 text-md-right",
+                          "components": [
+                            {
+                              "component": "CountryID",
+                              "name": "CountryIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Country",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col2",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "allowFiltering": true,
+                              "data": "${getCountryList}",
+                              "name": "CountryID",
+                              "placeholder": "Choose Country",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamAbbrev",
+                              "type": "dropdown",
+                              "value": "${otherparty.CountryID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col3",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "EmailAddress",
+                              "name": "EmailAddressLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Email Address",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "maxLength": 450,
+                              "name": "EmailAddress",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${otherparty.EmailAddress}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "EmailAddress",
+                              "name": "emailValidator0",
+                              "text": "Not a valid email address",
+                              "type": "email-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "BusinessPhoneNum",
+                              "name": "BusinessPhoneNumLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Business #",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "BusinessPhoneNum",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "mask",
+                              "value": "${otherparty.BusinessPhoneNum}",
+                              "visible": true
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3 text-md-right",
+                          "components": [
+                            {
+                              "component": "CellPhoneNum",
+                              "name": "CellPhoneNumLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Cell #",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col6",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "CellPhoneNum",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "mask",
+                              "value": "${otherparty.CellPhoneNum}",
+                              "visible": true
+                            }
+                          ],
+                          "name": "col7",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "SolicitorID",
+                              "name": "SolicitorIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Solicitor",
+                              "type": "label",
+                              "visible": false
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-6",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "allowFiltering": true,
+                              "data": "${getServiceProvidersResult}",
+                              "events": {
+                                "change": []
+                              },
+                              "name": "SolicitorID",
+                              "placeholder": "Choose Solicitor",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "Name",
+                              "type": "dropdown",
+                              "value": "${otherparty.SolicitorID}",
+                              "valueProperty": "ServiceProviderID",
+                              "valueType": "int?",
+                              "visible": false
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "Role",
+                                        "value": "\"Outside Counsel\""
+                                      }
+                                    ],
+                                    "path": "add-service-provider",
+                                    "then": [
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "otherparty.SolicitorID",
+                                        "type": "set",
+                                        "value": "${result.ServiceProviderID}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "RECODb.getServiceProviderDetails",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ServiceProviderRole",
+                                                "type": "string",
+                                                "value": "\"Outside Counsel\""
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "Name"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      },
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "RECODb.getServiceProviders",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ServiceProviderID",
+                                                "type": "integer",
+                                                "value": "${otherparty.SolicitorID}"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "solicitor",
+                                            "type": "set",
+                                            "value": "${result.First()}",
+                                            "valueType": "RecoCms6.Models.RecoDb.ServiceProvider"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ],
+                                    "title": "Add Outside Counsel",
+                                    "type": "popup",
+                                    "width": 800
+                                  }
+                                ]
+                              },
+                              "icon": "add_circle_outline",
+                              "name": "buttonNewSolicitor",
+                              "text": "New",
+                              "type": "button",
+                              "visible": false
+                            }
+                          ],
+                          "name": "col8",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [
+                            {
+                              "components": [
+                                {
+                                  "components": [
+                                    {
+                                      "class": "col-md-3",
+                                      "components": [
+                                        {
+                                          "component": "EmailAddress",
+                                          "name": "label0",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "Email Address",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col12",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-9",
+                                      "components": [
+                                        {
+                                          "maxLength": 450,
+                                          "name": "textbox0",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "type": "textbox",
+                                          "value": "${solicitor.EmailAddress}",
+                                          "valueType": "string"
+                                        },
+                                        {
+                                          "component": "EmailAddress",
+                                          "name": "emailValidator1",
+                                          "text": "Not a valid email address",
+                                          "type": "email-validator"
+                                        }
+                                      ],
+                                      "name": "col13",
+                                      "type": "col"
+                                    }
+                                  ],
+                                  "name": "row3",
+                                  "style": {
+                                    "marginBottom": ".25em"
+                                  },
+                                  "type": "row"
+                                },
+                                {
+                                  "components": [
+                                    {
+                                      "class": "col-md-3",
+                                      "components": [
+                                        {
+                                          "component": "BusinessPhoneNum",
+                                          "name": "label1",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "Business Phone Num",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col14",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-3",
+                                      "components": [
+                                        {
+                                          "mask": "(***) ***-****",
+                                          "name": "mask0",
+                                          "pattern": "[^0-9]",
+                                          "placeholder": "(000) 000-0000",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "type": "mask",
+                                          "value": "${solicitor.BusinessPhoneNum}",
+                                          "visible": true
+                                        }
+                                      ],
+                                      "name": "col15",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-3",
+                                      "components": [
+                                        {
+                                          "component": "CellPhoneNum",
+                                          "name": "label2",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "Cell Phone Num",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col16",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-3",
+                                      "components": [
+                                        {
+                                          "mask": "(***) ***-****",
+                                          "name": "mask1",
+                                          "pattern": "[^0-9]",
+                                          "placeholder": "(000) 000-0000",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "type": "mask",
+                                          "value": "${solicitor.CellPhoneNum}",
+                                          "visible": true
+                                        }
+                                      ],
+                                      "name": "col17",
+                                      "type": "col"
+                                    }
+                                  ],
+                                  "name": "row4",
+                                  "style": {
+                                    "marginBottom": ".25em"
+                                  },
+                                  "type": "row"
+                                },
+                                {
+                                  "components": [
+                                    {
+                                      "class": "col-md-3",
+                                      "components": [
+                                        {
+                                          "component": "FirmID",
+                                          "name": "FirmIDLabel",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "Firm",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col20",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-6",
+                                      "components": [
+                                        {
+                                          "allowClear": true,
+                                          "allowFiltering": true,
+                                          "data": "${getFirmsResult}",
+                                          "name": "FirmID",
+                                          "placeholder": "Choose Firm",
+                                          "style": {
+                                            "display": "block",
+                                            "width": "100%"
+                                          },
+                                          "template": "",
+                                          "textProperty": "Name",
+                                          "type": "dropdown",
+                                          "value": "${solicitor.FirmID}",
+                                          "valueProperty": "FirmID",
+                                          "valueType": "int?"
+                                        },
+                                        {
+                                          "component": "FirmID",
+                                          "defaultValue": "0",
+                                          "name": "FirmIDRequiredValidator",
+                                          "style": {
+                                            "position": "absolute"
+                                          },
+                                          "text": "Firm is required",
+                                          "type": "required-validator"
+                                        }
+                                      ],
+                                      "name": "col21",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-3",
+                                      "components": [
+                                        {
+                                          "events": {
+                                            "click": [
+                                              {
+                                                "path": "add-firm",
+                                                "then": [
+                                                  {
+                                                    "condition": "${result != null}",
+                                                    "name": "solicitor.FirmID",
+                                                    "type": "set",
+                                                    "value": "${result.FirmID}",
+                                                    "valueType": "int"
+                                                  },
+                                                  {
+                                                    "name": "RECODb.getFirmDetails",
+                                                    "parameters": [
+                                                      {
+                                                        "name": "$orderby",
+                                                        "value": [
+                                                          {
+                                                            "direction": "asc",
+                                                            "property": "Name"
+                                                          }
+                                                        ]
+                                                      }
+                                                    ],
+                                                    "then": [
+                                                      {
+                                                        "name": "getFirmsResult",
+                                                        "type": "set",
+                                                        "value": "${result}",
+                                                        "valueType": "IEnumerable<RecoCms6.Models.RecoDb.FirmDetail>"
+                                                      }
+                                                    ],
+                                                    "type": "invoke"
+                                                  }
+                                                ],
+                                                "title": "",
+                                                "type": "popup"
+                                              }
+                                            ]
+                                          },
+                                          "icon": "add_circle_outline",
+                                          "name": "buttonNewFirm",
+                                          "text": "New",
+                                          "type": "button"
+                                        }
+                                      ],
+                                      "name": "col22",
+                                      "type": "col"
+                                    }
+                                  ],
+                                  "name": "row6",
+                                  "style": {
+                                    "marginBottom": "1rem"
+                                  },
+                                  "type": "row"
+                                }
+                              ],
+                              "name": "fieldset0",
+                              "text": "Solicitor Details",
+                              "type": "fieldset",
+                              "visible": "${otherparty.SolicitorID != null}"
+                            }
+                          ],
+                          "name": "col11",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row2",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${otherparty}",
+                  "events": {
+                    "submit": [
+                      {
+                        "name": "RECODb.getNextClaimDisplayOrders",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "operation": "eq",
+                                "property": "ClaimID",
+                                "type": "integer",
+                                "value": "${ClaimID}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "condition": "intOtherParty == 0",
+                            "name": "otherparty.DisplayOrder",
+                            "type": "set",
+                            "value": "(short)${result.First().NextOtherDisplayOrder}",
+                            "valueType": "short"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "code": "return Upsert()",
+                        "then": [
+                          {
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "execute"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.OtherParty",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${otherparty != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "intOtherParty",
+        "type": "set",
+        "value": "${parameters.OtherPartyID}",
+        "valueType": "int"
+      },
+      {
+        "name": "RECODb.getRegistrants",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getRegistrantsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Registrant>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getParametersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getTransactionRoles",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Other Party Transaction Role\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProvinceList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getCountryList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Country\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getCommunicationMethods",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Method Of Communication\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "otherTransactionRoleID",
+            "type": "set",
+            "value": "${result.First(pd=>pd.ParamDesc==\"Other\" && pd.ParamTypeDesc==\"Other Party Transaction Role\").ParameterID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "otherparty",
+        "type": "set",
+        "value": "intOtherParty > 0 ? Get(intOtherParty) : new RecoCms6.Models.RecoDb.OtherParty(){};",
+        "valueType": "RecoCms6.Models.RecoDb.OtherParty"
+      },
+      {
+        "name": "otherparty.ClaimID",
+        "type": "set",
+        "value": "${ClaimID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "intOtherParty == 0",
+        "name": "otherparty.ID",
+        "type": "set",
+        "value": "Guid.NewGuid()",
+        "valueType": "Guid"
+      },
+      {
+        "condition": "${intOtherParty == 0 && Globals.defaultProvinceID != 0}",
+        "name": "otherparty.ProvinceID",
+        "type": "set",
+        "value": "${Globals.defaultProvinceID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "${intOtherParty == 0 && Globals.defaultProvinceID != 0}",
+        "name": "otherparty.CountryID",
+        "type": "set",
+        "value": "${Globals.defaultCountryID}",
+        "valueType": "int"
+      },
+      {
+        "name": "RECODb.getServiceProviderDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ServiceProviderRole",
+                "type": "string",
+                "value": "\"Outside Counsel\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getServiceProvidersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getServiceProviders",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ServiceProviderID",
+                "type": "integer",
+                "value": "${otherparty.SolicitorID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "condition": "${otherparty.SolicitorID != null}",
+            "name": "solicitor",
+            "type": "set",
+            "value": "${result.First()}",
+            "valueType": "RecoCms6.Models.RecoDb.ServiceProvider"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getFirmDetails",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getFirmsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.FirmDetail>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Other Party"
+}

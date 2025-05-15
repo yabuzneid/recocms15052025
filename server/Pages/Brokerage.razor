@@ -1,0 +1,58 @@
+﻿@page "/brokerage"
+@layout MainLayout
+@inherits RecoCms6.Pages.BrokerageComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Brokerages">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getBrokeragesResult" TItem="RecoCms6.Models.RecoDb.Brokerage" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" Property="Name" Title="Brokerage Name" Width="200px">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" FilterProperty="BrokerOfRecordName" Property="BrokerOfRecordID" SortProperty="BrokerOfRecordName" Title="Broker of Record" Visible="@(Globals.generalsettings.ApplicationName == "RECO CMS")" Width="150px">
+              <Template Context="data">
+              @(data.BrokerOfRecordName)
+              </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" Property="BrokerOfRecordName" Title="Broker Name" Visible="@(Globals.generalsettings.ApplicationName == "REIX CMS")" Type="string">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" FormatString="{0:d}" Property="RegistrationExpiryDate" Title="Reg. Expiry Date" Width="100px">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" Property="ContactPerson" Title="Contact Person" Width="150px">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" Property="Street1" Title="Street 1" Width="200px">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" Property="City" Title="City" Width="100px">
+            </RadzenGridColumn>
+            @* <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" FilterProperty="Parameter1.ParamDesc" Property="ProvinceID" SortProperty="Parameter1.ParamDesc" Title="Province" Width="100px"> *@
+            @*   <Template Context="data"> *@
+            @*   @(data.Parameter?.ParamDesc) *@
+            @*   </Template> *@
+            @* </RadzenGridColumn> *@
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" Property="PostalCode" Title="Postal Code" Width="100px">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" FilterProperty="Administrator.Name" Property="AdministratorID" SortProperty="Administrator.Name" Title="Administrator" Width="100px">
+              <Template Context="data">
+              @(data.Administrator?.Name)
+              </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.Brokerage" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="recoCms6ModelsRecoDbBrokerage">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, recoCms6ModelsRecoDbBrokerage))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

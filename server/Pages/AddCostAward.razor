@@ -1,0 +1,65 @@
+﻿@page "/add-cost-award/{ClaimID}/{CostAwardID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddCostAwardComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div style="text-align: left" class="row">
+      <div class="col-md-12" style="text-align: left">
+        <RadzenTemplateForm Data="@costaward" TItem="RecoCms6.Models.RecoDb.CostAward" style="text-align: left" Visible="@(costaward != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="CostAward1" style="width: 100%" Text="Cost Award">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenNumeric Format="c" ShowUpDown="false" style="width: 100%" @bind-Value="@(costaward.CostAward1)" Name="CostAward1">
+                </RadzenNumeric>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="CostAwardDate" style="width: 100%" Text="Cost Award Date">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenDatePicker style="display: block; width: 100%" @bind-Value="@(costaward.CostAwardDate)" Name="CostAwardDate">
+                </RadzenDatePicker>
+                <RadzenRequiredValidator Component="CostAwardDate" style="position: absolute" Text="Cost Award Date is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <RadzenLabel Component="Paid" Text="Paid">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-1">
+                <RadzenCheckBox @bind-Value="@(costaward.Paid)" Name="Paid">
+                </RadzenCheckBox>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" style="margin-left: 1rem" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

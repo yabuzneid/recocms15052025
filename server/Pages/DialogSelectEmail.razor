@@ -1,0 +1,32 @@
+﻿@page "/dialog-select-email/{ClaimID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.DialogSelectEmailComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenTemplateForm TItem="dynamic">
+      <ChildContent>
+        <RadzenListBox AllowFiltering="true" Data="@getClaimEmailAddressesResult" Multiple="true" style="height: 306px; margin-bottom: 20px; width: 100%" TextProperty="EmailAddress" @bind-Value="@result" ValueProperty="EmailAddress" Name="ListboxEmails">
+        </RadzenListBox>
+      </ChildContent>
+    </RadzenTemplateForm>
+    <div class="row">
+      <div class="col-md-12 justify-content-center d-flex">
+        <RadzenButton ButtonStyle="ButtonStyle.Primary" style="float: left" Text="Add
+        " Click="@ButtonAddClick">
+        </RadzenButton>
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@ButtonCancelClick">
+        </RadzenButton>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

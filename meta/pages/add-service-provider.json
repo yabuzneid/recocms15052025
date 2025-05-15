@@ -1,0 +1,690 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Name",
+                              "name": "NameLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Name",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 100,
+                              "name": "Name",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${serviceprovider.Name}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "Name",
+                              "name": "NameRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Name is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Address",
+                              "name": "AddressLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Address",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 500,
+                              "name": "Address",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${serviceprovider.Address}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "City",
+                              "name": "CityLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "City",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col2",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "maxLength": 100,
+                              "name": "City",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${serviceprovider.City}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "name": "col3",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "ProvinceID",
+                              "name": "ProvinceIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Province",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getProvinceList}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "ProvinceID",
+                              "placeholder": "Choose Province",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${serviceprovider.ProvinceID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "PostalCode",
+                              "name": "PostalCodeLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Postal Code",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "maxLength": 7,
+                              "name": "PostalCode",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${serviceprovider.PostalCode}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "PostalCode",
+                              "name": "regexValidator0",
+                              "pattern": "([ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy][0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy])\\ ?([0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy][0-9])",
+                              "style": {
+                                "display": "block",
+                                "position": "absolute",
+                                "width": "100%"
+                              },
+                              "text": "Not a valid postal code",
+                              "type": "regex-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "EmailAddress",
+                              "name": "EmailAddressLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Email Address",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 450,
+                              "name": "EmailAddress",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${serviceprovider.EmailAddress}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "BusinessPhoneNum",
+                              "name": "BusinessPhoneNumLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Business Phone Num",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "BusinessPhoneNum",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "mask",
+                              "value": "${serviceprovider.BusinessPhoneNum}",
+                              "visible": true
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "CellPhoneNum",
+                              "name": "CellPhoneNumLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Cell Phone Num",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "CellPhoneNum",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "mask",
+                              "value": "${serviceprovider.CellPhoneNum}",
+                              "visible": true
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "FirmID",
+                              "name": "FirmIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Firm",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-6",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getFirmsResult}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "FirmID",
+                              "placeholder": "Choose Firm",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "Name",
+                              "type": "dropdown",
+                              "value": "${serviceprovider.FirmID}",
+                              "valueProperty": "FirmID",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "FirmID",
+                              "defaultValue": "0",
+                              "name": "FirmIDRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Firm is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "events": {
+                                "click": [
+                                  {
+                                    "path": "add-firm",
+                                    "then": [
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "serviceprovider.FirmID",
+                                        "type": "set",
+                                        "value": "${result.FirmID}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "name": "RECODb.getFirmDetails",
+                                        "parameters": [
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "Name"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getFirmsResult",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.FirmDetail>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ],
+                                    "title": "",
+                                    "type": "popup"
+                                  }
+                                ]
+                              },
+                              "icon": "add_circle_outline",
+                              "name": "buttonNewFirm",
+                              "text": "New",
+                              "type": "button"
+                            }
+                          ],
+                          "name": "col4",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "ServiceProviderRoleID",
+                              "name": "ServiceProviderRoleIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Service Provider Role",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getServiceProviderRoleList}",
+                              "disabled": "",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "ServiceProviderRoleID",
+                              "placeholder": "Choose Role",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${serviceprovider.ServiceProviderRoleID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "label0",
+                              "text": "Active",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col24",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "checkbox0",
+                              "type": "checkbox",
+                              "value": "${serviceprovider.Active}",
+                              "valueType": "bool?"
+                            }
+                          ],
+                          "name": "col25",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${serviceprovider}",
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new ServiceProvider!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.createServiceProvider",
+                        "parameters": [
+                          {
+                            "name": "ServiceProvider",
+                            "value": "${serviceprovider}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${serviceprovider}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.ServiceProvider",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${serviceprovider != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "serviceprovider",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.ServiceProvider(){}",
+        "valueType": "RecoCms6.Models.RecoDb.ServiceProvider"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getCommunicationMethodList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Method Of Communication\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProvinceList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getServiceProviderRoleList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Service Provider Role\" && p.ParamValue==1)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "condition": "${Role != null}",
+            "name": "requestedRoleID",
+            "type": "set",
+            "value": "${getServiceProviderRoleList.Where(p=>p.ParamDesc == Role).First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "condition": "${Role != null}",
+            "name": "serviceprovider.ServiceProviderRoleID",
+            "type": "set",
+            "value": "${requestedRoleID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getFirmDetails",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getFirmsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.FirmDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "serviceprovider.ID",
+        "type": "set",
+        "value": "Guid.NewGuid()",
+        "valueType": "Guid"
+      },
+      {
+        "name": "serviceprovider.ProvinceID",
+        "type": "set",
+        "value": "${Globals.defaultProvinceID}",
+        "valueType": "int"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Service Provider"
+}

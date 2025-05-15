@@ -1,0 +1,105 @@
+﻿@page "/transaction-approval-limits"
+@layout MainLayout
+@inherits RecoCms6.Pages.TransactionApprovalLimitsComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Program Manager, System Admin")]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Transaction Approval Limits">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getTransactionApprovalLimitsResult" FilterMode="Radzen.FilterMode.Advanced" TItem="RecoCms6.Models.RecoDb.TransactionApprovalLimit" RowCreate="@Grid0RowCreate" RowUpdate="@Grid0RowUpdate">
+          <Columns>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TransactionApprovalLimit" Property="ProgramID" Title="Program">
+              <Template Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenDropDown Data="@getProgramList" Disabled="true" TextProperty="ParamDesc" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.ProgramID)" ValueProperty="ParameterID" Name="Dropdown3">
+                </RadzenDropDown>
+              </Template>
+              <EditTemplate Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenDropDown Data="@getProgramList" Disabled="false" TextProperty="ParamDesc" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.ProgramID)" ValueProperty="ParameterID" Name="Dropdown4">
+                </RadzenDropDown>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TransactionApprovalLimit" Property="RoleID" Title="Role">
+              <Template Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenDropDown Data="@roleList" Disabled="true" TextProperty="Name" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.RoleID)" ValueProperty="Id" Name="Dropdown2">
+                </RadzenDropDown>
+              </Template>
+              <EditTemplate Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenDropDown Data="@roleList" TextProperty="Name" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.RoleID)" ValueProperty="Id" Name="Dropdown0">
+                </RadzenDropDown>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TransactionApprovalLimit" Property="IncurredTypeID" Title="Incurred Type">
+              <Template Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenDropDown Data="@getTypeList" Disabled="true" TextProperty="ParamDesc" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.IncurredTypeID)" ValueProperty="ParameterID" Name="IncurredTypeID">
+                </RadzenDropDown>
+              </Template>
+              <EditTemplate Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenDropDown Data="@getTypeList" TextProperty="ParamDesc" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.IncurredTypeID)" ValueProperty="ParameterID" Name="IncurredTypeID">
+                </RadzenDropDown>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TransactionApprovalLimit" Property="IncurredCategoryID" Title="Incurred Category">
+              <Template Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenDropDown Data="@getCategoryList" Disabled="true" TextProperty="ParamDesc" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.IncurredCategoryID)" ValueProperty="ParameterID" Name="Dropdown1">
+                </RadzenDropDown>
+              </Template>
+              <EditTemplate Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenDropDown Data="@getCategoryList" TextProperty="ParamDesc" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.IncurredCategoryID)" ValueProperty="ParameterID" Name="Dropdown0">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="Dropdown0" Popup="false" Text="Category is Required">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TransactionApprovalLimit" FormatString="{0:C}" Property="ApprovalLimit" Title="Approval Limit">
+              <EditTemplate Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenNumeric AutoComplete="false" Format="c" ShowUpDown="false" style="display: block; width: 75%" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.ApprovalLimit)" Name="ApprovalLimit">
+                </RadzenNumeric>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TransactionApprovalLimit" Property="UserID" Title="User ID">
+              <Template Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenDropDown Data="@userList" Disabled="true" TextProperty="Email" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.UserID)" ValueProperty="Id" Name="Dropdown0">
+                </RadzenDropDown>
+              </Template>
+              <EditTemplate Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenDropDown Data="@userList" TextProperty="Email" @bind-Value="@(RecoCms6ModelsRecoDbTransactionApprovalLimit.UserID)" ValueProperty="Id" Name="Dropdown0">
+                </RadzenDropDown>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TransactionApprovalLimit" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@((args) =>EditButtonClick(args, RecoCms6ModelsRecoDbTransactionApprovalLimit))">
+                </RadzenButton>
+              </Template>
+              <EditTemplate Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) =>SaveButtonClick(args, RecoCms6ModelsRecoDbTransactionApprovalLimit))">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="cancel" Size="ButtonSize.Small" Click="@((args) =>CancelButtonClick(args, RecoCms6ModelsRecoDbTransactionApprovalLimit))">
+                </RadzenButton>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.TransactionApprovalLimit" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="RecoCms6ModelsRecoDbTransactionApprovalLimit">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, RecoCms6ModelsRecoDbTransactionApprovalLimit))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

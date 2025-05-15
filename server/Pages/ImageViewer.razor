@@ -1,0 +1,17 @@
+﻿@page "/image-viewer/{ID}"
+@layout NoMenuLayout
+@inherits RecoCms6.Pages.ImageViewerComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenImage Path="@(string.Format("{0}download/file/FileID={1}", Globals.Uri, ID))"  Visible="true">
+        </RadzenImage>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

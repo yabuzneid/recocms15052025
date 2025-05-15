@@ -1,0 +1,36 @@
+<!--CppClaimantGrid PageSizeList=@PageSizes Items=@getTradeList TItem="TradeViewModel" TEntity="RecoCms6.Models.RecoDb.Trade" 
+EntityQuery="i => i.Select(c => new RecoCms6.Models.RecoDb.Trade(){ TradeID = c.TradeID }).ToList()" 
+UpdateOrder="@UpdateTradesDisplayOrder" ReloadGrid="@ReloadTradeList" 
+ExcludeList="@(new List<string>(){ "ClaimID", "OccurrenceID" })" 
+TOpenDialog="AddTrade" DialogParameters="@(p => new Dictionary<string, object>() { { "TradeID", p.TradeID}, { "ClaimID", intClaimID } })" 
+HiddenColumns="@(new List<string>(){ "ClaimID", "OccurrenceID", "TradeID" })">
+</CppClaimantGrid-->
+
+
+<CppClaimantGrid PageSizeList=@PageSizes Items=@getBrokerageList TItem="CppBrokerageViewModel" 
+TEntity="RecoCms6.Models.RecoDb.Insured" EntityQuery="i => i.Select(c => new RecoCms6.Models.RecoDb.Insured(){ ID = c.ID }).ToList()" 
+UpdateOrder="@UpdateInsuredsDisplayOrder" ReloadGrid="@ReloadInsuredList" 
+ExcludeList="@(new List<string>(){ "InsuredID" })" TOpenDialog="AddInsured" DialogParameters="@(p => new Dictionary<string, object>() { { "ID", p.ID}, { "ClaimID", intClaimID }, { "InsuredID", p.InsuredID } })" HiddenColumns="@(new List<string>() { "InsuredID" })">
+</CppClaimantGrid>
+
+ <CppClaimantGrid @ref="gridEOClaimant" PageSizeList=@PageSizes Items=@getEOClaimantList TItem="EOClaimantViewModel" TEntity="Claimant" 
+ EntityQuery="i => i.Select(c => new Claimant(){ ID = c.ID }).ToList()" 
+ UpdateOrder="@UpdateDisplayOrder" ReloadGrid="@ReloadClaimantList" 
+ ExcludeList="@(new List<string>() { "ClaimantID" })" TOpenDialog="AddClaimant" DialogParameters="@(p => new Dictionary<string, object>() { { "ID", p.ID}, { "ClaimID", intClaimID }, { "ClaimantID", p.ClaimantID } })" HiddenColumns="@(new List<string>() { "ClaimantID","ClaimID" })">
+</CppClaimantGrid>
+
+<CppClaimantGrid PageSizeList=@PageSizes Items=@getOtherPartyList TItem="CppOtherPartyViewModel" TEntity="RecoCms6.Models.RecoDb.OtherParty" 
+EntityQuery="i => i.Select(c => new OtherParty(){ ID = c.ID }).ToList()" 
+UpdateOrder="@UpdateOtherPartyDisplayOrder" ReloadGrid="@ReloadOtherPartyList" 
+ExcludeList="@(new List<string>(){ "OtherPartyID" })" TOpenDialog="AddOtherParty" 
+DialogParameters="@(p => new Dictionary<string, object>() { { "ID", p.ID}, { "ClaimID", intClaimID }, { "OtherPartyID", p.OtherPartyID } })" 
+HiddenColumns="@(new List<string>() { "OtherPartyID","ClaimID" })">
+</CppClaimantGrid>
+
+<CppClaimantGrid PageSizeList=@PageSizes Items=@getExpertList TItem="ExpertViewModel" TEntity="RecoCms6.Models.RecoDb.Expert" 
+EntityQuery="i => i.Select(c => new RecoCms6.Models.RecoDb.Expert(){ ExpertID = c.ExpertID }).ToList()" 
+UpdateOrder="@UpdateExpertsDisplayOrder" ReloadGrid="@ReloadExpertList" 
+ExcludeList="@(new List<string>())" TOpenDialog="AddExpert" 
+DialogParameters="@(p => new Dictionary<string, object>() { { "ExpertID", p.ExpertID}, { "ClaimID", intClaimID } })" 
+HiddenColumns="@(new List<string>(){ "ExpertID","ClaimID" })">
+</CppClaimantGrid>

@@ -1,0 +1,2039 @@
+{
+  "access": "Authenticated",
+  "components": [
+    {
+      "components": [
+        {
+          "action": "",
+          "components": [
+            {
+              "components": [
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "name": "heading0",
+                      "size": "H3",
+                      "text": "Claim #",
+                      "type": "heading"
+                    }
+                  ],
+                  "name": "col19",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-5",
+                  "components": [
+                    {
+                      "name": "heading1",
+                      "size": "H3",
+                      "text": "${claim.ClaimNo}",
+                      "type": "heading",
+                      "visible": "${Security.IsInRole(\"Defense Counsel\")}"
+                    }
+                  ],
+                  "name": "col21",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "name": "heading2",
+                      "size": "H3",
+                      "text": "Counsel Claim #",
+                      "type": "heading"
+                    }
+                  ],
+                  "name": "col5",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-3",
+                  "components": [
+                    {
+                      "name": "textbox0",
+                      "placeholder": "",
+                      "readOnly": "${!Security.IsInRole(\"Defense Counsel\")}",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "type": "textbox",
+                      "value": "${claim.CounselFileNo}"
+                    }
+                  ],
+                  "name": "col6",
+                  "type": "col"
+                }
+              ],
+              "name": "row13",
+              "style": {
+                "marginBottom": ".25em"
+              },
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "component": "textBox1",
+                      "name": "labelBroker",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "text": "Insured(s)",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col0",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-5",
+                  "components": [
+                    {
+                      "name": "label22",
+                      "text": "${Insured}",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col1",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "name": "label4",
+                      "text": "Reserves",
+                      "type": "label",
+                      "visible": "${LegalReserves != null}"
+                    }
+                  ],
+                  "name": "col20",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-3",
+                  "components": [
+                    {
+                      "name": "label25",
+                      "text": "${LegalReserves}",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col22",
+                  "type": "col"
+                }
+              ],
+              "name": "row0",
+              "style": {
+                "marginBottom": ".25em"
+              },
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "component": "textBox1",
+                      "name": "labelClaimant",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "text": "Claimant(s)",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col3",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-5",
+                  "components": [
+                    {
+                      "name": "label23",
+                      "text": "${Claimant}",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col4",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "component": "textBox1",
+                      "name": "label17",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "text": "Status",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col23",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "name": "label18",
+                      "text": "${Globals.gblCurrentClaim.Status}",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col25",
+                  "type": "col"
+                }
+              ],
+              "name": "row2",
+              "style": {
+                "marginBottom": ".25em"
+              },
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "component": "textBox1",
+                      "name": "labelFileHandler",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "text": "File Handled By",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col9",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-5",
+                  "components": [
+                    {
+                      "name": "label24",
+                      "text": "${FileHandler}",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col10",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-1",
+                  "components": [
+                    {
+                      "component": "textBox1",
+                      "name": "labelFlag",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "text": "Flag",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col7",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-4",
+                  "components": [
+                    {
+                      "allowClear": true,
+                      "allowFiltering": true,
+                      "data": "${parameterFlags}",
+                      "events": {
+                        "loadData": []
+                      },
+                      "filterCaseSensitivity": "caseInsensitive",
+                      "name": "dropdownFlag",
+                      "style": {
+                        "display": "block",
+                        "width": "100%"
+                      },
+                      "textProperty": "ParamDesc",
+                      "type": "dropdown",
+                      "value": "${report.ClaimReportFlagID}",
+                      "valueProperty": "ParameterID",
+                      "valueType": "int?"
+                    }
+                  ],
+                  "name": "col8",
+                  "type": "col"
+                }
+              ],
+              "name": "row5",
+              "style": {
+                "marginBottom": ".25em"
+              },
+              "type": "row"
+            },
+            {
+              "items": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [
+                            {
+                              "disabled": false,
+                              "name": "ExecutiveSummary",
+                              "style": {
+                                "height": "350px"
+                              },
+                              "type": "html-editor",
+                              "uploadUrl": "upload/image",
+                              "value": "${report.ExecutiveSummary}"
+                            }
+                          ],
+                          "name": "col12",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row6",
+                      "type": "row"
+                    }
+                  ],
+                  "disabled": false,
+                  "selected": true,
+                  "text": "Executive Summary"
+                },
+                {
+                  "attributes": [],
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [
+                            {
+                              "disabled": false,
+                              "name": "Facts",
+                              "style": {
+                                "height": "350px"
+                              },
+                              "type": "html-editor",
+                              "uploadUrl": "upload/image",
+                              "value": "${report.Facts}"
+                            }
+                          ],
+                          "name": "col13",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row7",
+                      "type": "row"
+                    },
+                    {
+                      "allowCollapse": true,
+                      "collapsed": true,
+                      "components": [
+                        {
+                          "columns": [
+                            {
+                              "format": "",
+                              "property": "Facts",
+                              "template": "<span style=\"white-space: pre-wrap\">@((MarkupString)data.Facts)</span>",
+                              "title": "Facts",
+                              "type": "string"
+                            },
+                            {
+                              "format": "date-time",
+                              "formatString": "{0:d}",
+                              "property": "DateSubmitted",
+                              "title": "Date Submitted",
+                              "type": "string",
+                              "width": "150px"
+                            },
+                            {
+                              "format": "",
+                              "property": "SubmittedBy",
+                              "title": "Submitted By",
+                              "type": "string",
+                              "width": "150px"
+                            }
+                          ],
+                          "data": "${previousFacts}",
+                          "itemType": "RecoCms6.Models.RecoDb.ClaimReportDetail",
+                          "name": "datagrid0",
+                          "type": "datagrid"
+                        }
+                      ],
+                      "name": "panel1",
+                      "text": "Previous Facts",
+                      "type": "panel"
+                    }
+                  ],
+                  "selected": false,
+                  "text": "Facts"
+                },
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [
+                            {
+                              "disabled": false,
+                              "name": "Coverage",
+                              "style": {
+                                "height": "350px"
+                              },
+                              "type": "html-editor",
+                              "uploadUrl": "upload/image",
+                              "value": "${report.Coverage}"
+                            }
+                          ],
+                          "name": "col14",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row8",
+                      "type": "row"
+                    },
+                    {
+                      "name": "label8",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "fontSize": "12px",
+                        "lineHeight": "18px"
+                      },
+                      "text": "Coverage is required",
+                      "type": "label",
+                      "visible": "${rfvCoverage}"
+                    },
+                    {
+                      "allowCollapse": true,
+                      "collapsed": true,
+                      "components": [
+                        {
+                          "columns": [
+                            {
+                              "format": "",
+                              "property": "Coverage",
+                              "template": "<span style=\"white-space: pre-wrap\">@((MarkupString)data.Coverage)</span>",
+                              "title": "Coverage",
+                              "type": "string"
+                            },
+                            {
+                              "format": "date-time",
+                              "formatString": "{0:d}",
+                              "property": "DateSubmitted",
+                              "title": "Date Submitted",
+                              "type": "string",
+                              "width": "150px"
+                            },
+                            {
+                              "format": "",
+                              "property": "SubmittedBy",
+                              "title": "Submitted By",
+                              "type": "string",
+                              "width": "150px"
+                            }
+                          ],
+                          "count": "",
+                          "data": "${previousCoverage}",
+                          "itemType": "RecoCms6.Models.RecoDb.ClaimReportDetail",
+                          "name": "datagrid1",
+                          "type": "datagrid"
+                        }
+                      ],
+                      "name": "panel2",
+                      "text": "Previous Coverage",
+                      "type": "panel"
+                    }
+                  ],
+                  "selected": false,
+                  "text": "Coverage"
+                },
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [
+                            {
+                              "disabled": false,
+                              "name": "Liability",
+                              "style": {
+                                "height": "350px"
+                              },
+                              "type": "html-editor",
+                              "uploadUrl": "upload/image",
+                              "value": "${report.Liability}"
+                            }
+                          ],
+                          "name": "col15",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row9",
+                      "type": "row"
+                    },
+                    {
+                      "name": "label9",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "fontSize": "12px",
+                        "lineHeight": "18px"
+                      },
+                      "text": "Liability is required",
+                      "type": "label",
+                      "visible": "${rfvLiability}"
+                    },
+                    {
+                      "allowCollapse": true,
+                      "collapsed": true,
+                      "components": [
+                        {
+                          "columns": [
+                            {
+                              "format": "",
+                              "property": "Liability",
+                              "template": "<span style=\"white-space: pre-wrap\">@((MarkupString)data.Liability)</span>",
+                              "title": "Liability",
+                              "type": "string"
+                            },
+                            {
+                              "format": "date-time",
+                              "formatString": "{0:d}",
+                              "property": "DateSubmitted",
+                              "title": "Date Submitted",
+                              "type": "string",
+                              "width": "150px"
+                            },
+                            {
+                              "format": "",
+                              "property": "SubmittedBy",
+                              "title": "Submitted By",
+                              "type": "string",
+                              "width": "150px"
+                            }
+                          ],
+                          "data": "${previousClaimReports}",
+                          "itemType": "RecoCms6.Models.RecoDb.ClaimReportDetail",
+                          "name": "datagrid2",
+                          "type": "datagrid"
+                        }
+                      ],
+                      "name": "panel3",
+                      "text": "Previous Liability",
+                      "type": "panel"
+                    }
+                  ],
+                  "selected": false,
+                  "text": "Liability"
+                },
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [
+                            {
+                              "disabled": false,
+                              "name": "Damages",
+                              "style": {
+                                "height": "350px"
+                              },
+                              "type": "html-editor",
+                              "uploadUrl": "upload/image",
+                              "value": "${report.Damages}"
+                            }
+                          ],
+                          "name": "col16",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row10",
+                      "type": "row"
+                    },
+                    {
+                      "name": "label10",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "fontSize": "12px",
+                        "lineHeight": "18px"
+                      },
+                      "text": "Damages is required",
+                      "type": "label",
+                      "visible": "${rfvDamages}"
+                    },
+                    {
+                      "allowCollapse": true,
+                      "collapsed": true,
+                      "components": [
+                        {
+                          "columns": [
+                            {
+                              "format": "",
+                              "property": "Damages",
+                              "template": "<span style=\"white-space: pre-wrap\">@((MarkupString)data.Damages)</span>",
+                              "title": "Damages",
+                              "type": "string"
+                            },
+                            {
+                              "format": "date-time",
+                              "formatString": "{0:d}",
+                              "property": "DateSubmitted",
+                              "title": "Date Submitted",
+                              "type": "string",
+                              "width": "150px"
+                            },
+                            {
+                              "format": "",
+                              "property": "SubmittedBy",
+                              "title": "Submitted By",
+                              "type": "string",
+                              "width": "150px"
+                            }
+                          ],
+                          "data": "${previousDamages}",
+                          "itemType": "RecoCms6.Models.RecoDb.ClaimReportDetail",
+                          "name": "datagrid3",
+                          "type": "datagrid"
+                        }
+                      ],
+                      "name": "panel4",
+                      "text": "Previous Damages",
+                      "type": "panel"
+                    }
+                  ],
+                  "selected": false,
+                  "text": "Damages"
+                },
+                {
+                  "components": [
+                    {
+                      "component": "textBox1",
+                      "name": "labelEstimatedExpense",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "text": "Estimated Expenses:",
+                      "type": "label"
+                    },
+                    {
+                      "component": "textBox1",
+                      "name": "label0",
+                      "style": {
+                        "color": "rgba(100, 101, 103, 0.72)",
+                        "fontSize": "14px",
+                        "width": "80%"
+                      },
+                      "text": "Note: Please consider the stage that you think this claim will be resolved at and the tasks that will need to be performed in providing us your estimate \n(e.g Initial Review and defence; discovery: mediation: trial preparation; pre-trial and trial.)",
+                      "type": "label"
+                    },
+                    {
+                      "maxLength": 255,
+                      "name": "textareaEstimatedExpenses",
+                      "style": {
+                        "height": "80px",
+                        "width": "80%"
+                      },
+                      "type": "textarea",
+                      "value": "${report.EstimatedExpenses}"
+                    },
+                    {
+                      "name": "label11",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "fontSize": "12px",
+                        "lineHeight": "18px"
+                      },
+                      "text": "Estimated Expenses are required",
+                      "type": "label",
+                      "visible": "${rfvEstimatedExpenses}"
+                    },
+                    {
+                      "component": "textBox1",
+                      "name": "labelEstmatedIndemnity",
+                      "style": {
+                        "marginTop": "20px",
+                        "width": "100%"
+                      },
+                      "text": "Estimated Indemnity",
+                      "type": "label"
+                    },
+                    {
+                      "component": "textBox1",
+                      "name": "label1",
+                      "style": {
+                        "color": "rgba(100, 101, 103, 0.72)",
+                        "fontSize": "14px",
+                        "width": "611.59375px"
+                      },
+                      "text": "Note: Based on what you know about the claim today, please provide your best estimate of what you think the claim is worth or what you would be comfortable in recommending as a settlement.",
+                      "type": "label"
+                    },
+                    {
+                      "component": "textBox1",
+                      "name": "labelDamagesClaimed",
+                      "style": {
+                        "marginTop": "20px",
+                        "width": "100%"
+                      },
+                      "text": "Damages Claimed",
+                      "type": "label"
+                    },
+                    {
+                      "component": "textBox1",
+                      "name": "label2",
+                      "style": {
+                        "color": "rgba(100, 101, 103, 0.72)",
+                        "fontSize": "14px",
+                        "width": "611.59375px"
+                      },
+                      "text": "(in demand letter or pleading) ",
+                      "type": "label"
+                    },
+                    {
+                      "autoComplete": false,
+                      "maxLength": 50,
+                      "name": "textboxDamagesClaimed",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "type": "textbox",
+                      "value": "${report.DamagesClaimed}"
+                    },
+                    {
+                      "name": "label12",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "fontSize": "12px",
+                        "lineHeight": "18px"
+                      },
+                      "text": "Damages Claimed are required",
+                      "type": "label",
+                      "visible": "${rfvDamagesClaimed}"
+                    },
+                    {
+                      "component": "textBox1",
+                      "name": "labelSettlementValue",
+                      "style": {
+                        "marginTop": "20px",
+                        "width": "100%"
+                      },
+                      "text": "Settlement Value",
+                      "type": "label"
+                    },
+                    {
+                      "component": "textBox1",
+                      "name": "label3",
+                      "style": {
+                        "color": "rgba(100, 101, 103, 0.72)",
+                        "fontSize": "14px",
+                        "width": "611.59375px"
+                      },
+                      "text": "(best estimate of what insurer will ultimately pay to settle this claim) ",
+                      "type": "label"
+                    },
+                    {
+                      "autoComplete": false,
+                      "name": "textboxSettlementValue",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "type": "textbox",
+                      "value": "${report.EstimatedIndemnity}"
+                    },
+                    {
+                      "name": "label16",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "fontSize": "12px",
+                        "lineHeight": "18px"
+                      },
+                      "text": "Settlement Value is required",
+                      "type": "label",
+                      "visible": "${rfvEstimatedIndmenity}"
+                    },
+                    {
+                      "component": "textBox1",
+                      "name": "labelPossibleSubrogation",
+                      "style": {
+                        "marginTop": "20px",
+                        "width": "100%"
+                      },
+                      "text": "Possible Subrogation/Recovery",
+                      "type": "label"
+                    },
+                    {
+                      "autoComplete": false,
+                      "name": "textboxPossibleSubrogation",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "type": "textbox",
+                      "value": "${report.PossibleSubrogation}"
+                    },
+                    {
+                      "name": "label20",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "fontSize": "12px",
+                        "lineHeight": "18px"
+                      },
+                      "text": "Possible Subrogation is required",
+                      "type": "label",
+                      "visible": "${rfvSubrogation}"
+                    }
+                  ],
+                  "selected": false,
+                  "text": "Reserves"
+                },
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [
+                            {
+                              "disabled": false,
+                              "name": "ActionPlan",
+                              "style": {
+                                "height": "350px"
+                              },
+                              "type": "html-editor",
+                              "uploadUrl": "upload/image",
+                              "value": "${report.ActionPlan}"
+                            },
+                            {
+                              "name": "label5",
+                              "style": {
+                                "color": "rgb(249, 119, 127)",
+                                "fontSize": "12px",
+                                "lineHeight": "18px"
+                              },
+                              "text": "Update is required",
+                              "type": "label",
+                              "visible": "${rfvActionPlan}"
+                            }
+                          ],
+                          "name": "col17",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row11",
+                      "type": "row"
+                    },
+                    {
+                      "allowCollapse": true,
+                      "collapsed": true,
+                      "components": [
+                        {
+                          "columns": [
+                            {
+                              "editTemplate": "",
+                              "format": "",
+                              "property": "ActionPlan",
+                              "template": "<span style=\"white-space: pre-wrap\">@((MarkupString)data.ActionPlan)</span>",
+                              "title": "Update",
+                              "type": "string"
+                            },
+                            {
+                              "format": "date-time",
+                              "formatString": "{0:d}",
+                              "property": "DateSubmitted",
+                              "title": "Date Submitted",
+                              "type": "string",
+                              "width": "150px"
+                            },
+                            {
+                              "format": "",
+                              "property": "SubmittedBy",
+                              "title": "Submitted By",
+                              "type": "string",
+                              "width": "150px"
+                            }
+                          ],
+                          "data": "${previousActionPlans}",
+                          "itemType": "RecoCms6.Models.RecoDb.ClaimReportDetail",
+                          "name": "datagrid5",
+                          "type": "datagrid"
+                        }
+                      ],
+                      "name": "panel6",
+                      "text": "Previous Update(s)",
+                      "type": "panel",
+                      "visible": true
+                    }
+                  ],
+                  "disabled": false,
+                  "selected": false,
+                  "text": "Update",
+                  "visible": ""
+                },
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [
+                            {
+                              "disabled": false,
+                              "name": "Recommendations",
+                              "style": {
+                                "height": "350px"
+                              },
+                              "type": "html-editor",
+                              "uploadUrl": "upload/image",
+                              "value": "${report.Recommendations}"
+                            }
+                          ],
+                          "name": "col18",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row12",
+                      "type": "row"
+                    },
+                    {
+                      "name": "label21",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "fontSize": "12px",
+                        "lineHeight": "18px"
+                      },
+                      "text": "Recommendations are required",
+                      "type": "label",
+                      "visible": "${rfvRecommendations}"
+                    },
+                    {
+                      "allowCollapse": true,
+                      "collapsed": true,
+                      "components": [
+                        {
+                          "columns": [
+                            {
+                              "editTemplate": "",
+                              "format": "",
+                              "property": "Recommendations",
+                              "template": "<span style=\"white-space: pre-wrap\">@((MarkupString)data.Recommendations)</span>",
+                              "title": "Recommendations",
+                              "type": "string"
+                            },
+                            {
+                              "format": "date-time",
+                              "formatString": "{0:d}",
+                              "property": "DateSubmitted",
+                              "title": "Date Submitted",
+                              "type": "string",
+                              "width": "150px"
+                            },
+                            {
+                              "format": "",
+                              "property": "SubmittedBy",
+                              "title": "Submitted By",
+                              "type": "string",
+                              "width": "150px"
+                            }
+                          ],
+                          "data": "${previousRecommendations}",
+                          "itemType": "RecoCms6.Models.RecoDb.ClaimReportDetail",
+                          "name": "datagrid4",
+                          "type": "datagrid"
+                        }
+                      ],
+                      "name": "panel5",
+                      "text": "Previous Recommendations",
+                      "type": "panel"
+                    }
+                  ],
+                  "selected": false,
+                  "text": "Recommendations"
+                },
+                {
+                  "components": [
+                    {
+                      "events": {
+                        "click": [
+                          {
+                            "parameters": [
+                              {
+                                "name": "ClaimID",
+                                "value": "${claim.ClaimID}"
+                              }
+                            ],
+                            "path": "add-file",
+                            "then": [
+                              {
+                                "code": "${await gridFiles.Reload()}",
+                                "type": "execute"
+                              }
+                            ],
+                            "title": "Add Document",
+                            "type": "popup"
+                          }
+                        ]
+                      },
+                      "icon": "attach_file",
+                      "name": "btnAttachToClaim",
+                      "style": {
+                        "marginBottom": "10px"
+                      },
+                      "text": "Attach to claim",
+                      "type": "button"
+                    },
+                    {
+                      "allowPaging": true,
+                      "columns": [
+                        {
+                          "format": "date-time",
+                          "formatString": "{0:d}",
+                          "property": "EntryDate",
+                          "sortProperty": "",
+                          "title": "Entry Date",
+                          "type": "string"
+                        },
+                        {
+                          "format": "",
+                          "property": "Subject",
+                          "title": "Subject",
+                          "type": "string"
+                        },
+                        {
+                          "format": "",
+                          "property": "Filename",
+                          "template": [
+                            {
+                              "class": "col-md-12",
+                              "components": [
+                                {
+                                  "name": "image2",
+                                  "path": "${string.Format(\"{0}download/file/FileID={1}\", Globals.Uri, data.ID)}",
+                                  "style": {
+                                    "height": "50px"
+                                  },
+                                  "type": "image",
+                                  "visible": "${data.Extension.ToLower()==\".jpg\" || data.Extension.ToLower()==\".jpeg\" || data.Extension.ToLower()==\".png\" || data.Extension.ToLower()==\".gif\"}"
+                                },
+                                {
+                                  "icon": "open_in_new",
+                                  "name": "link0",
+                                  "parameters": [
+                                    {
+                                      "name": "ID",
+                                      "value": "${data.ID}"
+                                    }
+                                  ],
+                                  "path": "file-viewer",
+                                  "style": {
+                                    "float": "left",
+                                    "verticalAlign": "baseline"
+                                  },
+                                  "target": "_blank",
+                                  "text": "${data.Filename}",
+                                  "type": "link",
+                                  "visible": "${docExtensions.Contains(data.Extension)}"
+                                },
+                                {
+                                  "icon": "open_in_new",
+                                  "name": "link2",
+                                  "parameters": [
+                                    {
+                                      "name": "ID",
+                                      "value": "${data.ID}"
+                                    }
+                                  ],
+                                  "path": "image-viewer",
+                                  "style": {
+                                    "float": "left",
+                                    "verticalAlign": "baseline"
+                                  },
+                                  "target": "_blank",
+                                  "text": "${data.Filename}",
+                                  "type": "link",
+                                  "visible": "${imageExtensions.Contains(data.Extension)}"
+                                },
+                                {
+                                  "buttonStyle": "secondary",
+                                  "buttonType": "button",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "name": "DownloadFileAsync",
+                                        "parameters": [
+                                          {
+                                            "name": "file",
+                                            "type": "RecoCms6.Models.RecoDb.File",
+                                            "value": "${data}"
+                                          }
+                                        ],
+                                        "schema": {
+                                          "$ref": "#/definitions/Task",
+                                          "dotnetType": "System.Threading.Tasks.Task"
+                                        },
+                                        "type": "invoke-method"
+                                      }
+                                    ]
+                                  },
+                                  "icon": "get_app",
+                                  "name": "buttonDownloadFile",
+                                  "size": "sm",
+                                  "template": "",
+                                  "text": "Download File",
+                                  "type": "button",
+                                  "visible": "${!docExtensions.Contains(data.Extension) && !imageExtensions.Contains(data.Extension)}"
+                                }
+                              ],
+                              "name": "col125",
+                              "type": "col"
+                            }
+                          ],
+                          "title": "Filename",
+                          "type": "string"
+                        },
+                        {
+                          "template": [
+                            {
+                              "buttonStyle": "secondary",
+                              "buttonType": "button",
+                              "events": {
+                                "click": [
+                                  {
+                                    "name": "DownloadFileAsync",
+                                    "parameters": [
+                                      {
+                                        "name": "fileID",
+                                        "type": "int",
+                                        "value": "${data.FileID}"
+                                      }
+                                    ],
+                                    "schema": {
+                                      "$ref": "#/definitions/Task",
+                                      "dotnetType": "System.Threading.Tasks.Task"
+                                    },
+                                    "type": "invoke-method"
+                                  }
+                                ]
+                              },
+                              "icon": "open_in_new",
+                              "name": "button0",
+                              "size": "sm",
+                              "style": {
+                                "marginRight": ".25em"
+                              },
+                              "template": "",
+                              "text": "Download",
+                              "type": "button",
+                              "visible": true
+                            }
+                          ]
+                        }
+                      ],
+                      "count": "",
+                      "data": "${files}",
+                      "itemType": "RecoCms6.Models.RecoDb.File",
+                      "name": "gridFiles",
+                      "type": "grid"
+                    }
+                  ],
+                  "selected": false,
+                  "text": "Attachments"
+                },
+                {
+                  "components": [
+                    {
+                      "columns": [
+                        {
+                          "filterable": false,
+                          "format": "uuid",
+                          "headerTemplate": "",
+                          "property": "ID",
+                          "sortable": false,
+                          "template": [
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "name": "label13",
+                                      "text": "${data.EntryDate}",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col104",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-4",
+                                  "components": [
+                                    {
+                                      "name": "label14",
+                                      "text": "${data.Subject}",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col105",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label15",
+                                      "text": "${data.Name}",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col106",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "icon": "attach_money",
+                                      "name": "icon0",
+                                      "type": "icon",
+                                      "visible": "${data.LargeLoss == true}"
+                                    },
+                                    {
+                                      "icon": "vertical_align_top",
+                                      "name": "icon1",
+                                      "type": "icon",
+                                      "visible": "${data.Sticky == true}"
+                                    },
+                                    {
+                                      "icon": "description",
+                                      "name": "icon2",
+                                      "type": "icon",
+                                      "visible": "${data.LogType == \"Note\"}"
+                                    },
+                                    {
+                                      "icon": "insert_photo",
+                                      "name": "icon3",
+                                      "type": "icon",
+                                      "visible": "${data.NoteType == \"Image\"}"
+                                    },
+                                    {
+                                      "icon": "today",
+                                      "name": "icon4",
+                                      "type": "icon",
+                                      "visible": "${data.LogType == \"Diary\"}"
+                                    },
+                                    {
+                                      "icon": "attach_file",
+                                      "name": "icon5",
+                                      "type": "icon",
+                                      "visible": "${data.LogType == \"File\" && data.NoteType != \"Image\"}"
+                                    }
+                                  ],
+                                  "name": "col107",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row39",
+                              "style": {
+                                "borderBottom": "1px solid #88989b",
+                                "color": "#0e83f9"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-12",
+                                  "components": [
+                                    {
+                                      "icon": "",
+                                      "name": "link1",
+                                      "parameters": [
+                                        {
+                                          "name": "ID",
+                                          "value": "${data.ID}"
+                                        }
+                                      ],
+                                      "path": "file-viewer",
+                                      "target": "_blank",
+                                      "text": "Download",
+                                      "type": "link",
+                                      "visible": "${data.LogType == \"File\" && data.NoteType != \"Image\"}"
+                                    }
+                                  ],
+                                  "name": "col103",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row42",
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-12",
+                                  "components": [
+                                    {
+                                      "name": "image0",
+                                      "path": "${data.Details}",
+                                      "type": "image",
+                                      "visible": "${data.LogType == \"Image\" || data.NoteType==\"Image\"}"
+                                    }
+                                  ],
+                                  "name": "col102",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row41",
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-12",
+                                  "components": [
+                                    {
+                                      "content": "<p style=\"white-space: pre-line\">${(MarkupString)data.Details}</p>",
+                                      "name": "html0",
+                                      "type": "html",
+                                      "visible": "${data.LogType==\"Note\" || data.LogType==\"Diary\" || data.LogType == \"File Summary\"}"
+                                    }
+                                  ],
+                                  "name": "col101",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row40",
+                              "type": "row"
+                            }
+                          ],
+                          "title": "",
+                          "type": "string"
+                        }
+                      ],
+                      "data": "${activityLog}",
+                      "itemType": "RecoCms6.Models.RecoDb.ClaimActivityLog",
+                      "name": "gridActivityLog",
+                      "responsive": true,
+                      "type": "grid"
+                    }
+                  ],
+                  "icon": "",
+                  "selected": false,
+                  "text": "Notes"
+                },
+                {
+                  "components": [
+                    {
+                      "columns": [
+                        {
+                          "template": [
+                            {
+                              "name": "buttonSelect",
+                              "style": {
+                                "marginRight": "25px;"
+                              },
+                              "text": "Select",
+                              "type": "button",
+                              "visible": false
+                            },
+                            {
+                              "icon": "open_in_new",
+                              "name": "link1",
+                              "parameters": [
+                                {
+                                  "name": "ID",
+                                  "value": "${data.ID}"
+                                }
+                              ],
+                              "path": "file-viewer",
+                              "target": "_blank",
+                              "text": "View Claim Report",
+                              "type": "link",
+                              "visible": "${data.ID != null}"
+                            }
+                          ],
+                          "title": "#"
+                        },
+                        {
+                          "format": "",
+                          "headerTemplate": "",
+                          "property": "InitialReport",
+                          "sortProperty": "",
+                          "title": "Initial Report",
+                          "type": "boolean"
+                        },
+                        {
+                          "format": "",
+                          "property": "SubmittedByName",
+                          "sortable": false,
+                          "title": "Submitted By",
+                          "type": "string"
+                        },
+                        {
+                          "format": "date-time",
+                          "formatString": "{0:d}",
+                          "property": "DateLastModified",
+                          "title": "Last Modified",
+                          "type": "string"
+                        },
+                        {
+                          "format": "date-time",
+                          "formatString": "{0:d}",
+                          "property": "DateSubmitted",
+                          "title": "Submitted",
+                          "type": "string"
+                        },
+                        {
+                          "template": [
+                            {
+                              "buttonStyle": "secondary",
+                              "buttonType": "button",
+                              "events": {
+                                "click": [
+                                  {
+                                    "name": "DownloadFileAsync",
+                                    "parameters": [
+                                      {
+                                        "name": "file",
+                                        "type": "RecoCms6.Models.RecoDb.ClaimFilesByUser",
+                                        "value": "${data.FileID}"
+                                      }
+                                    ],
+                                    "schema": {
+                                      "$ref": "#/definitions/Task",
+                                      "dotnetType": "System.Threading.Tasks.Task"
+                                    },
+                                    "type": "invoke-method"
+                                  }
+                                ]
+                              },
+                              "icon": "open_in_new",
+                              "name": "button1",
+                              "size": "sm",
+                              "style": {
+                                "marginRight": ".25em"
+                              },
+                              "template": "",
+                              "text": "Download",
+                              "type": "button",
+                              "visible": "${data.FileID != null}"
+                            }
+                          ]
+                        }
+                      ],
+                      "data": "${claimReports}",
+                      "itemType": "RecoCms6.Models.RecoDb.ClaimReportDetail",
+                      "name": "gridReports",
+                      "type": "grid"
+                    }
+                  ],
+                  "selected": false,
+                  "text": "Reports"
+                }
+              ],
+              "name": "tabs0",
+              "style": {
+                "marginBottom": ".25em"
+              },
+              "type": "tabs",
+              "visible": true
+            },
+            {
+              "components": [
+                {
+                  "class": "col-md-6 text-md-center",
+                  "components": [
+                    {
+                      "buttonType": "submit",
+                      "events": {
+                        "click": [
+                          {
+                            "name": "IsSubmitEvent",
+                            "type": "set",
+                            "value": "false",
+                            "valueType": "bool"
+                          }
+                        ]
+                      },
+                      "icon": "save",
+                      "name": "buttonSave",
+                      "style": {
+                        "display": "block",
+                        "float": "left"
+                      },
+                      "text": "Save Claim Report",
+                      "type": "button",
+                      "visible": true
+                    }
+                  ],
+                  "name": "col2",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-6  text-md-center",
+                  "components": [
+                    {
+                      "buttonType": "submit",
+                      "events": {
+                        "click": [
+                          {
+                            "name": "IsSubmitEvent",
+                            "type": "set",
+                            "value": "true",
+                            "valueType": "bool"
+                          }
+                        ]
+                      },
+                      "icon": "save_alt",
+                      "name": "buttonSubmit",
+                      "style": {
+                        "display": "block",
+                        "float": "right"
+                      },
+                      "text": "Submit Claim Report",
+                      "type": "button",
+                      "visible": "${claim.FileHandlerID != null}"
+                    }
+                  ],
+                  "name": "col11",
+                  "type": "col"
+                }
+              ],
+              "name": "row1",
+              "style": {
+                "display": "flex"
+              },
+              "type": "row"
+            }
+          ],
+          "data": "${report}",
+          "events": {
+            "invalidSubmit": [
+              {
+                "code": "await ShowFormErrors(${event})",
+                "type": "execute"
+              }
+            ],
+            "submit": [
+              {
+                "name": "ShowBusyDialog",
+                "schema": {
+                  "$ref": "#/definitions/Task",
+                  "dotnetType": "System.Threading.Tasks.Task"
+                },
+                "type": "invoke-method"
+              }
+            ]
+          },
+          "itemType": "RecoCms6.Models.RecoDb.ClaimReport",
+          "method": "",
+          "name": "formReport",
+          "style": {
+            "marginRight": "15px",
+            "width": "90%"
+          },
+          "type": "template-form"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "intClaimID",
+        "type": "set",
+        "value": "StringExtensions.IntegerFromBase64(ClaimID)",
+        "valueType": "int"
+      },
+      {
+        "name": "RECODb.getClaims",
+        "parameters": [
+          {
+            "name": "$filter",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${intClaimID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "claim",
+            "type": "set",
+            "value": "${result}.FirstOrDefault()",
+            "valueType": "RecoCms6.Models.RecoDb.Claim"
+          },
+          {
+            "condition": "${Globals.gblCurrentClaim == null}",
+            "name": "RECODb.getClaimLists",
+            "parameters": [
+              {
+                "name": "$filter",
+                "operator": "and",
+                "value": [
+                  {
+                    "operation": "eq",
+                    "property": "ClaimID",
+                    "type": "integer",
+                    "value": "${claim.ClaimID}"
+                  }
+                ]
+              }
+            ],
+            "then": [
+              {
+                "global": true,
+                "name": "gblCurrentClaim",
+                "type": "set",
+                "value": "${result.FirstOrDefault()}",
+                "valueType": "RecoCms6.Models.RecoDb.ClaimList"
+              }
+            ],
+            "type": "invoke"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getServiceProviders",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "UserID",
+                "type": "string",
+                "value": "${Security.User.Id}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "serviceprovider",
+            "type": "set",
+            "value": "${result.FirstOrDefault()}",
+            "valueType": "RecoCms6.Models.RecoDb.ServiceProvider"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "report",
+        "type": "set",
+        "value": "await getClaimReport(${claim.ClaimID})",
+        "valueType": "RecoCms6.Models.RecoDb.ClaimReport"
+      },
+      {
+        "name": "report.ClaimID",
+        "type": "set",
+        "value": "${claim.ClaimID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "${Insured==null || Insured == String.Empty}",
+        "name": "Insured",
+        "type": "set",
+        "value": "${Globals.gblCurrentClaim.Insured1}",
+        "valueType": "string"
+      },
+      {
+        "condition": "${Claimant == null || Claimant == String.Empty}",
+        "name": "Claimant",
+        "type": "set",
+        "value": "${Globals.gblCurrentClaim.Claimant1}",
+        "valueType": "string"
+      },
+      {
+        "condition": "${FileHandler == null || FileHandler == String.Empty}",
+        "name": "FileHandler",
+        "type": "set",
+        "value": "${Globals.gblCurrentClaim.FileHandler}",
+        "valueType": "string"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Claim Report Flag\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"ProgramID\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"File Type\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "parameterFlags",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Claim Report Flag\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "isEOProgram",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\" && p.ParamAbbrev==\"EO\").First().ParameterID == claim.ProgramID}",
+            "valueType": "bool"
+          },
+          {
+            "name": "getClaimReportFileTypeID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p=>p.ParamDesc==\"Claim Report\" && p.ParamTypeDesc==\"File Type\").ParameterID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getFiles",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${claim.ClaimID}"
+              },
+              {
+                "operation": "eq",
+                "property": "VisibleToCounsel",
+                "type": "boolean",
+                "value": "true"
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "desc",
+                "property": "EntryDate"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "files",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.File>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getClaimReportDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${claim.ClaimID}"
+              },
+              {
+                "operation": "eq",
+                "property": "FirmType",
+                "type": "string",
+                "value": "\"Defense Counsel\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "desc",
+                "property": "DateCreated"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "global": false,
+            "name": "claimReports",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimReportDetail>"
+          },
+          {
+            "name": "previousClaimReports",
+            "type": "set",
+            "value": "${result.Where(cr=>cr.DateSubmitted != null)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimReportDetail>"
+          },
+          {
+            "name": "previousActionPlans",
+            "type": "set",
+            "value": "${previousClaimReports.Where(cr=>cr.ActionPlan != null && cr.ActionPlan != string.Empty)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimReportDetail>"
+          },
+          {
+            "name": "previousFacts",
+            "type": "set",
+            "value": "${previousClaimReports.Where(cr=>cr.Facts != null && cr.Facts != string.Empty)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimReportDetail>"
+          },
+          {
+            "name": "previousCoverage",
+            "type": "set",
+            "value": "${previousClaimReports.Where(cr=>cr.Coverage != null && cr.Coverage != string.Empty)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimReportDetail>"
+          },
+          {
+            "name": "previousLiability",
+            "type": "set",
+            "value": "${previousClaimReports.Where(cr=>cr.Liability != null && cr.Liability != string.Empty)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimReportDetail>"
+          },
+          {
+            "name": "previousDamages",
+            "type": "set",
+            "value": "${previousClaimReports.Where(cr=>cr.Damages != null && cr.Damages != string.Empty)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimReportDetail>"
+          },
+          {
+            "name": "previousRecommendations",
+            "type": "set",
+            "value": "${previousClaimReports.Where(cr=>cr.Recommendations != null && cr.Recommendations != string.Empty)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimReportDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "report",
+        "type": "set",
+        "value": "await getClaimReport(${claim.ClaimID})",
+        "valueType": "RecoCms6.Models.RecoDb.ClaimReport"
+      },
+      {
+        "name": "RECODb.getClaimCurrentReserves",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "IncurredType",
+                "type": "string",
+                "value": "\"Legal\""
+              },
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${claim.ClaimID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "condition": "${result.FirstOrDefault() != null && result.FirstOrDefault().TotalReserve != null}",
+            "name": "LegalReserves",
+            "type": "set",
+            "value": "string.Format(\"{0:C}\",${result.FirstOrDefault().TotalReserve})",
+            "valueType": "string"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "docExtensions",
+        "type": "set",
+        "value": "new List<string> {\".pdf\",\".xls\",\".xlsx\",\".doc\",\".docx\"}",
+        "valueType": "List<string>"
+      },
+      {
+        "name": "imageExtensions",
+        "type": "set",
+        "value": "new List<string>{\".png\",\".jpeg\",\".jpg\",\".gif\"}",
+        "valueType": "List<string>"
+      },
+      {
+        "name": "avExtensions",
+        "type": "set",
+        "value": "new List<string> {\".avi\",\".mov\",\".mp4\",\".mp3\",\".m4a\",\".wav\"}",
+        "valueType": "List<string>"
+      },
+      {
+        "name": "rfvExecSummary",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvFacts",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvCoverage",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvLiability",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvDamages",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvRecommendations",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvActionPlan",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvEstimatedExpenses",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvEstimatedIndmenity",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvDamagesClaimed",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvSubrogation",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvSettlement",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "saveResult",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "RECODb.getClaimActivityLogs",
+        "parameters": [
+          {
+            "name": "ClaimID",
+            "value": "${claim.ClaimID}"
+          },
+          {
+            "name": "UserID",
+            "value": "${Security.User.Id}"
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "desc",
+                "property": "Sticky"
+              },
+              {
+                "direction": "desc",
+                "property": "EntryDate"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "activityLog",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimActivityLog>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "SetPreference",
+        "schema": {
+          "$ref": "#/definitions/Void",
+          "dotnetType": "void"
+        },
+        "type": "invoke-method"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "ClaimReport"
+}

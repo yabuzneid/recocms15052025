@@ -1,0 +1,383 @@
+{
+  "access": "Authenticated",
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "LitigationDateType",
+                              "name": "LitigationDateTypeLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Litigation Date Type",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-6",
+                          "components": [
+                            {
+                              "data": "${getLitigationDateTypeList}",
+                              "name": "LitigationDateTypeID",
+                              "style": {
+                                "display": "block"
+                              },
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${claimlitigationdate.LitigationDateTypeID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "LitigationDateTypeID",
+                              "name": "LitigationDateTypeRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Litigation Date Type is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "LitigationDate",
+                              "name": "LitigationDateLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Litigation Date",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "dateFormat": "yyyy-MM-dd",
+                              "name": "LitigationDate",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "datepicker",
+                              "value": "${claimlitigationdate.LitigationDate}",
+                              "valueType": "DateTime"
+                            },
+                            {
+                              "component": "LitigationDate",
+                              "name": "LitigationDateRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Date is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label0",
+                              "text": "Litigation Status",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col2",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getLitigationDateStatusList}",
+                              "name": "LitigationStatusID",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${claimlitigationdate.LitigationStatusID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col3",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "style": {
+                                "marginLeft": "1rem"
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${claimlitigationdate}",
+                  "events": {
+                    "submit": [
+                      {
+                        "condition": "${intLitigationDateID == 0}",
+                        "error": [
+                          {
+                            "name": "SaveErrorAsync",
+                            "parameters": [
+                              {
+                                "name": "exception",
+                                "type": "System.Exception",
+                                "value": "${result}"
+                              }
+                            ],
+                            "schema": {
+                              "$ref": "#/definitions/Task",
+                              "dotnetType": "System.Threading.Tasks.Task"
+                            },
+                            "type": "invoke-method"
+                          },
+                          {
+                            "detail": "Unable to create new Litigation Date!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.createClaimLitigationDate",
+                        "parameters": [
+                          {
+                            "name": "ClaimLitigationDate",
+                            "value": "${claimlitigationdate}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${claimlitigationdate}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${intLitigationDateID != 0}",
+                        "error": [
+                          {
+                            "name": "SaveErrorAsync",
+                            "parameters": [
+                              {
+                                "name": "exception",
+                                "type": "System.Exception",
+                                "value": "${result}"
+                              }
+                            ],
+                            "schema": {
+                              "$ref": "#/definitions/Task",
+                              "dotnetType": "System.Threading.Tasks.Task"
+                            },
+                            "type": "invoke-method"
+                          },
+                          {
+                            "severity": "error",
+                            "summary": "Unable to Save Litigation Date",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.updateClaimLitigationDate",
+                        "parameters": [
+                          {
+                            "name": "LitigationDateID",
+                            "value": "${claimlitigationdate.LitigationDateID}"
+                          },
+                          {
+                            "name": "ClaimLitigationDate",
+                            "value": "${claimlitigationdate}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${result}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.ClaimLitigationDate",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${claimlitigationdate != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "intClaimID",
+        "type": "set",
+        "value": "${StringExtensions.IntegerFromBase64(parameters.ClaimID)}",
+        "valueType": "int"
+      },
+      {
+        "name": "claimlitigationdate",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.ClaimLitigationDate(){}",
+        "valueType": "RecoCms6.Models.RecoDb.ClaimLitigationDate"
+      },
+      {
+        "name": "claimlitigationdate.ClaimID",
+        "type": "set",
+        "value": "${intClaimID}",
+        "valueType": "int"
+      },
+      {
+        "name": "intLitigationDateID",
+        "type": "set",
+        "value": "${parameters.LitigationDateID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "${intLitigationDateID != 0}",
+        "name": "RECODb.getClaimLitigationDateByLitigationDateID",
+        "parameters": [
+          {
+            "name": "LitigationDateID",
+            "value": "${intLitigationDateID}"
+          }
+        ],
+        "then": [
+          {
+            "name": "claimlitigationdate",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "RecoCms6.Models.RecoDb.ClaimLitigationDate"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Litigation Date Type\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Litigation Date Status\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getLitigationDateTypeList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Litigation Date Type\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getLitigationDateStatusList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Litigation Date Status\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Claim Litigation Date"
+}

@@ -1,0 +1,61 @@
+﻿@page "/add-issue-reporting"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddIssueReportingComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@issuereporting" TItem="RecoCms6.Models.RecoDb.IssueReporting" Visible="@(issuereporting != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Subject" style="width: 100%" Text="Subject">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="100" style="display: block; width: 100%" @bind-Value="@(issuereporting.Subject)" Name="Subject">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Subject" style="position: absolute" Text="Subject is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Issue" style="width: 100%" Text="Issue">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenHtmlEditor style="height: 400px" UploadUrl="upload/image" @bind-Value="@(issuereporting.Issue)" Name="HtmlEditor0">
+                </RadzenHtmlEditor>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="IssueStatusID" style="width: 100%" Text="Status">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenDropDownDataGrid AllowRowSelectOnRowClick="false" AllowSorting="false" Data="@getParametersForIssueStatusIDResult" Disabled="true" Placeholder="Choose Parameter" ShowSearch="false" style="display: block; width: 100%" TextProperty="ParamDesc" @bind-Value="@(issuereporting.IssueStatusID)" ValueProperty="ParameterID" Name="IssueStatusID">
+                </RadzenDropDownDataGrid>
+                <RadzenRequiredValidator Component="IssueStatusID" DefaultValue="0" style="position: absolute" Text="Status is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" style="margin-left: 1rem" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

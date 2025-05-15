@@ -1,0 +1,56 @@
+@page "/login/{EncodedUsername}/validate2fa"
+@layout LoginLayout
+
+<RadzenContent Container="main">
+    <ChildContent>
+        <RadzenHeading Size="H1" Text="2nd Factor Authentication" />
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenTemplateForm Action="@($"/account/validate2fa?rememberMe={rememberMe}&rememberIp={rememberIp}")"
+                                    Data="@("LoginValidate2fa")" Method="post">
+                    <ChildContent>
+                        <RadzenHtml Visible="@QrCodeIsVisible">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>Scan the QR Code or enter this key below into your two factor authenticator app. Spaces and casing do not matter.</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-6">
+                                    <RadzenImage Style="width: 100%" Path="@($"data:image/jpeg;base64,{QrCodeBase64}")" AlternateText="QR Code for 2FA"/>
+                                </div>
+                                <div class="col-md-5"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Secret
+                                </div>
+                            </div>
+                        </RadzenHtml>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <RadzenLabel Component="validationCode" Text="Code:"/>
+                            </div>
+                            <div class="col-md-9">
+                                <RadzenTextBox @bind-Value="@validationCode" Component="validationCode"
+                                               Name="validationCode" Placeholder="2nd Factor Code"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <RadzenLabel Text="Remember This Device?"/>
+                            </div>
+                            <div class="col-md-1">
+                                <RadzenCheckBox Name="rememberMe" TValue="bool" @bind="@rememberMe"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <RadzenButton ButtonType="ButtonType.Submit" Text="Login"/>
+                        </div>
+                    </ChildContent>
+                </RadzenTemplateForm>
+            </div>
+        </div>
+    </ChildContent>
+</RadzenContent>

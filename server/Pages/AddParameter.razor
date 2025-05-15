@@ -1,0 +1,77 @@
+﻿@page "/add-parameter/{ParamTypeID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddParameterComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@parameter" TItem="RecoCms6.Models.RecoDb.Parameter" Visible="@(parameter != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="ParamTypeID" style="width: 100%" Text="Param Type">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@getParamTypesResult" Disabled="true" Placeholder="Choose ParamType" style="display: block; width: 100%" TextProperty="ParamTypeDesc" @bind-Value="@(parameter.ParamTypeID)" ValueProperty="ParamTypeID" Name="ParamTypeID" >
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="ParamTypeID" DefaultValue="0" style="position: absolute" Text="ParamTypeID is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="ParamAbbrev" style="width: 100%" Text="Param Abbrev">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="5" style="width: 100%" @bind-Value="@(parameter.ParamAbbrev)" Name="ParamAbbrev">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="ParamDesc" style="width: 100%" Text="Param Desc">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="50" style="display: block; width: 100%" @bind-Value="@(parameter.ParamDesc)" Name="ParamDesc">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="ParamDesc" style="position: absolute" Text="ParamDesc is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="ParamValue" style="width: 100%" Text="Param Value">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="width: 100%" @bind-Value="@(parameter.ParamValue)" Name="ParamValue">
+                </RadzenNumeric>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

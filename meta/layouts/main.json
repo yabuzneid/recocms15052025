@@ -1,0 +1,325 @@
+{
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "justify-content-start align-items-center",
+              "components": [
+                {
+                  "class": "col-6 d-flex align-items-center",
+                  "components": [
+                    {
+                      "events": {
+                        "click": [
+                          {
+                            "code": "await InvokeAsync(() => { sidebar0.Toggle(); });",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { body0.Toggle(); });",
+                            "type": "execute"
+                          }
+                        ]
+                      },
+                      "name": "sidebar-toggle0",
+                      "type": "sidebar-toggle"
+                    },
+                    {
+                      "name": "label0",
+                      "text": "RecoCMS6",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "leftCol",
+                  "type": "col"
+                },
+                {
+                  "class": "col-6 text-right",
+                  "components": [
+                    {
+                      "name": "profilemenu0",
+                      "template": [
+                        {
+                          "email": "${Security.User?.Name}",
+                          "type": "gravatar"
+                        }
+                      ],
+                      "type": "profilemenu",
+                      "visible": "${Security.IsAuthenticated()}"
+                    }
+                  ],
+                  "name": "rightCol",
+                  "type": "col"
+                }
+              ],
+              "name": "headerRow",
+              "type": "row"
+            }
+          ],
+          "name": "header0",
+          "type": "header"
+        },
+        {
+          "components": [
+            {
+              "name": "main",
+              "type": "content-container"
+            }
+          ],
+          "name": "body0",
+          "type": "body"
+        },
+        {
+          "components": [
+            {
+              "attributes": [
+                {}
+              ],
+              "items": [
+                {
+                  "path": "/",
+                  "target": "_self",
+                  "text": "Claims",
+                  "visible": "${Security.IsAuthenticated()}"
+                },
+                {
+                  "path": "upload-invoice",
+                  "text": "Upload Invoice",
+                  "visible": "${Security.IsAuthenticated()}"
+                },
+                {
+                  "path": "",
+                  "text": "Service Provider",
+                  "visible": "${Security.IsAuthenticated()}"
+                },
+                {
+                  "path": "brokerage",
+                  "text": "Brokerage",
+                  "visible": "${Security.IsAuthenticated()}"
+                },
+                {
+                  "items": [
+                    {
+                      "items": [],
+                      "path": "active-user-diary-report",
+                      "text": "Active User Diary",
+                      "visible": "${Security.IsAuthenticated()}"
+                    },
+                    {
+                      "path": "actuary-bordereau",
+                      "text": "Actuary Bordereau",
+                      "visible": "${Security.IsAuthenticated()}"
+                    },
+                    {
+                      "path": "current-diary-report",
+                      "text": "Current Diary Report",
+                      "visible": "${Security.IsAuthenticated() && !Security.IsInRole(\"Actuary\")}"
+                    },
+                    {
+                      "path": "empty-reserves-bordereau",
+                      "text": "Empty Reserves Bordereau",
+                      "visible": "${Security.IsAuthenticated() && !Security.IsInRole(\"Actuary\")}"
+                    },
+                    {
+                      "path": "full-bordereau",
+                      "text": "Full Bordereau",
+                      "visible": "${Security.IsAuthenticated()}"
+                    },
+                    {
+                      "path": "large-loss-bordereau",
+                      "text": "Large Loss Bordereau",
+                      "visible": "${Security.IsAuthenticated() && !Security.IsInRole(\"Actuary\")}"
+                    },
+                    {
+                      "path": "last-defense-claim-report",
+                      "text": "Last Defense Claim Report",
+                      "visible": "${Security.IsAuthenticated()}"
+                    },
+                    {
+                      "path": "lloyds-bordereau",
+                      "text": "Lloyds Bordereau",
+                      "visible": "${Security.IsAuthenticated() && !Security.IsInRole(\"Actuary\")}"
+                    },
+                    {
+                      "path": "movement-bordereau",
+                      "text": "Movement Bordereau",
+                      "visible": "${Security.IsAuthenticated() && !Security.IsInRole(\"Actuary\")}"
+                    },
+                    {
+                      "path": "no-active-diary-report",
+                      "text": "No Active Diary Report",
+                      "visible": "${Security.IsAuthenticated() && !Security.IsInRole(\"Actuary\")}"
+                    },
+                    {
+                      "path": "reserve-change-history",
+                      "text": "Reserve Change History",
+                      "visible": "${Security.IsAuthenticated() && !Security.IsInRole(\"Actuary\")}"
+                    },
+                    {
+                      "path": "service-provider-bordereau",
+                      "text": "Service Provider Bordereau",
+                      "visible": "${Security.IsAuthenticated()}"
+                    }
+                  ],
+                  "parameters": [],
+                  "text": "Reports",
+                  "visible": "${Security.IsAuthenticated() && !Security.IsInRole(\"Defense Counsel\") && !Security.IsInRole(\"Coverage Counsel\") && !Security.IsInRole(\"Claims Admin\")}"
+                },
+                {
+                  "path": "claimant-solicitor",
+                  "text": "Claimant Solicitor",
+                  "visible": "${Security.IsAuthenticated()}"
+                },
+                {
+                  "items": [
+                    {
+                      "path": "edit-application-user",
+                      "text": "Profile",
+                      "visible": "${Security.IsAuthenticated()}"
+                    },
+                    {
+                      "path": "profile",
+                      "text": "Change Password",
+                      "visible": "${Security.IsAuthenticated()}"
+                    }
+                  ],
+                  "text": "My Profile",
+                  "visible": "${Security.IsAuthenticated()}"
+                },
+                {
+                  "text": "Administrator",
+                  "visible": "${Security.IsAuthenticated()}"
+                }
+              ],
+              "multiple": false,
+              "name": "panelmenu0",
+              "style": {
+                "height": "100%"
+              },
+              "type": "panelmenu"
+            }
+          ],
+          "name": "sidebar0",
+          "type": "sidebar"
+        },
+        {
+          "components": [
+            {
+              "name": "footerText",
+              "text": "RecoCMS6, Copyright Ⓒ 2023",
+              "type": "label"
+            }
+          ],
+          "name": "footer0",
+          "type": "footer"
+        }
+      ],
+      "type": "layout"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "condition": "${Security.IsAuthenticated() != true}",
+        "parameters": [],
+        "path": "login",
+        "type": "navigate"
+      },
+      {
+        "condition": "${Globals.generalsettings == null}",
+        "error": [],
+        "name": "RECODb.getGeneralSettings",
+        "parameters": [
+          {
+            "name": "$filter"
+          }
+        ],
+        "then": [
+          {
+            "global": true,
+            "name": "generalsettings",
+            "type": "set",
+            "value": "${result.FirstOrDefault() ?? new RecoCms6.Models.RecoDb.GeneralSetting()}",
+            "valueType": "dynamic"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "global": true,
+        "name": "Uri",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      },
+      {
+        "code": "return UriHelper.BaseUri",
+        "then": [
+          {
+            "global": true,
+            "name": "Uri",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "dynamic"
+          }
+        ],
+        "type": "execute"
+      },
+      {
+        "condition": "${Globals.userdetails == null}",
+        "name": "RECODb.getUserDetails",
+        "then": [
+          {
+            "condition": "",
+            "global": true,
+            "name": "userdetails",
+            "type": "set",
+            "value": "${result.FirstOrDefault()}",
+            "valueType": "RecoCms6.Models.RecoDb.UserDetail"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "global": true,
+        "name": "claimantsolicitortitle",
+        "type": "set",
+        "value": "${Globals.generalsettings.ClaimantName + \" Solicitor\"}",
+        "valueType": "dynamic"
+      },
+      {
+        "condition": "${Security.IsAuthenticated()}",
+        "name": "CheckSystemNotice",
+        "schema": {
+          "$ref": "#/definitions/Void",
+          "dotnetType": "void"
+        },
+        "type": "invoke-method"
+      },
+      {
+        "global": true,
+        "name": "txtSearch",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      },
+      {
+        "condition": "${Security.IsAuthenticated()}",
+        "name": "RECODb.getServiceProviderClaimPreferences",
+        "then": [
+          {
+            "global": true,
+            "name": "ServiceProviderClaims",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderClaimPreference>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "name": "Main"
+}

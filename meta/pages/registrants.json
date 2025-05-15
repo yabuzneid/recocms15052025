@@ -1,0 +1,260 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "name": "pageTitle",
+          "size": "H1",
+          "text": "Registrants",
+          "type": "heading"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "path": "add-registrant",
+                        "then": [
+                          {
+                            "code": "await grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "Add",
+                  "type": "button"
+                },
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "property": "Name",
+                      "title": "Name",
+                      "width": "200px"
+                    },
+                    {
+                      "property": "RegistrantNo",
+                      "title": "Registrant No",
+                      "width": "100px"
+                    },
+                    {
+                      "property": "EmailAddress",
+                      "title": "Email Address"
+                    },
+                    {
+                      "property": "BusinessPhoneNum",
+                      "title": "Business Phone Num"
+                    },
+                    {
+                      "property": "CellPhoneNum",
+                      "title": "Cell Phone Num"
+                    },
+                    {
+                      "filterProperty": "Brokerage.Name",
+                      "property": "BrokerageID",
+                      "sortProperty": "Brokerage.Name",
+                      "template": "${data.Brokerage?.Name}",
+                      "title": "Brokerage",
+                      "width": "200px"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "events": {
+                            "click": [
+                              {
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Registrant",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "RECODb.deleteRegistrant",
+                                "parameters": [
+                                  {
+                                    "name": "ID",
+                                    "value": "${data.ID}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${getRegistrantsResult}",
+                  "events": {
+                    "loadData": [],
+                    "rowSelect": [
+                      {
+                        "name": "selectedRegistrant",
+                        "type": "set",
+                        "value": "${event}",
+                        "valueType": "RecoCms6.Models.RecoDb.Registrant"
+                      },
+                      {
+                        "condition": "${SelectAgent == null}",
+                        "parameters": [
+                          {
+                            "name": "ID",
+                            "value": "${event.ID}"
+                          }
+                        ],
+                        "path": "edit-registrant",
+                        "then": [
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Registrant",
+                  "name": "grid0",
+                  "template": "",
+                  "title": "",
+                  "type": "grid",
+                  "value": ""
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12 text-center",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "condition": "${selectedRegistrant == null}",
+                        "detail": "Please select a registrant first",
+                        "severity": "warn",
+                        "summary": "No Registrant Selected",
+                        "type": "notify"
+                      },
+                      {
+                        "condition": "${selectedRegistrant != null}",
+                        "result": "${selectedRegistrant}",
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "icon": "done_all",
+                  "name": "buttonSelect",
+                  "text": "Select",
+                  "type": "button",
+                  "visible": "${parameters.SelectAgent == true}"
+                },
+                {
+                  "buttonStyle": "light",
+                  "events": {
+                    "click": [
+                      {
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "icon": "clear",
+                  "name": "buttonCancel",
+                  "text": "Cancel",
+                  "type": "button",
+                  "visible": "${parameters.SelectAgent == true}"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getRegistrants",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getRegistrantsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Registrant>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Registrants"
+}

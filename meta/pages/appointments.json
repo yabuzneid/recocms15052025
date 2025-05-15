@@ -1,0 +1,201 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "name": "pageTitle",
+          "size": "H1",
+          "text": "Appointments",
+          "type": "heading"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "path": "add-appointment",
+                        "then": [
+                          {
+                            "code": "await grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "Add",
+                  "type": "button"
+                },
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "filterProperty": "Claim.ClaimNo",
+                      "property": "ClaimID",
+                      "sortProperty": "Claim.ClaimNo",
+                      "template": "${data.Claim?.ClaimNo}",
+                      "title": "Claim"
+                    },
+                    {
+                      "formatString": "{0:MM/dd/yyyy}",
+                      "property": "EntryDate",
+                      "title": "Entry Date"
+                    },
+                    {
+                      "filterProperty": "Parameter.ParamDesc",
+                      "property": "AppointmentType",
+                      "sortProperty": "Parameter.ParamDesc",
+                      "template": "${data.Parameter?.ParamDesc}",
+                      "title": "Appointment Type"
+                    },
+                    {
+                      "property": "Subject",
+                      "title": "Subject"
+                    },
+                    {
+                      "formatString": "{0:MM/dd/yyyy}",
+                      "property": "StartDate",
+                      "title": "Start Date"
+                    },
+                    {
+                      "formatString": "{0:MM/dd/yyyy}",
+                      "property": "EndDate",
+                      "title": "End Date"
+                    },
+                    {
+                      "property": "AllDay",
+                      "title": "All Day"
+                    },
+                    {
+                      "property": "EnteredBy",
+                      "title": "Entered By"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "events": {
+                            "click": [
+                              {
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Appointment",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "RECODb.deleteAppointment",
+                                "parameters": [
+                                  {
+                                    "name": "ID",
+                                    "value": "${data.ID}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${getAppointmentsResult}",
+                  "events": {
+                    "loadData": [],
+                    "rowSelect": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "ID",
+                            "value": "${event.ID}"
+                          }
+                        ],
+                        "path": "edit-appointment",
+                        "then": [
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Appointment",
+                  "name": "grid0",
+                  "title": "",
+                  "type": "grid"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getAppointments",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getAppointmentsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Appointment>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Appointments"
+}

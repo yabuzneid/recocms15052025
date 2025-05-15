@@ -1,0 +1,39 @@
+﻿@page "/system-notices"
+@layout MainLayout
+@inherits RecoCms6.Pages.SystemNoticesComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="System Notices">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-6 text-md-center">
+            <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+            </RadzenButton>
+          </div>
+          <div class="col-md-6">
+            <RadzenButton Icon="layers_clear" Text="Clear" Click="@ButtonClearNoticeClick">
+            </RadzenButton>
+          </div>
+        </div>
+        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="false" AllowSorting="true" Data="@getSystemNoticesResult" TItem="RecoCms6.Models.RecoDb.SystemNotice" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.SystemNotice" Property="SystemNotice1" Title="System Notice">
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

@@ -1,0 +1,45 @@
+﻿@page "/claimant-solicitor"
+@layout MainLayout
+@inherits RecoCms6.Pages.ClaimantSolicitorComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="@pagetitle">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenTextBox Placeholder="Search ..." style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox0" @oninput="@(async(args) => {search = $"{args.Value}";await grid0.GoToPage(0);await Load();})">
+        </RadzenTextBox>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getClaimantSolicitorsResult" FilterMode="Radzen.FilterMode.Advanced" TItem="RecoCms6.Models.RecoDb.ClaimantSolicitor" RowDoubleClick="@Grid0RowDoubleClick">
+          <Columns>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimantSolicitor" Property="Name" Title="Name">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimantSolicitor" Property="EmailAddress" Title="Email Address">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimantSolicitor" Property="BusinessPhoneNum" Title="Business Phone Num">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimantSolicitor" Property="SolicitorFirm" Title="Solicitor Firm">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimantSolicitor" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="recoCms6ModelsRecoDbClaimantSolicitor">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, recoCms6ModelsRecoDbClaimantSolicitor))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

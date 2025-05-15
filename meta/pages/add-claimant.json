@@ -1,0 +1,1617 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "Name",
+                                  "name": "NameLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Claimant Name",
+                                  "type": "label",
+                                  "visible": true
+                                }
+                              ],
+                              "name": "col32",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-4",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "maxLength": 100,
+                                  "name": "Name",
+                                  "style": {
+                                    "display": "block",
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${claimant.Name}",
+                                  "valueType": "string",
+                                  "visible": true
+                                },
+                                {
+                                  "name": "label9",
+                                  "style": {
+                                    "color": "rgb(249, 119, 127)",
+                                    "fontSize": "12px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "18px"
+                                  },
+                                  "text": "Name is required",
+                                  "type": "label",
+                                  "visible": "${rfvClaimantName}"
+                                }
+                              ],
+                              "name": "col33",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "Name",
+                                  "name": "label3",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Registrant #",
+                                  "type": "label",
+                                  "visible": "${isCPProgram}"
+                                }
+                              ],
+                              "name": "col57",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "max": "",
+                                  "min": "",
+                                  "name": "numeric0",
+                                  "placeholder": "",
+                                  "showUpDown": false,
+                                  "type": "numeric",
+                                  "value": "${claimant.RegistrantNum}",
+                                  "valueType": "string",
+                                  "visible": "${isCPProgram}"
+                                }
+                              ],
+                              "name": "col58",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row3",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "Name",
+                                  "name": "label2",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Contact Name",
+                                  "type": "label",
+                                  "visible": "${isCPProgram}"
+                                }
+                              ],
+                              "name": "col10",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-4",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "maxLength": 100,
+                                  "name": "textbox0",
+                                  "style": {
+                                    "display": "block",
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${claimant.ContactName}",
+                                  "valueType": "string",
+                                  "visible": "${isCPProgram}"
+                                }
+                              ],
+                              "name": "col11",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row1",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "Address",
+                                  "name": "AddressLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Address",
+                                  "type": "label",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col34",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-10",
+                              "components": [
+                                {
+                                  "maxLength": 500,
+                                  "name": "Address",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${claimant.Address}",
+                                  "valueType": "string",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col35",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row5",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "City",
+                                  "name": "CityLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "City",
+                                  "type": "label",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col36",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "maxLength": 100,
+                                  "name": "City",
+                                  "placeholder": "",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${claimant.City}",
+                                  "valueType": "string",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col37",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-1",
+                              "components": [
+                                {
+                                  "component": "ProvinceID",
+                                  "name": "ProvinceIDLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Province",
+                                  "type": "label",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col38",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "allowFiltering": true,
+                                  "data": "${getProvincesList}",
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "name": "ProvinceID",
+                                  "placeholder": "Choose Province",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "textProperty": "ParamAbbrev",
+                                  "type": "dropdown",
+                                  "value": "${claimant.ProvinceID}",
+                                  "valueProperty": "ParameterID",
+                                  "valueType": "int?",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col48",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "PostalCode",
+                                  "name": "PostalCodeLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Postal Code",
+                                  "type": "label",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col49",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "maxLength": 7,
+                                  "name": "PostalCode",
+                                  "placeholder": "A1A 1A1",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${claimant.PostalCode}",
+                                  "valueType": "string",
+                                  "visible": ""
+                                },
+                                {
+                                  "name": "label10",
+                                  "style": {
+                                    "color": "rgb(249, 119, 127)",
+                                    "fontSize": "12px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "18px"
+                                  },
+                                  "text": "Not a valid postal code",
+                                  "type": "label",
+                                  "visible": "${rfvClaimantPostalCode}"
+                                }
+                              ],
+                              "name": "col50",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row16",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "BusinessPhoneNum",
+                                  "name": "BusinessPhoneNumLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Business #",
+                                  "type": "label",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col53",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "mask": "(***) ***-****",
+                                  "name": "BusinessPhoneNum",
+                                  "pattern": "[^0-9]",
+                                  "placeholder": "(000) 000-0000",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "mask",
+                                  "value": "${claimant.BusinessPhoneNum}",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col54",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "component": "CellPhoneNum",
+                                  "name": "CellPhoneNumLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Cell #",
+                                  "type": "label",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col55",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "mask": "(***) ***-****",
+                                  "name": "CellPhoneNum",
+                                  "pattern": "[^0-9]",
+                                  "placeholder": "(000) 000-0000",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "mask",
+                                  "value": "${claimant.CellPhoneNum}",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col56",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row18",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "EmailAddress",
+                                  "name": "EmailAddressLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Email Address",
+                                  "type": "label",
+                                  "visible": ""
+                                }
+                              ],
+                              "name": "col51",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "maxLength": 450,
+                                  "name": "EmailAddress",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${claimant.EmailAddress}",
+                                  "valueType": "string",
+                                  "visible": ""
+                                },
+                                {
+                                  "name": "label11",
+                                  "style": {
+                                    "color": "rgb(249, 119, 127)",
+                                    "fontSize": "12px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "18px"
+                                  },
+                                  "text": "Not a valid email address",
+                                  "type": "label",
+                                  "visible": "${rfvClaimantEmail}"
+                                }
+                              ],
+                              "name": "col52",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row17",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "TransactionRoleID",
+                                  "name": "label0",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Transaction Roles",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col63",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-4",
+                              "components": [
+                                {
+                                  "allowClear": true,
+                                  "allowFiltering": true,
+                                  "data": "${getClaimantTransactionRolesList}",
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "maxSelectedLabels": 6,
+                                  "multiple": true,
+                                  "name": "dropdown0",
+                                  "placeholder": "Choose Transaction Role",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "template": "",
+                                  "textProperty": "ParamDesc",
+                                  "type": "dropdown",
+                                  "value": "${Roles}",
+                                  "valueProperty": "ParameterID",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col64",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-1",
+                              "components": [
+                                {
+                                  "name": "label4",
+                                  "text": "Other",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col0",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-4",
+                              "components": [
+                                {
+                                  "autoComplete": true,
+                                  "name": "OtherTransactionRole",
+                                  "placeholder": "",
+                                  "type": "textbox",
+                                  "value": "${claimant.OtherTransactionRole}"
+                                }
+                              ],
+                              "name": "col1",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row22",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "CooperatingBrokerageID",
+                                  "name": "CooperatingBrokerageIDLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "\nBrokerage",
+                                  "type": "label",
+                                  "visible": "${isCDProgram}"
+                                }
+                              ],
+                              "name": "col65",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-6",
+                              "components": [
+                                {
+                                  "allowClear": true,
+                                  "allowFiltering": true,
+                                  "data": "${getBrokeragesResult}",
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "name": "CooperatingBrokerageID",
+                                  "placeholder": "Choose Brokerage",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "textProperty": "Name",
+                                  "type": "dropdown",
+                                  "value": "${claimant.CooperatingBrokerageID}",
+                                  "valueProperty": "BrokerageID",
+                                  "valueType": "int?",
+                                  "visible": "${isCDProgram}"
+                                }
+                              ],
+                              "name": "col66",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "path": "add-brokerage",
+                                        "type": "popup"
+                                      }
+                                    ]
+                                  },
+                                  "icon": "add_circle_outline",
+                                  "name": "buttonNewBrokerage",
+                                  "text": "New",
+                                  "type": "button",
+                                  "visible": "${isCDProgram}"
+                                }
+                              ],
+                              "name": "col67",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row23",
+                          "style": {},
+                          "type": "row"
+                        }
+                      ],
+                      "name": "fieldset0",
+                      "text": "Contact Details",
+                      "type": "fieldset"
+                    },
+                    {
+                      "components": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "name": "label1",
+                                  "text": "Self Represented",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col70",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "name": "SelfRepresented",
+                                  "type": "checkbox",
+                                  "value": "${claimant.SelfRepresented}",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col71",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row25",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "ClaimantSolicitorID",
+                                  "name": "ClaimantSolicitorIDLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Claimant Solicitor",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col59",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-6",
+                              "components": [
+                                {
+                                  "allowClear": true,
+                                  "allowFilteringByAllStringColumns": true,
+                                  "columns": [
+                                    {
+                                      "format": "",
+                                      "property": "Name",
+                                      "title": "Name",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "format": "",
+                                      "property": "SolicitorFirm",
+                                      "title": "Solicitor Firm",
+                                      "type": "string"
+                                    }
+                                  ],
+                                  "data": "${getClaimantSolicitorsResult}",
+                                  "defaultValue": "",
+                                  "disabled": false,
+                                  "events": {
+                                    "change": [
+                                      {
+                                        "condition": "${claimant.ClaimantSolicitorID != null}",
+                                        "name": "RECODb.getClaimantSolicitors",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "SolicitorID",
+                                                "type": "integer",
+                                                "value": "${claimant.ClaimantSolicitorID}"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "solicitor",
+                                            "type": "set",
+                                            "value": "${result.First()}",
+                                            "valueType": "RecoCms6.Models.RecoDb.ClaimantSolicitor"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ]
+                                  },
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "itemType": "RecoCms6.Models.RecoDb.ClaimantSolicitor",
+                                  "name": "ClaimantSolicitorID",
+                                  "responsive": true,
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "textProperty": "Name",
+                                  "type": "dropdown-datagrid",
+                                  "value": "${claimant.ClaimantSolicitorID}",
+                                  "valueProperty": "SolicitorID",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col60",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "path": "add-claimant-solicitor",
+                                        "then": [
+                                          {
+                                            "condition": "${result != null}",
+                                            "name": "claimant.ClaimantSolicitorID",
+                                            "type": "set",
+                                            "value": "${result.SolicitorID}",
+                                            "valueType": "dynamic"
+                                          },
+                                          {
+                                            "condition": "${result != null}",
+                                            "name": "RECODb.getClaimantSolicitors",
+                                            "then": [
+                                              {
+                                                "name": "getClaimantSolicitorsResult",
+                                                "type": "set",
+                                                "value": "${result}",
+                                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimantSolicitor>"
+                                              },
+                                              {
+                                                "name": "solicitor",
+                                                "type": "set",
+                                                "value": "${result.First(cp=>cp.SolicitorID == claimant.ClaimantSolicitorID)}",
+                                                "valueType": "RecoCms6.Models.RecoDb.ClaimantSolicitor"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          }
+                                        ],
+                                        "type": "popup",
+                                        "width": 800
+                                      }
+                                    ]
+                                  },
+                                  "icon": "add_circle_outline",
+                                  "name": "buttonNewSolicitor",
+                                  "text": "New",
+                                  "type": "button"
+                                }
+                              ],
+                              "name": "col61",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row20",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "name": "label5",
+                                  "text": "Email Address",
+                                  "type": "label",
+                                  "visible": "${claimant.ClaimantSolicitorID != null}"
+                                }
+                              ],
+                              "name": "col2",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "name": "SolicitorEmail",
+                                  "placeholder": "",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${solicitor.EmailAddress}",
+                                  "visible": "${claimant.ClaimantSolicitorID != null}"
+                                },
+                                {
+                                  "name": "label12",
+                                  "style": {
+                                    "color": "rgb(249, 119, 127)",
+                                    "fontSize": "12px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "18px"
+                                  },
+                                  "text": "Not a Valid Email Address",
+                                  "type": "label",
+                                  "visible": "${rfvSolicitorEmail}"
+                                }
+                              ],
+                              "name": "col3",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row0",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "BusinessPhoneNum",
+                                  "name": "label6",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Business #",
+                                  "type": "label",
+                                  "visible": "${claimant.ClaimantSolicitorID != null}"
+                                }
+                              ],
+                              "name": "col4",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "mask": "(***) ***-****",
+                                  "name": "mask0",
+                                  "pattern": "[^0-9]",
+                                  "placeholder": "(000) 000-0000",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "mask",
+                                  "value": "${solicitor.BusinessPhoneNum}",
+                                  "visible": "${claimant.ClaimantSolicitorID != null}"
+                                }
+                              ],
+                              "name": "col5",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-1",
+                              "components": [
+                                {
+                                  "component": "CellPhoneNum",
+                                  "name": "label7",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Cell #",
+                                  "type": "label",
+                                  "visible": "${claimant.ClaimantSolicitorID != null}"
+                                }
+                              ],
+                              "name": "col6",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "mask": "(***) ***-****",
+                                  "name": "mask1",
+                                  "pattern": "[^0-9]",
+                                  "placeholder": "(000) 000-0000",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "mask",
+                                  "value": "${solicitor.CellPhoneNum}",
+                                  "visible": "${claimant.ClaimantSolicitorID != null}"
+                                }
+                              ],
+                              "name": "col7",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row2",
+                          "style": {
+                            "marginBottom": ".25em"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "name": "label8",
+                                  "text": "Firm",
+                                  "type": "label",
+                                  "visible": "${claimant.ClaimantSolicitorID != null}"
+                                }
+                              ],
+                              "name": "col8",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-5",
+                              "components": [
+                                {
+                                  "autoComplete": false,
+                                  "name": "SolicitorFirm",
+                                  "placeholder": "",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${solicitor.SolicitorFirm}",
+                                  "visible": "${claimant.ClaimantSolicitorID != null}"
+                                }
+                              ],
+                              "name": "col9",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row4",
+                          "type": "row"
+                        }
+                      ],
+                      "name": "fieldset1",
+                      "text": "Solicitor",
+                      "type": "fieldset"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12 text-lg-center",
+                          "components": [
+                            {
+                              "buttonType": "submit",
+                              "events": {
+                                "click": [
+                                  {
+                                    "name": "Validate",
+                                    "schema": {
+                                      "$ref": "#/definitions/Void",
+                                      "dotnetType": "void"
+                                    },
+                                    "type": "invoke-method"
+                                  },
+                                  {
+                                    "condition": "${intClaimantID == 0 && bPageIsValid}",
+                                    "name": "claimant.ID",
+                                    "type": "set",
+                                    "value": "Guid.NewGuid();",
+                                    "valueType": "Guid"
+                                  },
+                                  {
+                                    "condition": "${intClaimantID == 0 && bPageIsValid}",
+                                    "name": "RECODb.getNextClaimDisplayOrders",
+                                    "parameters": [
+                                      {
+                                        "name": "$filter",
+                                        "operator": "and",
+                                        "value": [
+                                          {
+                                            "operation": "eq",
+                                            "property": "ClaimID",
+                                            "type": "integer",
+                                            "value": "${ClaimID}"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "then": [
+                                      {
+                                        "name": "claimant.ClaimantOrder",
+                                        "type": "set",
+                                        "value": "(short)${result.First().NextClaimantDisplayOrder}",
+                                        "valueType": "short"
+                                      }
+                                    ],
+                                    "type": "invoke"
+                                  },
+                                  {
+                                    "code": "CreateAndLinkLitigationRoles();",
+                                    "condition": "${bPageIsValid}",
+                                    "type": "execute"
+                                  },
+                                  {
+                                    "condition": "${intClaimantID == 0 && bPageIsValid}",
+                                    "name": "RECODb.createClaimant",
+                                    "parameters": [
+                                      {
+                                        "name": "Claimant",
+                                        "value": "${claimant}"
+                                      }
+                                    ],
+                                    "then": [
+                                      {
+                                        "condition": "${claimant.ClaimantSolicitorID != null}",
+                                        "name": "RECODb.updateClaimantSolicitor",
+                                        "parameters": [
+                                          {
+                                            "name": "ClaimantSolicitor",
+                                            "value": "${solicitor}"
+                                          },
+                                          {
+                                            "name": "ID",
+                                            "value": "${solicitor.ID}"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      },
+                                      {
+                                        "result": "${claimant}",
+                                        "type": "close-popup"
+                                      }
+                                    ],
+                                    "type": "invoke"
+                                  },
+                                  {
+                                    "condition": "${intClaimantID != 0 && bPageIsValid}",
+                                    "name": "RECODb.updateClaimant",
+                                    "parameters": [
+                                      {
+                                        "name": "ID",
+                                        "value": "${claimant.ID}"
+                                      },
+                                      {
+                                        "name": "Claimant",
+                                        "value": "${claimant}"
+                                      }
+                                    ],
+                                    "then": [
+                                      {
+                                        "condition": "${claimant.ClaimantSolicitorID != null}",
+                                        "name": "RECODb.updateClaimantSolicitor",
+                                        "parameters": [
+                                          {
+                                            "name": "ID",
+                                            "value": "${solicitor.ID}"
+                                          },
+                                          {
+                                            "name": "ClaimantSolicitor",
+                                            "value": "${solicitor}"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      },
+                                      {
+                                        "result": "${claimant}",
+                                        "type": "close-popup"
+                                      }
+                                    ],
+                                    "type": "invoke"
+                                  }
+                                ]
+                              },
+                              "name": "buttonSave",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "buttonType": "button",
+                              "events": {
+                                "click": [
+                                  {
+                                    "result": "",
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "icon": "",
+                              "name": "buttonCancel",
+                              "style": {
+                                "border": "1px solid rgb(58, 71, 77)"
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "name": "col68",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row7",
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${claimant}",
+                  "events": {
+                    "submit": []
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Claimant",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${claimant != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "intClaimantID",
+        "type": "set",
+        "value": "${parameters.ClaimantID}",
+        "valueType": "int"
+      },
+      {
+        "name": "claimant",
+        "type": "set",
+        "value": "intClaimantID > 0 ? Get(intClaimantID) : new RecoCms6.Models.RecoDb.Claimant(){};\n",
+        "valueType": "RecoCms6.Models.RecoDb.Claimant"
+      },
+      {
+        "name": "isEOProgram",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "claimant.ClaimID",
+        "type": "set",
+        "value": "${ClaimID}",
+        "valueType": "int"
+      },
+      {
+        "name": "RECODb.getRegistrants",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              },
+              {
+                "direction": "asc",
+                "property": "RegistrantNo"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getRegistrantsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Registrant>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"ProgramID\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Claimant Litigation Role\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Province\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Method Of Communication\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Claimant Transaction Role\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"PaymentsOwedBy\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getParametersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "EOProgramID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\" && p.ParamAbbrev==\"EO\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getClaimantLitigationRolesList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Claimant Litigation Role\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProvincesList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getClaimantTransactionRolesList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Claimant Transaction Role\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getCommunicationMethodsList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Method Of Communication\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "CDProgramID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\" && p.ParamAbbrev==\"CDP\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "CPProgramID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\" && p.ParamAbbrev==\"CPP\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getPaymentsOwedByList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"PaymentsOwedBy\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getClaimantSolicitors",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getClaimantSolicitorsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimantSolicitor>"
+          },
+          {
+            "condition": "${claimant.ClaimantSolicitorID != null}",
+            "name": "solicitor",
+            "type": "set",
+            "value": "${result.First(cs=>cs.SolicitorID == claimant.ClaimantSolicitorID)}",
+            "valueType": "RecoCms6.Models.RecoDb.ClaimantSolicitor"
+          },
+          {
+            "condition": "${claimant.ClaimantSolicitorID == null}",
+            "name": "solicitor",
+            "type": "set",
+            "value": "new RecoCms6.Models.RecoDb.ClaimantSolicitor()",
+            "valueType": "RecoCms6.Models.RecoDb.ClaimantSolicitor"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getBrokerages",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getBrokeragesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Brokerage>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getFiles",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getFilesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.File>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getClaims",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${ClaimID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "isEOProgram",
+            "type": "set",
+            "value": "${result.First().ProgramID == EOProgramID}",
+            "valueType": "bool"
+          },
+          {
+            "name": "isCPProgram",
+            "type": "set",
+            "value": "${result.First().ProgramID == CPProgramID}",
+            "valueType": "bool"
+          },
+          {
+            "name": "isCDProgram",
+            "type": "set",
+            "value": "${result.First().ProgramID == CDProgramID}",
+            "valueType": "bool"
+          },
+          {
+            "name": "claim",
+            "type": "set",
+            "value": "${result.First()}",
+            "valueType": "RecoCms6.Models.RecoDb.Claim"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "progress",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "uploadedFiles0",
+        "type": "set",
+        "value": "new List<FileInfo>()",
+        "valueType": "IEnumerable<Radzen.FileInfo>"
+      },
+      {
+        "name": "uploadedFiles1",
+        "type": "set",
+        "value": "new List<FileInfo>()",
+        "valueType": "IEnumerable<Radzen.FileInfo>"
+      },
+      {
+        "name": "uploadedFiles2",
+        "type": "set",
+        "value": "new List<FileInfo>()",
+        "valueType": "IEnumerable<Radzen.FileInfo>"
+      },
+      {
+        "name": "uploadedFiles3",
+        "type": "set",
+        "value": "new List<FileInfo>()",
+        "valueType": "IEnumerable<Radzen.FileInfo>"
+      },
+      {
+        "name": "uploadedFiles4",
+        "type": "set",
+        "value": "new List<FileInfo>()",
+        "valueType": "IEnumerable<Radzen.FileInfo>"
+      },
+      {
+        "name": "uploadedFiles5",
+        "type": "set",
+        "value": "new List<FileInfo>()",
+        "valueType": "IEnumerable<Radzen.FileInfo>"
+      },
+      {
+        "name": "uploadedFiles6",
+        "type": "set",
+        "value": "new List<FileInfo>()",
+        "valueType": "IEnumerable<Radzen.FileInfo>"
+      },
+      {
+        "name": "uploadedFiles7",
+        "type": "set",
+        "value": "new List<FileInfo>()",
+        "valueType": "IEnumerable<Radzen.FileInfo>"
+      },
+      {
+        "condition": "${intClaimantID == 0 && Globals.defaultProvinceID != 0}",
+        "name": "claimant.ProvinceID",
+        "type": "set",
+        "value": "${Globals.defaultProvinceID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "${intClaimantID != 0}",
+        "name": "RECODb.getClaimantLitigationRoles",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimantID",
+                "type": "integer",
+                "value": "${intClaimantID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "Roles",
+            "type": "set",
+            "value": "${result.Select(x=>x.LitigationRole).ToArray()}",
+            "valueType": "IEnumerable<int>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "condition": "${intClaimantID ==0}",
+        "name": "Roles",
+        "type": "set",
+        "value": "new int[] {};",
+        "valueType": "IEnumerable<int>"
+      },
+      {
+        "name": "OriginalRoles",
+        "type": "set",
+        "value": "${Roles}",
+        "valueType": "IEnumerable<int>"
+      },
+      {
+        "condition": "",
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Claimant Transaction Role\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "condition": "${isEOProgram}",
+            "name": "getClaimantTransactionRolesList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Claimant Transaction Role\" && p.ParamValue==null)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "condition": "${isCPProgram}",
+            "name": "getClaimantTransactionRolesList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Claimant Transaction Role\" && p.ParamValue==CPProgramID)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "condition": "${isCDProgram}",
+            "name": "getClaimantTransactionRolesList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Claimant Transaction Role\" && p.ParamValue==CDProgramID)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "rfvClaimantName",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvClaimantPostalCode",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvClaimantEmail",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "rfvSolicitorEmail",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "bPageIsValid",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Claimant"
+}

@@ -1,0 +1,2662 @@
+{
+  "access": "Authenticated",
+  "components": [
+    {
+      "components": [
+        {
+          "items": [
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Address1",
+                              "name": "Address1Label",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Address 1",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col10",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-7",
+                          "components": [
+                            {
+                              "maxLength": 450,
+                              "name": "Address1",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${trade.Address1}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "Address1",
+                              "name": "Address1RequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Address1 is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "name": "col11",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "component": "UnitNumber",
+                              "name": "UnitNumberLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Unit #",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col14",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "maxLength": 20,
+                              "name": "UnitNumber",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${trade.UnitNumber}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "name": "col15",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row2",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Address2",
+                              "name": "Address2Label",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Address 2",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col12",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 450,
+                              "name": "Address2",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${trade.Address2}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "name": "col13",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row3",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "City",
+                              "name": "CityLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "City",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col18",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-6",
+                          "components": [
+                            {
+                              "data": "${getCityList}",
+                              "name": "autocomplete0",
+                              "schema": "ParameterDetail",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "textProperty": "ParamDesc",
+                              "type": "autocomplete",
+                              "value": "${trade.City}"
+                            }
+                          ],
+                          "name": "col19",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "component": "Province",
+                              "name": "ProvinceLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Province",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col16",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "allowFiltering": true,
+                              "data": "${getProvinceList}",
+                              "events": {
+                                "change": [
+                                  {
+                                    "name": "RECODb.getParameterDetails",
+                                    "parameters": [
+                                      {
+                                        "name": "$filter",
+                                        "operator": "and",
+                                        "value": [
+                                          {
+                                            "operation": "eq",
+                                            "property": "ParentParameterID",
+                                            "type": "integer",
+                                            "value": "${trade.Province}"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "name": "$orderby",
+                                        "value": [
+                                          {
+                                            "direction": "asc",
+                                            "property": "ParamDesc"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "then": [
+                                      {
+                                        "name": "getCityList",
+                                        "type": "set",
+                                        "value": "${result}",
+                                        "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+                                      }
+                                    ],
+                                    "type": "invoke"
+                                  }
+                                ]
+                              },
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "Province",
+                              "placeholder": "Choose Province",
+                              "style": {},
+                              "template": "",
+                              "textProperty": "ParamAbbrev",
+                              "type": "dropdown",
+                              "value": "${trade.Province}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col17",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row6",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "PostalCode",
+                              "name": "PostalCodeLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Postal Code",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col2",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "events": {
+                                "change": [
+                                  {
+                                    "condition": "${trade.PostalCode.Length == 7}",
+                                    "name": "RECODb.getPostalCodeDetails",
+                                    "parameters": [
+                                      {
+                                        "name": "$filter",
+                                        "operator": "and",
+                                        "value": [
+                                          {
+                                            "operation": "eq",
+                                            "property": "PostalCode",
+                                            "type": "string",
+                                            "value": "${trade.PostalCode}"
+                                          }
+                                        ]
+                                      }
+                                    ],
+                                    "then": [
+                                      {
+                                        "condition": "${result.FirstOrDefault() != null}",
+                                        "name": "trade.Province",
+                                        "type": "set",
+                                        "value": "${result.FirstOrDefault().ProvinceID}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${result.FirstOrDefault() != null}",
+                                        "name": "trade.City",
+                                        "type": "set",
+                                        "value": "${result.First().City}",
+                                        "valueType": "string"
+                                      }
+                                    ],
+                                    "type": "invoke"
+                                  }
+                                ]
+                              },
+                              "maxLength": 7,
+                              "name": "PostalCode",
+                              "placeholder": "A1A 1A1",
+                              "style": {},
+                              "type": "textbox",
+                              "value": "${trade.PostalCode}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "PostalCode",
+                              "name": "regexValidator0",
+                              "pattern": "([ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy][0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy])\\ ?([0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy][0-9])",
+                              "style": {
+                                "display": "block",
+                                "position": "absolute",
+                                "width": "100%"
+                              },
+                              "text": "Not a valid postal code",
+                              "type": "regex-validator"
+                            }
+                          ],
+                          "name": "col3",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "component": "Country",
+                              "name": "CountryLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Country",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col5",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "allowFiltering": true,
+                              "data": "${getCountryList}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "Country",
+                              "placeholder": "Choose Country",
+                              "style": {},
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.Country}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col4",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${trade}",
+                  "events": {
+                    "submit": [
+                      {
+                        "name": "SaveTrade",
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Trade",
+                  "name": "templateForm0",
+                  "type": "template-form",
+                  "visible": "${trade != null}"
+                },
+                {
+                  "allowCollapse": false,
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "SPIS",
+                              "name": "label1",
+                              "text": "SPIS",
+                              "type": "label",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col7",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "data": "${getYesNoNAList}",
+                              "disabled": true,
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "dropdown1",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.SPIS}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col8",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "PersonalInterest",
+                              "name": "label2",
+                              "text": "Personal Interest?",
+                              "type": "label",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col9",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "data": "${getYesNoNAList}",
+                              "disabled": true,
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "dropdown2",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.PersonalInterest}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col20",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "HomeInspection",
+                              "name": "label3",
+                              "text": "Home Inspection?\n",
+                              "type": "label",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col21",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "data": "${getYesNoNAList}",
+                              "disabled": true,
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "dropdown3",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.HomeInspection}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col22",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row5",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "ClaimTradeTypeID",
+                              "name": "label4",
+                              "text": "${Globals.generalsettings.LocationName} + \" Type\"",
+                              "type": "label",
+                              "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                            }
+                          ],
+                          "name": "col23",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "allowFiltering": true,
+                              "data": "${getTradeTypeList}",
+                              "disabled": false,
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "dropdown4",
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.TradeTypeID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?",
+                              "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                            }
+                          ],
+                          "name": "col24",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label5",
+                              "text": "Urban Or Rural",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col25",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getUrbanOrRuralList}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "dropdown5",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.UrbanOrRuralID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col26",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row7",
+                      "type": "row"
+                    }
+                  ],
+                  "icon": "",
+                  "name": "fieldset0",
+                  "text": "Additional Details",
+                  "type": "fieldset",
+                  "visible": "${Globals.generalsettings.ApplicationName==\"REIX CMS\"}"
+                }
+              ],
+              "icon": "",
+              "selected": true,
+              "text": "${Globals.generalsettings.LocationName}"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "labelLeaseDate",
+                              "text": "Date of APS/Lease",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col79",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "dateFormat": "yyyy-MM-dd",
+                              "disabled": "${Security.IsInRole(\"Auditor\")}",
+                              "name": "LeaseDate",
+                              "placeholder": "",
+                              "showTimeOkButton": false,
+                              "type": "datepicker",
+                              "value": "${trade.LeaseDate}"
+                            }
+                          ],
+                          "name": "col80",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label8",
+                              "text": "Price",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col81",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "format": "c",
+                              "min": 0,
+                              "name": "Price",
+                              "placeholder": "",
+                              "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                              "showUpDown": false,
+                              "step": "10000",
+                              "type": "numeric",
+                              "value": "${trade.Price}",
+                              "valueType": "decimal?"
+                            }
+                          ],
+                          "name": "col82",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row24",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label9",
+                              "text": "Did The Deal Close?",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col69",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "data": "${getYesNoPendingList}",
+                              "disabled": false,
+                              "name": "dropdown0",
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.DidDealClose}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?",
+                              "visible": true
+                            }
+                          ],
+                          "name": "col85",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label1DateClosed",
+                              "text": "Date Closed",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col84",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "dateFormat": "yyyy-MM-dd",
+                              "disabled": "${Security.IsInRole(\"Auditor\")}",
+                              "name": "DateClosed",
+                              "placeholder": "",
+                              "showTimeOkButton": false,
+                              "type": "datepicker",
+                              "value": "${trade.DateClosed}"
+                            }
+                          ],
+                          "name": "col83",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row25",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label11",
+                              "text": "Deposit Amount",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col86",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "format": "c",
+                              "min": 0,
+                              "name": "DepositAmount",
+                              "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                              "showUpDown": false,
+                              "step": "1000",
+                              "type": "numeric",
+                              "value": "${trade.DepositAmount}",
+                              "valueType": "decimal?"
+                            }
+                          ],
+                          "name": "col88",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label10",
+                              "text": "Buyer/Tenant's Name",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col91",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "name": "textbox0",
+                              "placeholder": "",
+                              "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${trade.BuyerName}"
+                            }
+                          ],
+                          "name": "col92",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "label13",
+                              "text": "CD File #",
+                              "type": "label",
+                              "visible": "${isCPProgram}"
+                            }
+                          ],
+                          "name": "col93",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "data": "${getAssocCDClaimsResult}",
+                              "disabled": true,
+                              "name": "BuyerCDFileID",
+                              "textProperty": "ClaimNo",
+                              "type": "dropdown",
+                              "value": "${trade.BuyerCDFileID}",
+                              "valueProperty": "ClaimID",
+                              "valueType": "int?",
+                              "visible": "${isCPProgram}"
+                            }
+                          ],
+                          "name": "col94",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "buttonStyle": "secondary",
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "ProgramID",
+                                        "value": "${getCDProgramID}"
+                                      },
+                                      {
+                                        "name": "ExcludeClaimID",
+                                        "value": "0"
+                                      },
+                                      {
+                                        "name": "SelectClaim",
+                                        "value": "true"
+                                      }
+                                    ],
+                                    "path": "claims",
+                                    "then": [
+                                      {
+                                        "condition": "${result != 0}",
+                                        "name": "trade.BuyerCDFileID",
+                                        "type": "set",
+                                        "value": "${result}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${result != 0}",
+                                        "name": "buyerCDFileID",
+                                        "type": "set",
+                                        "value": "(int)trade.BuyerCDFileID ",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${result != 0}",
+                                        "name": "RECODb.getClaims",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "or",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${sellerCDFileID}"
+                                              },
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${buyerCDFileID}"
+                                              },
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${sharedAgentClaimID}"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getAssocCDClaimsResult",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Claim>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ],
+                                    "title": "Select CD Claim",
+                                    "type": "popup",
+                                    "width": 1024
+                                  }
+                                ]
+                              },
+                              "icon": "search",
+                              "name": "buttonFindRelatedBuyerCD",
+                              "text": "Find",
+                              "type": "button",
+                              "visible": "${!Security.IsInRole(\"Auditor\") && isCPProgram}"
+                            }
+                          ],
+                          "name": "col112",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row27",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label14",
+                              "text": "Seller/LLD's Name",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col95",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "name": "textbox1",
+                              "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${trade.SellerName}"
+                            }
+                          ],
+                          "name": "col96",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "label15",
+                              "text": "CD File #",
+                              "type": "label",
+                              "visible": "${isCPProgram}"
+                            }
+                          ],
+                          "name": "col97",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "data": "${getAssocCDClaimsResult}",
+                              "disabled": true,
+                              "name": "SellerCDFileID",
+                              "textProperty": "ClaimNo",
+                              "type": "dropdown",
+                              "value": "${trade.SellerCDFileID}",
+                              "valueProperty": "ClaimID",
+                              "valueType": "int?",
+                              "visible": "${isCPProgram}"
+                            }
+                          ],
+                          "name": "col98",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "buttonStyle": "secondary",
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "ProgramID",
+                                        "value": "${getCDProgramID}"
+                                      },
+                                      {
+                                        "name": "ExcludeClaimID",
+                                        "value": "0"
+                                      },
+                                      {
+                                        "name": "SelectClaim",
+                                        "value": "true"
+                                      }
+                                    ],
+                                    "path": "claims",
+                                    "then": [
+                                      {
+                                        "condition": "${result != 0}",
+                                        "name": "trade.SellerCDFileID",
+                                        "type": "set",
+                                        "value": "${result}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${result != 0}",
+                                        "name": "sellerCDFileID",
+                                        "type": "set",
+                                        "value": "(int)trade.SellerCDFileID",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${result != 0}",
+                                        "name": "RECODb.getClaims",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "or",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${sellerCDFileID}"
+                                              },
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${buyerCDFileID}"
+                                              },
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${sharedAgentClaimID}"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getAssocCDClaimsResult",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Claim>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ],
+                                    "title": "Select CD Claim",
+                                    "type": "popup",
+                                    "width": 1024
+                                  }
+                                ]
+                              },
+                              "icon": "search",
+                              "name": "buttonFindRelatedSellerCD",
+                              "text": "Find",
+                              "type": "button",
+                              "visible": "${!Security.IsInRole(\"Auditor\") && isCPProgram}"
+                            }
+                          ],
+                          "name": "col113",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row28",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label16",
+                              "text": "Is this a builder deal?",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col99",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "disabled": "${Security.IsInRole(\"Auditor\")}",
+                              "name": "checkbox0",
+                              "type": "checkbox",
+                              "value": "${trade.BuilderDeal}",
+                              "valueType": "bool?"
+                            }
+                          ],
+                          "name": "col100",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label1Builder",
+                              "text": "Builder Reference #",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col101",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "disabled": "${Security.IsInRole(\"Auditor\")}",
+                              "name": "textbox2",
+                              "placeholder": "",
+                              "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                              "type": "textbox",
+                              "value": "${trade.BuilderReferenceNum}"
+                            }
+                          ],
+                          "name": "col102",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row29",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label18",
+                              "text": "Builder",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col103",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-7",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "allowFilteringByAllStringColumns": true,
+                              "columns": [
+                                {
+                                  "property": "Name",
+                                  "title": "Name"
+                                },
+                                {
+                                  "property": "Address",
+                                  "title": "Address"
+                                },
+                                {
+                                  "property": "ContactName",
+                                  "title": "Contact Name"
+                                }
+                              ],
+                              "count": "",
+                              "data": "${getBuildersList}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "itemType": "RecoCms6.Models.RecoDb.BuilderDetail",
+                              "name": "BuilderID",
+                              "placeholder": "Select Builder",
+                              "responsive": true,
+                              "selectedValue": "",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "textProperty": "Name",
+                              "type": "dropdown-datagrid",
+                              "value": "${trade.BuilderID}",
+                              "valueProperty": "BuilderID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col104",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "buttonStyle": "secondary",
+                              "events": {
+                                "click": [
+                                  {
+                                    "path": "add-builder",
+                                    "then": [
+                                      {
+                                        "condition": "",
+                                        "name": "builder",
+                                        "type": "set",
+                                        "value": "${result}",
+                                        "valueType": "dynamic"
+                                      },
+                                      {
+                                        "condition": "${builder != null}",
+                                        "name": "trade.BuilderID",
+                                        "type": "set",
+                                        "value": "${result.BuilderID}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${builder != null}",
+                                        "name": "RECODb.getBuilderDetails",
+                                        "parameters": [
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "Name"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getBuildersList",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.BuilderDetail>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ],
+                                    "type": "popup",
+                                    "width": 800
+                                  }
+                                ]
+                              },
+                              "icon": "add_circle_outline",
+                              "name": "buttonShowBuilderDetails",
+                              "text": "New",
+                              "type": "button",
+                              "visible": "${!Security.IsInRole(\"Auditor\")}"
+                            }
+                          ],
+                          "name": "col105",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row30",
+                      "type": "row"
+                    }
+                  ],
+                  "headerTemplate": "",
+                  "name": "fieldset20",
+                  "summaryTemplate": "",
+                  "text": "Transaction Details",
+                  "type": "fieldset",
+                  "visible": true
+                },
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label17",
+                              "text": "Percentage",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col115",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "format": "0.00'%'",
+                              "max": 1,
+                              "min": 0,
+                              "name": "numeric0",
+                              "placeholder": "",
+                              "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                              "showUpDown": false,
+                              "step": "0.01",
+                              "type": "numeric",
+                              "value": "${trade.CommissionPercentage}",
+                              "valueType": "double?"
+                            }
+                          ],
+                          "name": "col118",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label19",
+                              "text": "Gross Amt (Without HST)",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col117",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "format": "c",
+                              "min": 0,
+                              "name": "numeric1",
+                              "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                              "showUpDown": false,
+                              "step": "1000",
+                              "type": "numeric",
+                              "value": "${trade.CommissionGross}",
+                              "valueType": "decimal?"
+                            }
+                          ],
+                          "name": "col116",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row32",
+                      "style": {
+                        "marginBottom": "1em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label20",
+                              "text": "Is Commission Paid in Installments?",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col119",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "disabled": "${Security.IsInRole(\"Auditor\")}",
+                              "name": "checkbox1",
+                              "type": "checkbox",
+                              "value": "${trade.CommissionPaidInInstallments}",
+                              "valueType": "bool?"
+                            }
+                          ],
+                          "name": "col122",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-7",
+                          "components": [
+                            {
+                              "allowColumnResize": true,
+                              "allowPaging": true,
+                              "columns": [
+                                {
+                                  "format": "date-time",
+                                  "formatString": "{0:d}",
+                                  "property": "DatePaid",
+                                  "title": "Date Expected/Paid",
+                                  "type": "string"
+                                },
+                                {
+                                  "format": "",
+                                  "property": "Description",
+                                  "title": "Details",
+                                  "type": "string"
+                                },
+                                {
+                                  "filterValue": "",
+                                  "format": "decimal",
+                                  "formatString": "{0:C}",
+                                  "property": "Amount",
+                                  "title": "Amount",
+                                  "type": "number"
+                                }
+                              ],
+                              "data": "${getCommissionInstallmentsList}",
+                              "events": {
+                                "rowDoubleClick": [],
+                                "rowSelect": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "CommissionInstallmentID",
+                                        "value": "${event.CommissionInstallmentID}"
+                                      }
+                                    ],
+                                    "path": "edit-commission-installment",
+                                    "then": [
+                                      {
+                                        "code": "await gridCommissionInstallments.Reload();",
+                                        "type": "execute"
+                                      },
+                                      {
+                                        "code": "await InvokeAsync(() => { StateHasChanged();});",
+                                        "type": "execute"
+                                      }
+                                    ],
+                                    "type": "popup"
+                                  }
+                                ]
+                              },
+                              "itemType": "RecoCms6.Models.RecoDb.CommissionInstallment",
+                              "name": "gridCommissionInstallments",
+                              "pageSize": 5,
+                              "type": "grid"
+                            }
+                          ],
+                          "name": "col121",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "buttonStyle": "secondary",
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "TradeID",
+                                        "value": "${trade.TradeID}"
+                                      }
+                                    ],
+                                    "path": "add-commission-installment",
+                                    "type": "popup"
+                                  }
+                                ]
+                              },
+                              "icon": "library_add",
+                              "name": "buttonAddInstallment",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Add Installment",
+                              "type": "button",
+                              "visible": "${!Security.IsInRole(\"Auditor\")}"
+                            }
+                          ],
+                          "name": "col120",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row33",
+                      "style": {
+                        "marginBottom": "1em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label24",
+                              "text": "Amount Collected By RECO/Receiver",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col128",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "format": "c",
+                              "max": "",
+                              "min": 0,
+                              "name": "numeric2",
+                              "placeholder": "",
+                              "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                              "showUpDown": false,
+                              "step": "1000",
+                              "type": "numeric",
+                              "value": "${trade.AmountCollected}",
+                              "valueType": "decimal?"
+                            }
+                          ],
+                          "name": "col131",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label27",
+                              "text": "Date Collected\n",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col130",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "dateFormat": "yyyy-MM-dd",
+                              "disabled": "${Security.IsInRole(\"Auditor\")}",
+                              "name": "datepicker0",
+                              "placeholder": "",
+                              "showTimeOkButton": false,
+                              "type": "datepicker",
+                              "value": "${trade.AmountCollectedDate}"
+                            }
+                          ],
+                          "name": "col129",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row39",
+                      "type": "row"
+                    }
+                  ],
+                  "name": "fieldset6",
+                  "text": "Commission % For Entire Transaction",
+                  "type": "fieldset",
+                  "visible": "${isCPProgram}"
+                },
+                {
+                  "allowCollapse": true,
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "name": "label22",
+                              "text": "Is the Commission shared with another agent?",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col77",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "disabled": "${Security.IsInRole(\"Auditor\")}",
+                              "name": "checkbox2",
+                              "type": "checkbox",
+                              "value": "${trade.SharedCommission}",
+                              "valueType": "bool?"
+                            }
+                          ],
+                          "name": "col106",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "label23",
+                              "text": "Agent",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col78",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "data": "${getSharedAgent}",
+                              "disabled": true,
+                              "name": "SharedAgentID",
+                              "textProperty": "Name",
+                              "type": "dropdown",
+                              "value": "${trade.SharedAgentID}",
+                              "valueProperty": "RegistrantID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col107",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "buttonStyle": "secondary",
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "SelectAgent",
+                                        "value": "true"
+                                      }
+                                    ],
+                                    "path": "registrants",
+                                    "then": [
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "sharedAgent",
+                                        "type": "set",
+                                        "value": "${result}",
+                                        "valueType": "RecoCms6.Models.RecoDb.Registrant"
+                                      },
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "RECODb.getRegistrants",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "RegistrantID",
+                                                "type": "integer",
+                                                "value": "${result.RegistrantID}"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getSharedAgent",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Registrant>"
+                                          },
+                                          {
+                                            "name": "trade.SharedAgentID",
+                                            "type": "set",
+                                            "value": "${sharedAgent.RegistrantID}",
+                                            "valueType": "int"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ],
+                                    "type": "popup",
+                                    "width": 1024
+                                  }
+                                ]
+                              },
+                              "icon": "search",
+                              "name": "buttonFindSharedAgent",
+                              "text": "Find",
+                              "type": "button",
+                              "visible": "${!Security.IsInRole(\"Auditor\")}"
+                            }
+                          ],
+                          "name": "col108",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row37",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "name": "label25",
+                              "text": "Have they submitted a claim?\n",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col109",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "disabled": "${Security.IsInRole(\"Auditor\")}",
+                              "name": "checkbox3",
+                              "type": "checkbox",
+                              "value": "${trade.SharedAgentSubmitClaim}",
+                              "valueType": "bool?"
+                            }
+                          ],
+                          "name": "col123",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "name": "label26",
+                              "text": "Claim",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col124",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "data": "${getAssocCDClaimsResult}",
+                              "disabled": true,
+                              "name": "SharedAgentClaimID",
+                              "textProperty": "ClaimNo",
+                              "type": "dropdown",
+                              "value": "${trade.SharedAgentClaimID}",
+                              "valueProperty": "ClaimID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col125",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "buttonStyle": "secondary",
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "ProgramID",
+                                        "value": "${claim.ProgramID}"
+                                      },
+                                      {
+                                        "name": "ExcludeClaimID",
+                                        "value": "${claim.ClaimID}"
+                                      },
+                                      {
+                                        "name": "SelectClaim",
+                                        "value": "true"
+                                      }
+                                    ],
+                                    "path": "claims",
+                                    "then": [
+                                      {
+                                        "condition": "${result != 0}",
+                                        "name": "trade.SharedAgentClaimID",
+                                        "type": "set",
+                                        "value": "${result}",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${result != 0}",
+                                        "name": "sharedAgentClaimID",
+                                        "type": "set",
+                                        "value": "(int)trade.SharedAgentClaimID",
+                                        "valueType": "int"
+                                      },
+                                      {
+                                        "condition": "${result != 0}",
+                                        "name": "RECODb.getClaims",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "or",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${sellerCDFileID}"
+                                              },
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${buyerCDFileID}"
+                                              },
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${sharedAgentClaimID}"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getAssocCDClaimsResult",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Claim>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ],
+                                    "title": "Find Submitted Claim",
+                                    "type": "popup",
+                                    "width": 1024
+                                  }
+                                ]
+                              },
+                              "icon": "search",
+                              "name": "buttonFindSubmittedClaim",
+                              "text": "Find",
+                              "type": "button",
+                              "visible": "${!Security.IsInRole(\"Auditor\")}"
+                            }
+                          ],
+                          "name": "col126",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row38",
+                      "type": "row"
+                    }
+                  ],
+                  "name": "fieldset8",
+                  "text": "Shared Commission Details",
+                  "type": "fieldset",
+                  "visible": "${isCPProgram}"
+                },
+                {
+                  "allowCollapse": true,
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-6",
+                          "components": [
+                            {
+                              "name": "label28",
+                              "text": "Is there money outstanding with Listing brokerage or transactional lawyer to be collected?",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col132",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "disabled": "${Security.IsInRole(\"Auditor\")}",
+                              "name": "OutstandingMoney",
+                              "type": "checkbox",
+                              "value": "${trade.OutstandingMoney}",
+                              "valueType": "bool?"
+                            }
+                          ],
+                          "name": "col133",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label29",
+                              "text": "Has Outstanding Monies been sent to RECO?",
+                              "type": "label",
+                              "visible": "${trade.OutstandingMoney}"
+                            }
+                          ],
+                          "name": "col134",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "disabled": "${Security.IsInRole(\"Auditor\")}",
+                              "name": "OutstandingMoneyInTransit",
+                              "type": "checkbox",
+                              "value": "${trade.OutstandingMoneyInTransit}",
+                              "valueType": "bool?",
+                              "visible": "${trade.OutstandingMoney}"
+                            }
+                          ],
+                          "name": "col135",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row41",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "name": "label30",
+                              "text": "How much?",
+                              "type": "label",
+                              "visible": "${trade.OutstandingMoneyInTransit}"
+                            }
+                          ],
+                          "name": "col136",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "format": "c",
+                              "max": "",
+                              "min": 0,
+                              "name": "OutstandingMoneyAmount",
+                              "placeholder": "",
+                              "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                              "showUpDown": false,
+                              "step": "1000",
+                              "type": "numeric",
+                              "value": "${trade.OutstandingMoneyAmount}",
+                              "valueType": "decimal?",
+                              "visible": "${trade.OutstandingMoneyInTransit}"
+                            }
+                          ],
+                          "name": "col137",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row42",
+                      "style": {
+                        "marginBottom": ".25em"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-4",
+                          "components": [
+                            {
+                              "name": "label31",
+                              "text": "Describe Action to ensure this has happened",
+                              "type": "label",
+                              "visible": "${(trade.OutstandingMoney) && !(trade.OutstandingMoneyInTransit)}"
+                            }
+                          ],
+                          "name": "col140",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-8",
+                          "components": [
+                            {
+                              "name": "OutstandingMoneyAction",
+                              "placeholder": "",
+                              "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                              "rows": 3,
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textarea",
+                              "value": "${trade.OutstandingMoneyAction}",
+                              "visible": "${(trade.OutstandingMoney) && !(trade.OutstandingMoneyInTransit)}"
+                            }
+                          ],
+                          "name": "col141",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row43",
+                      "type": "row"
+                    }
+                  ],
+                  "name": "fieldset9",
+                  "text": "Outstanding Monies",
+                  "type": "fieldset",
+                  "visible": "${!isEOProgram}"
+                },
+                {
+                  "allowCollapse": false,
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "SPIS",
+                              "name": "label55",
+                              "text": "SPIS",
+                              "type": "label",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col200",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "data": "${getYesNoNAList}",
+                              "disabled": true,
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "SPIS",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.SPIS}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col201",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "PersonalInterest",
+                              "name": "label56",
+                              "text": "Personal Interest?",
+                              "type": "label",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col202",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "data": "${getYesNoNAList}",
+                              "disabled": true,
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "PersonalInterest",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.PersonalInterest}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col203",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "HomeInspection",
+                              "name": "label57",
+                              "text": "Home Inspection?\n",
+                              "type": "label",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col205",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "data": "${getYesNoNAList}",
+                              "disabled": true,
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "HomeInspection",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.HomeInspection}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?",
+                              "visible": "${Globals.generalsettings.ShowTradeFlags}"
+                            }
+                          ],
+                          "name": "col208",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row64",
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "ClaimTradeTypeID",
+                              "name": "label58",
+                              "text": "${Globals.generalsettings.LocationName} + \" Type\"",
+                              "type": "label",
+                              "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                            }
+                          ],
+                          "name": "col204",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowClear": true,
+                              "allowFiltering": true,
+                              "data": "${getTradeTypeList}",
+                              "disabled": false,
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "ClaimTradeTypeID",
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.TradeTypeID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?",
+                              "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                            }
+                          ],
+                          "name": "col206",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "name": "label0",
+                              "text": "Urban Or Rural",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getUrbanOrRuralList}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "UrbanOrRuralID",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${trade.UrbanOrRuralID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row65",
+                      "type": "row"
+                    }
+                  ],
+                  "icon": "",
+                  "name": "fieldset12",
+                  "text": "Additional Details",
+                  "type": "fieldset",
+                  "visible": "${isEOProgram}"
+                }
+              ],
+              "icon": "",
+              "selected": false,
+              "text": "Trade Details",
+              "visible": "${Globals.generalsettings.ApplicationName==\"RECO CMS\"}"
+            }
+          ],
+          "name": "tabs0",
+          "type": "tabs"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12 text-md-center",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "class": "col-md-12",
+                      "components": [
+                        {
+                          "buttonType": "submit",
+                          "events": {
+                            "click": [
+                              {
+                                "name": "SaveTrade",
+                                "schema": {
+                                  "$ref": "#/definitions/Task",
+                                  "dotnetType": "System.Threading.Tasks.Task"
+                                },
+                                "type": "invoke-method"
+                              }
+                            ]
+                          },
+                          "icon": "save",
+                          "name": "buttonSaveTrade",
+                          "text": "Save",
+                          "type": "button",
+                          "visible": "${!Security.IsInRole(\"Auditor\")}"
+                        }
+                      ],
+                      "name": "col6",
+                      "type": "col"
+                    }
+                  ],
+                  "name": "row4",
+                  "type": "row"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "intTradeID",
+        "type": "set",
+        "value": "(int)${parameters.TradeID}",
+        "valueType": "int"
+      },
+      {
+        "name": "intClaimID",
+        "type": "set",
+        "value": "(int)${parameters.ClaimID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "${intTradeID == 0}",
+        "name": "trade",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Trade(){}",
+        "valueType": "RecoCms6.Models.RecoDb.Trade"
+      },
+      {
+        "name": "buyerCDFileID",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "sharedAgentClaimID",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "sellerCDFileID",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "condition": "${intTradeID > 0}",
+        "name": "RECODb.getTradeByTradeID",
+        "parameters": [
+          {
+            "name": "TradeID",
+            "value": "${intTradeID}"
+          }
+        ],
+        "then": [
+          {
+            "name": "trade",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "RecoCms6.Models.RecoDb.Trade"
+          },
+          {
+            "condition": "${trade.BuyerCDFileID != null}",
+            "name": "buyerCDFileID",
+            "type": "set",
+            "value": "(int)${trade.BuyerCDFileID}",
+            "valueType": "int"
+          },
+          {
+            "condition": "${trade.SharedAgentClaimID != null}",
+            "name": "sharedAgentClaimID",
+            "type": "set",
+            "value": "(int)${trade.SharedAgentClaimID}",
+            "valueType": "int"
+          },
+          {
+            "condition": "${trade.SellerCDFileID != null}",
+            "name": "sellerCDFileID",
+            "type": "set",
+            "value": "(int)${trade.SellerCDFileID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "trade.ClaimID",
+        "type": "set",
+        "value": "${intClaimID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "",
+        "name": "RECODb.getClaims",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${sharedAgentClaimID}"
+              },
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${buyerCDFileID}"
+              },
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${sellerCDFileID}"
+              },
+              {
+                "operation": "eq",
+                "property": "ClaimID",
+                "type": "integer",
+                "value": "${intClaimID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getAssocCDClaimsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Claim>"
+          },
+          {
+            "name": "claim",
+            "type": "set",
+            "value": "${result.Where(c=>c.ClaimID == intClaimID).First()}",
+            "valueType": "RecoCms6.Models.RecoDb.Claim"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Province\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"YesNoNA\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Trade Type\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Country\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"ProgramID\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"UrbanOrRural\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"City\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"YesNoPending\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getParametersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProvinceList",
+            "type": "set",
+            "value": "${result.Where(pd=>pd.ParamTypeDesc==\"Province\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getYesNoNAList",
+            "type": "set",
+            "value": "${result.Where(pd=>pd.ParamTypeDesc==\"YesNoNA\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getTradeTypeList",
+            "type": "set",
+            "value": "${result.Where(pd=>pd.ParamTypeDesc==\"Trade Type\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getCountryList",
+            "type": "set",
+            "value": "${result.Where(pd=>pd.ParamTypeDesc==\"Country\").OrderByDescending(pd=>pd.ParamValue).ThenBy(pd=>pd.ParamDesc)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getEOProgramID",
+            "type": "set",
+            "value": "${result.Where(pd=>pd.ParamTypeDesc==\"ProgramID\" && pd.ParamAbbrev==\"EO\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getCPProgramID",
+            "type": "set",
+            "value": "${result.Where(pd=>pd.ParamTypeDesc==\"ProgramID\" && pd.ParamAbbrev==\"CPP\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getCDProgramID",
+            "type": "set",
+            "value": "${result.Where(pd=>pd.ParamTypeDesc==\"ProgramID\" && pd.ParamAbbrev==\"CDP\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "isEOProgram",
+            "type": "set",
+            "value": "${claim.ProgramID == getEOProgramID}",
+            "valueType": "bool"
+          },
+          {
+            "name": "isCPProgram",
+            "type": "set",
+            "value": "${claim.ProgramID == getCPProgramID}",
+            "valueType": "bool"
+          },
+          {
+            "name": "isCDProgram",
+            "type": "set",
+            "value": "${claim.ProgramID == getCDProgramID}",
+            "valueType": "bool"
+          },
+          {
+            "name": "getUrbanOrRuralList",
+            "type": "set",
+            "value": "${result.Where(pd=>pd.ParamTypeDesc==\"UrbanOrRural\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getCityList",
+            "type": "set",
+            "value": "${result.Where(pd=>pd.ParamTypeDesc==\"City\" && pd.ParentParameterID==trade.Province)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getYesNoPendingList",
+            "type": "set",
+            "value": "${result.Where(pd=>pd.ParamTypeDesc==\"YesNoPending\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getBuilderDetails",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getBuildersList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.BuilderDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getRegistrants",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "RegistrantID",
+                "type": "integer",
+                "value": "${trade.SharedAgentID}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getSharedAgent",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Registrant>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getCommissionInstallments",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "TradeID",
+                "type": "integer",
+                "value": "${trade.TradeID}"
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "desc",
+                "property": "DatePaid"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "condition": "${!isEOProgram}",
+            "name": "getCommissionInstallmentsList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.CommissionInstallment>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "condition": "${intTradeID == 0}",
+        "name": "trade.Province",
+        "type": "set",
+        "value": "${Globals.defaultProvinceID}",
+        "valueType": "int"
+      },
+      {
+        "condition": "${intTradeID == 0}",
+        "name": "trade.Country",
+        "type": "set",
+        "value": "${Globals.defaultCountryID}",
+        "valueType": "int"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Trade"
+}

@@ -1,0 +1,74 @@
+﻿@page "/active-user-diary-report"
+@layout MainLayout
+@inherits RecoCms6.Pages.ActiveUserDiaryReportComponent
+
+@using Syncfusion.Blazor.Grids
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-1">
+        <RadzenLabel Text="From">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-2">
+        <RadzenDatePicker DateFormat="d" ShowTimeOkButton="true" @bind-Value="@startDate" Name="DtFromDate">
+        </RadzenDatePicker>
+        <RadzenRequiredValidator>
+        </RadzenRequiredValidator>
+      </div>
+      <div class="col-md-1">
+        <RadzenLabel Text="To">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-2">
+        <RadzenDatePicker DateFormat="d" ShowTimeOkButton="true" @bind-Value="@selectedReportDate" Name="DtEndDate">
+        </RadzenDatePicker>
+        <RadzenRequiredValidator>
+        </RadzenRequiredValidator>
+      </div>
+      <div class="col-md-4">
+        <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getActiveServiceProvidersList" Placeholder="Show All" style="width: 90%" TextProperty="NameandFirm" @bind-Value="@selectedUser" ValueProperty="UserID" Name="Dropdown0">
+        </RadzenDropDown>
+        <RadzenRequiredValidator>
+        </RadzenRequiredValidator>
+      </div>
+      <div class="col-md-2">
+        <RadzenButton Icon="get_app" Text="Export" Click="@Button1Click">
+        </RadzenButton>
+        <RadzenButton Icon="save" Text="Run" Click="@Button0Click">
+        </RadzenButton>
+      </div>
+    </div>
+    <div  class="row">
+      <div class="col-md-12">
+        <RadzenPanel  Text="Active User Diaries">
+          <ChildContent>
+            <div class="row">
+              <div class="col-md-12">
+                  <SfGrid DataSource="@getDataList" TValue="ActiveUserDiaryReportModel" AllowPaging="true" Width="100%">
+                    <GridScrollSettings Width="auto" />
+                    <GridColumns>
+                      <GridColumn Width="200" Field="@nameof(ActiveUserDiaryReportModel.ReminderDate)" HeaderText="Reminder Date" Format="d"></GridColumn>
+                      <GridColumn Width="200" Field="@nameof(ActiveUserDiaryReportModel.Subject)" HeaderText="Subject"></GridColumn>
+                      <GridColumn Width="200" Field="@nameof(ActiveUserDiaryReportModel.RECOClaim)" HeaderText="RECO Claim"></GridColumn>
+                      <GridColumn Width="200" Field="@nameof(ActiveUserDiaryReportModel.Program)" HeaderText="Program"></GridColumn>
+                      <GridColumn Width="200" Field="@nameof(ActiveUserDiaryReportModel.AdjusterClaim)" HeaderText="Adjuster Claim"></GridColumn>
+                      <GridColumn Width="200" Field="@nameof(ActiveUserDiaryReportModel.Registrants)" HeaderText="Registrants"></GridColumn>
+                      <GridColumn Width="200" Field="@nameof(ActiveUserDiaryReportModel.ClaimInitiation)" HeaderText="Claim Initiation"></GridColumn>
+                      <GridColumn Width="200" Field="@nameof(ActiveUserDiaryReportModel.FileHandler)" HeaderText="File Handler"></GridColumn>
+                      <GridColumn Width="200" Field="@nameof(ActiveUserDiaryReportModel.Recipients)" HeaderText="Recipients"></GridColumn>
+                    </GridColumns>
+                  </SfGrid>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenPanel>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

@@ -1,0 +1,185 @@
+﻿@page "/general-setting"
+@layout MainLayout
+@inherits RecoCms6.Pages.GeneralSettingComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="General Settings">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Visible="false" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenGrid @ref="grid0" AllowColumnResize="true" AllowFiltering="false" AllowPaging="false" AllowSorting="false" ColumnWidth="100px" Data="@getGeneralSettingsResult" FilterMode="Radzen.FilterMode.Advanced" TItem="RecoCms6.Models.RecoDb.GeneralSetting" PageSize="1" RowCreate="@Grid0RowCreate" RowUpdate="@Grid0RowUpdate">
+          <Columns>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="ApplicationName" Title="Application Name" Type="string">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox AutoComplete="false" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.ApplicationName)" Name="ApplicationName">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="OccurrenceMade" Title="Occurrence Made">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenCheckBox style="display: block; width: 100%" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.OccurrenceMade)" Name="OccurrenceMade">
+                </RadzenCheckBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" FormatString="{0:d}" Property="FiscalYear" Title="Fiscal Year">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenDatePicker style="display: block; width: 100%" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.FiscalYear)" Name="FiscalYear">
+                </RadzenDatePicker>
+                <RadzenRequiredValidator Component="FiscalYear" Popup="true">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="SeparateIncidents" Title="Separate Incidents">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenCheckBox style="display: block; width: 100%" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.SeparateIncidents)" Name="SeparateIncidents">
+                </RadzenCheckBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="ShowTradeFlags" Title="Show Trade Flags">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenCheckBox style="display: block; width: 100%" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.ShowTradeFlags)" Name="ShowTradeFlags">
+                </RadzenCheckBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="LocationName" Title="Location Name">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.LocationName)" Name="LocationName">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="TradeTypeName" Title="Trade Type Name">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.TradeTypeName)" Name="TradeTypeName">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="ShowLegal" Title="Show Legal">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenCheckBox style="display: block; width: 100%" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.ShowLegal)" Name="ShowLegal">
+                </RadzenCheckBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="ShowExpense" Title="Show Expense">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenCheckBox style="display: block; width: 100%" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.ShowExpense)" Name="ShowExpense">
+                </RadzenCheckBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="ShowRecovery" Title="Show Recovery" Type="boolean">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenCheckBox style="width: 100%" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.ShowRecovery)" Name="ShowRecovery">
+                </RadzenCheckBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="ShowAdjusting" Title="Show Adjusting" Type="boolean">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenCheckBox style="width: 100%" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.ShowAdjusting)" Name="Checkbox0">
+                </RadzenCheckBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="ClaimantName" Title="Claimant Name" Type="string">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="ContractYear" Title="Contract Year" Type="string">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="SubrogationName" Title="Subrogation Name" Type="string">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="Active" Title="Active" Type="boolean">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="Host" Title="SMTP Host" Type="string">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox AutoComplete="false" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.Host)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="Port" Title="Port" Type="integer">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenNumeric AutoComplete="false" ShowUpDown="false" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.Port)" Name="Numeric0">
+                </RadzenNumeric>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="UseSSL" Title="Use SSL" Type="boolean">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="ImapHost" Title="Imap Host" Type="string">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.ImapHost)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="ImapPort" Title="Imap Port" Type="integer">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenNumeric AutoComplete="false" @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.ImapPort)" Name="Numeric0">
+                </RadzenNumeric>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="SystemEmail" Title="System Email" Width="200px" Type="string">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.SystemEmail)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="SystemEmailPassword" Title="System Password" Type="string">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.SystemEmailPassword)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="SystemNameFrom" Title="System Email Display Name" Type="string">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.SystemNameFrom)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="BindEmailToClaimEmail" Title="Bind Email To Claim Email Address" Width="200px" Type="string">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.BindEmailToClaimEmail)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="BindEmailToClaimPassword" Title="Bind Email To Claim Password" Type="string">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.BindEmailToClaimPassword)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="BindAttachmentsToClaimEmail" Title="Bind Attachments To Claim Email Address" Width="200px" Type="string">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.BindAttachmentsToClaimEmail)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Property="BindAttachmentsToClaimPassword" Title="Bind Attachments To Claim Password" Type="string">
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenTextBox @bind-Value="@(RecoCms6ModelsRecoDbGeneralSetting.BindAttachmentsToClaimPassword)" Name="Textbox0">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.GeneralSetting" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@((args) =>EditButtonClick(args, RecoCms6ModelsRecoDbGeneralSetting))">
+                </RadzenButton>
+              </Template>
+              <EditTemplate Context="RecoCms6ModelsRecoDbGeneralSetting">
+                <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) =>SaveButtonClick(args, RecoCms6ModelsRecoDbGeneralSetting))">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="cancel" Size="ButtonSize.Small" Click="@((args) =>CancelButtonClick(args, RecoCms6ModelsRecoDbGeneralSetting))">
+                </RadzenButton>
+              </EditTemplate>
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

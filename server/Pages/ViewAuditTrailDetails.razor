@@ -1,0 +1,61 @@
+﻿@page "/view-audit-trail-details/{AuditTrailID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.ViewAuditTrailDetailsComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Program Manager, System Admin")]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-3">
+        <RadzenLabel Text="Claim No
+        ">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-9">
+        <RadzenLabel Text="@($"{(audittrail.ClaimNo)}")">
+        </RadzenLabel>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <RadzenLabel Text="Audit Trail Date">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-9">
+        <RadzenLabel Text="@($"{(audittrail.AuditTrailDate)}")">
+        </RadzenLabel>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <RadzenLabel Text="Updated By
+        ">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-9">
+        <RadzenLabel Text="@($"{(audittrail.Name)}")">
+        </RadzenLabel>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <RadzenLabel Text="Details
+        ">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-9">
+        <RadzenHtml>
+          @(audittrail.RowDetails)
+        </RadzenHtml>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

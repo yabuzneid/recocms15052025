@@ -1,0 +1,505 @@
+﻿@page "/add-trade/{TradeID}/{ClaimID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddTradeComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenTemplateForm Data="@trade" TItem="RecoCms6.Models.RecoDb.Trade" Visible="@(trade != null)" Submit="@TemplateForm0Submit">
+      <ChildContent>
+       <RadzenTabs RenderMode="TabRenderMode.Client">
+        <Tabs>
+          <RadzenTabsItem Selected="true" Text="@(Globals.generalsettings.LocationName)">
+            <ChildContent>
+                  <div style="margin-bottom: 1rem" class="row">
+                    <div class="col-md-2">
+                      <RadzenLabel Component="Address1" style="width: 100%" Text="Address 1">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-7">
+                      <RadzenTextBox MaxLength="450" style="display: block; width: 100%" @bind-Value="@(trade.Address1)" Name="Address1">
+                      </RadzenTextBox>
+                      <RadzenRequiredValidator Component="Address1" Popup="false" style="position: absolute" Text="Address1 is required">
+                      </RadzenRequiredValidator>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenLabel Component="UnitNumber" style="width: 100%" Text="Unit #">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenTextBox MaxLength="20" style="width: 100%" @bind-Value="@(trade.UnitNumber)" Name="UnitNumber">
+                      </RadzenTextBox>
+                    </div>
+                  </div>
+                  <div style="margin-bottom: 1rem" class="row">
+                    <div class="col-md-2">
+                      <RadzenLabel Component="Address2" style="width: 100%" Text="Address 2">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-9">
+                      <RadzenTextBox MaxLength="450" style="width: 100%" @bind-Value="@(trade.Address2)" Name="Address2">
+                      </RadzenTextBox>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <RadzenLabel Component="City" style="width: 100%" Text="City">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-6">
+                      <RadzenAutoComplete Data="@getCityList" style="width: 100%" TextProperty="ParamDesc" @bind-Value="@(trade.City)" Name="Autocomplete0">
+                      </RadzenAutoComplete>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenLabel Component="Province" style="width: 100%" Text="Province">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenDropDown AllowFiltering="true" Data="@getProvinceList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Province"  TextProperty="ParamAbbrev" @bind-Value="@(trade.Province)" ValueProperty="ParameterID" Name="Province" Change="@ProvinceChange">
+                      </RadzenDropDown>
+                      <RadzenRequiredValidator Component="Province" Popup="false" style="position: absolute" Text="Province is required">
+                      </RadzenRequiredValidator>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <RadzenLabel Component="PostalCode" style="width: 100%" Text="Postal Code">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenTextBox AutoComplete="false" MaxLength="7" Placeholder="A1A 1A1"  @bind-Value="@(trade.PostalCode)" Name="PostalCode" Change="@PostalCodeChange">
+                      </RadzenTextBox>
+                      <RadzenRegexValidator Component="PostalCode" Pattern="([ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy][0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy])\ ?([0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy][0-9])" style="display: block; position: absolute; width: 100%" Text="Not a valid postal code">
+                      </RadzenRegexValidator>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenLabel Component="Country" style="width: 100%" Text="Country">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDropDown AllowFiltering="true" Data="@getCountryList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Country"  TextProperty="ParamDesc" @bind-Value="@(trade.Country)" ValueProperty="ParameterID" Name="Country">
+                      </RadzenDropDown>
+                      <RadzenRequiredValidator Component="Country" Popup="false" style="position: absolute" Text="Country is required">
+                      </RadzenRequiredValidator>
+                    </div>
+                  </div>
+              <RadzenFieldset AllowCollapse="false" Text="Additional Details" Visible="@(Globals.generalsettings.ApplicationName=="REIX CMS")">
+                <ChildContent>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <RadzenLabel Component="SPIS" Text="SPIS" Visible="@(Globals.generalsettings.ShowTradeFlags)">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenDropDown Data="@getYesNoNAList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.SPIS)" ValueProperty="ParameterID" Visible="@(Globals.generalsettings.ShowTradeFlags)" Name="Dropdown1">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenLabel Component="PersonalInterest" Text="Personal Interest?" Visible="@(Globals.generalsettings.ShowTradeFlags)">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenDropDown Data="@getYesNoNAList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.PersonalInterest)" ValueProperty="ParameterID" Visible="@(Globals.generalsettings.ShowTradeFlags)" Name="Dropdown2">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenLabel Component="HomeInspection" Text="Home Inspection?
+                      " Visible="@(Globals.generalsettings.ShowTradeFlags)">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenDropDown Data="@getYesNoNAList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.HomeInspection)" ValueProperty="ParameterID" Visible="@(Globals.generalsettings.ShowTradeFlags)" Name="Dropdown3">
+                      </RadzenDropDown>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <RadzenLabel Component="ClaimTradeTypeID" Text="@($"{(Globals.generalsettings.LocationName) + " Type"}")" Visible="@(Globals.generalsettings.ApplicationName == "RECO CMS")">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getTradeTypeList" Disabled="false" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.TradeTypeID)" ValueProperty="ParameterID" Visible="@(Globals.generalsettings.ApplicationName == "RECO CMS")" Name="Dropdown4">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Urban Or Rural">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDropDown AllowFiltering="true" Data="@getUrbanOrRuralList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.UrbanOrRuralID)" ValueProperty="ParameterID" Name="Dropdown5">
+                      </RadzenDropDown>
+                    </div>
+                  </div>
+                </ChildContent>
+              </RadzenFieldset>
+            </ChildContent>
+          </RadzenTabsItem>
+          <RadzenTabsItem Selected="false" Text="Trade Details" Visible="@(Globals.generalsettings.ApplicationName=="RECO CMS")">
+            <ChildContent>
+              <RadzenFieldset Text="Transaction Details">
+                <ChildContent>
+                  <div style="margin-bottom: .25em" class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Date of APS/Lease">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@(Security.IsInRole("Auditor"))" ShowTimeOkButton="false" @bind-Value="@(trade.LeaseDate)" Name="LeaseDate">
+                      </RadzenDatePicker>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenLabel Text="Price">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenNumeric AutoComplete="false" Format="c" Min="0" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" Step="10000" @bind-Value="@(trade.Price)" Name="Price">
+                      </RadzenNumeric>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Did The Deal Close?">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDropDown Data="@getYesNoPendingList" Disabled="false" TextProperty="ParamDesc" @bind-Value="@(trade.DidDealClose)" ValueProperty="ParameterID" Name="Dropdown0">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenLabel Text="Date Closed">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@(Security.IsInRole("Auditor"))" ShowTimeOkButton="false" @bind-Value="@(trade.DateClosed)" Name="DateClosed">
+                      </RadzenDatePicker>
+                    </div>
+                  </div>
+                  <div style="margin-bottom: .25em" class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Deposit Amount">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenNumeric AutoComplete="false" Format="c" Min="0" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" Step="1000" @bind-Value="@(trade.DepositAmount)" Name="DepositAmount">
+                      </RadzenNumeric>
+                    </div>
+                  </div>
+                  <div style="margin-bottom: .25em" class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Buyer/Tenant's Name">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-4">
+                      <RadzenTextBox ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(trade.BuyerName)" Name="Textbox0">
+                      </RadzenTextBox>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenLabel Text="CD File #" Visible="@isCPProgram">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenDropDown AllowClear="true" Data="@getAssocCDClaimsResult" Disabled="true" TextProperty="ClaimNo" @bind-Value="@(trade.BuyerCDFileID)" ValueProperty="ClaimID" Visible="@isCPProgram" Name="BuyerCDFileID">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="search" Text="Find" Visible="@(!Security.IsInRole("Auditor") && isCPProgram)" Click="@ButtonFindRelatedBuyerCdClick">
+                      </RadzenButton>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Seller/LLD's Name">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-4">
+                      <RadzenTextBox ReadOnly="@(Security.IsInRole("Auditor"))" style="width: 100%" @bind-Value="@(trade.SellerName)" Name="Textbox1">
+                      </RadzenTextBox>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenLabel Text="CD File #" Visible="@isCPProgram">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenDropDown AllowClear="true" Data="@getAssocCDClaimsResult" Disabled="true" TextProperty="ClaimNo" @bind-Value="@(trade.SellerCDFileID)" ValueProperty="ClaimID" Visible="@isCPProgram" Name="SellerCDFileID">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="search" Text="Find" Visible="@(!Security.IsInRole("Auditor") && isCPProgram)" Click="@ButtonFindRelatedSellerCdClick">
+                      </RadzenButton>
+                    </div>
+                  </div>
+                  <div style="margin-bottom: .25em" class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Is this a builder deal?">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" @bind-Value="@(trade.BuilderDeal)" Name="Checkbox0">
+                      </RadzenCheckBox>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Builder Reference #">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenTextBox Disabled="@(Security.IsInRole("Auditor"))" ReadOnly="@(Security.IsInRole("Auditor"))" @bind-Value="@(trade.BuilderReferenceNum)" Name="Textbox2">
+                      </RadzenTextBox>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Builder">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-7">
+                      <RadzenDropDownDataGrid AllowClear="true" AllowFilteringByAllStringColumns="true" Data="@getBuildersList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Select Builder" Responsive="true" style="width: 100%" TextProperty="Name" @bind-Value="@(trade.BuilderID)" ValueProperty="BuilderID" Name="BuilderID">
+                        <Columns>
+                          <RadzenDropDownDataGridColumn Property="Name" Title="Name">
+                          </RadzenDropDownDataGridColumn>
+                          <RadzenDropDownDataGridColumn Property="Address" Title="Address">
+                          </RadzenDropDownDataGridColumn>
+                          <RadzenDropDownDataGridColumn Property="ContactName" Title="Contact Name">
+                          </RadzenDropDownDataGridColumn>
+                        </Columns>
+                      </RadzenDropDownDataGrid>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Text="New" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonShowBuilderDetailsClick">
+                      </RadzenButton>
+                    </div>
+                  </div>
+                </ChildContent>
+              </RadzenFieldset>
+              <RadzenFieldset Text="Commission % For Entire Transaction" Visible="@isCPProgram">
+                <ChildContent>
+                  <div style="margin-bottom: 1em" class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Percentage">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenNumeric AutoComplete="false" Format="0.00'%'" Max="1" Min="0" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" Step="0.01" @bind-Value="@(trade.CommissionPercentage)" Name="Numeric0">
+                      </RadzenNumeric>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Gross Amt (Without HST)">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenNumeric AutoComplete="false" Format="c" Min="0" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" Step="1000" @bind-Value="@(trade.CommissionGross)" Name="Numeric1">
+                      </RadzenNumeric>
+                    </div>
+                  </div>
+                  <div style="margin-bottom: 1em" class="row">
+                    <div class="col-md-2">
+                      <RadzenLabel Text="Is Commission Paid in Installments?">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" @bind-Value="@(trade.CommissionPaidInInstallments)" Name="Checkbox1">
+                      </RadzenCheckBox>
+                    </div>
+                    <div class="col-md-7">
+                      <RadzenGrid @ref="gridCommissionInstallments" AllowColumnResize="true" AllowPaging="true" Data="@getCommissionInstallmentsList" TItem="RecoCms6.Models.RecoDb.CommissionInstallment" PageSize="5" RowSelect="@GridCommissionInstallmentsRowSelect">
+                        <Columns>
+                          <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.CommissionInstallment" Format="date-time" FormatString="{0:d}" Property="DatePaid" Title="Date Expected/Paid" Type="string">
+                          </RadzenGridColumn>
+                          <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.CommissionInstallment" Property="Description" Title="Details" Type="string">
+                          </RadzenGridColumn>
+                          <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.CommissionInstallment" Format="decimal" FormatString="{0:C}" Property="Amount" Title="Amount" Type="number">
+                          </RadzenGridColumn>
+                        </Columns>
+                      </RadzenGrid>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="library_add" style="width: 100%" Text="Add Installment" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonAddInstallmentClick">
+                      </RadzenButton>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Amount Collected By RECO/Receiver">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenNumeric AutoComplete="false" Format="c" Min="0" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" Step="1000" @bind-Value="@(trade.AmountCollected)" Name="Numeric2">
+                      </RadzenNumeric>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Date Collected
+                      ">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@(Security.IsInRole("Auditor"))" ShowTimeOkButton="false" @bind-Value="@(trade.AmountCollectedDate)" Name="Datepicker0">
+                      </RadzenDatePicker>
+                    </div>
+                  </div>
+                </ChildContent>
+              </RadzenFieldset>
+              <RadzenFieldset AllowCollapse="true" Text="Shared Commission Details" Visible="@isCPProgram">
+                <ChildContent>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <RadzenLabel Text="Is the Commission shared with another agent?">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" @bind-Value="@(trade.SharedCommission)" Name="Checkbox2">
+                      </RadzenCheckBox>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenLabel Text="Agent">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDropDown AllowClear="true" Data="@getSharedAgent" Disabled="true" TextProperty="Name" @bind-Value="@(trade.SharedAgentID)" ValueProperty="RegistrantID" Name="SharedAgentID">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="search" Text="Find" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonFindSharedAgentClick">
+                      </RadzenButton>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <RadzenLabel Text="Have they submitted a claim?
+                      ">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" @bind-Value="@(trade.SharedAgentSubmitClaim)" Name="Checkbox3">
+                      </RadzenCheckBox>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenLabel Text="Claim">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDropDown AllowClear="true" Data="@getAssocCDClaimsResult" Disabled="true" TextProperty="ClaimNo" @bind-Value="@(trade.SharedAgentClaimID)" ValueProperty="ClaimID" Name="SharedAgentClaimID">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="search" Text="Find" Visible="@(!Security.IsInRole("Auditor"))" Click="@ButtonFindSubmittedClaimClick">
+                      </RadzenButton>
+                    </div>
+                  </div>
+                </ChildContent>
+              </RadzenFieldset>
+              <RadzenFieldset AllowCollapse="true" Text="Outstanding Monies" Visible="@(!isEOProgram)">
+                <ChildContent>
+                  <div style="margin-bottom: .25em" class="row">
+                    <div class="col-md-6">
+                      <RadzenLabel Text="Is there money outstanding with Listing brokerage or transactional lawyer to be collected?">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" @bind-Value="@(trade.OutstandingMoney)" Name="OutstandingMoney">
+                      </RadzenCheckBox>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Has Outstanding Monies been sent to RECO?" Visible="@(trade.OutstandingMoney)">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-1">
+                      <RadzenCheckBox Disabled="@(Security.IsInRole("Auditor"))" @bind-Value="@(trade.OutstandingMoneyInTransit)" Visible="@(trade.OutstandingMoney)" Name="OutstandingMoneyInTransit">
+                      </RadzenCheckBox>
+                    </div>
+                  </div>
+                  <div style="margin-bottom: .25em" class="row">
+                    <div class="col-md-2">
+                      <RadzenLabel Text="How much?" Visible="@(trade.OutstandingMoneyInTransit)">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenNumeric AutoComplete="false" Format="c" Min="0" ReadOnly="@(Security.IsInRole("Auditor"))" ShowUpDown="false" Step="1000" @bind-Value="@(trade.OutstandingMoneyAmount)" Visible="@(trade.OutstandingMoneyInTransit)" Name="OutstandingMoneyAmount">
+                      </RadzenNumeric>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <RadzenLabel Text="Describe Action to ensure this has happened" Visible="@((trade.OutstandingMoney) && !(trade.OutstandingMoneyInTransit))">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-8">
+                      <RadzenTextArea ReadOnly="@(Security.IsInRole("Auditor"))" Rows="3" style="width: 100%" @bind-Value="@(trade.OutstandingMoneyAction)" Visible="@((trade.OutstandingMoney) && !(trade.OutstandingMoneyInTransit))" Name="OutstandingMoneyAction">
+                      </RadzenTextArea>
+                    </div>
+                  </div>
+                </ChildContent>
+              </RadzenFieldset>
+              <RadzenFieldset AllowCollapse="false" Text="Additional Details" Visible="@isEOProgram">
+                <ChildContent>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <RadzenLabel Component="SPIS" Text="SPIS" Visible="@(Globals.generalsettings.ShowTradeFlags)">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenDropDown Data="@getYesNoNAList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.SPIS)" ValueProperty="ParameterID" Visible="@(Globals.generalsettings.ShowTradeFlags)" Name="SPIS">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenLabel Component="PersonalInterest" Text="Personal Interest?" Visible="@(Globals.generalsettings.ShowTradeFlags)">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenDropDown Data="@getYesNoNAList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.PersonalInterest)" ValueProperty="ParameterID" Visible="@(Globals.generalsettings.ShowTradeFlags)" Name="PersonalInterest">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenLabel Component="HomeInspection" Text="Home Inspection?
+                      " Visible="@(Globals.generalsettings.ShowTradeFlags)">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-2">
+                      <RadzenDropDown Data="@getYesNoNAList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.HomeInspection)" ValueProperty="ParameterID" Visible="@(Globals.generalsettings.ShowTradeFlags)" Name="HomeInspection">
+                      </RadzenDropDown>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <RadzenLabel Component="ClaimTradeTypeID" Text="@($"{(Globals.generalsettings.LocationName) + " Type"}")" Visible="@(Globals.generalsettings.ApplicationName == "RECO CMS")">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getTradeTypeList" Disabled="false" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.TradeTypeID)" ValueProperty="ParameterID" Visible="@(Globals.generalsettings.ApplicationName == "RECO CMS")" Name="ClaimTradeTypeID">
+                      </RadzenDropDown>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenLabel Text="Urban Or Rural">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-3">
+                      <RadzenDropDown AllowFiltering="true" Data="@getUrbanOrRuralList" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" TextProperty="ParamDesc" @bind-Value="@(trade.UrbanOrRuralID)" ValueProperty="ParameterID" Name="UrbanOrRuralID">
+                      </RadzenDropDown>
+                    </div>
+                  </div>
+                </ChildContent>
+              </RadzenFieldset>
+            </ChildContent>
+          </RadzenTabsItem>
+        </Tabs>
+      </RadzenTabs>
+      <div class="row">
+        <div class="col-md-12 text-md-center">
+          <div class="row">
+            <div class="col-md-12">
+              <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" Visible="@(!Security.IsInRole("Auditor"))">
+              </RadzenButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ChildContent>
+  </RadzenTemplateForm>
+  </ChildContent>
+</RadzenContent>

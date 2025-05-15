@@ -1,0 +1,833 @@
+{
+  "access": [
+    "Accountant",
+    "Program Manager",
+    "System Admin"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "name": "pageTitle",
+          "size": "H3",
+          "text": "Upload Invoice",
+          "type": "heading"
+        },
+        {
+          "action": "",
+          "components": [
+            {
+              "components": [
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "name": "label0",
+                      "text": "Select Firm",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col0",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-4",
+                  "components": [
+                    {
+                      "allowClear": true,
+                      "allowFiltering": true,
+                      "data": "${getFirmList}",
+                      "events": {
+                        "change": [
+                          {
+                            "condition": "${selectedFirmID != null}",
+                            "name": "payableTo",
+                            "type": "set",
+                            "value": "${getFirmList.FirstOrDefault(f=>f.FirmID == selectedFirmID).Name}",
+                            "valueType": "string"
+                          }
+                        ]
+                      },
+                      "filterCaseSensitivity": "caseInsensitive",
+                      "name": "firmID",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "textProperty": "Name",
+                      "type": "dropdown",
+                      "value": "${selectedFirmID}",
+                      "valueProperty": "FirmID",
+                      "valueType": "int"
+                    },
+                    {
+                      "name": "label6",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "display": "block",
+                        "fontSize": "12px"
+                      },
+                      "text": "Must Select a Firm",
+                      "type": "label",
+                      "visible": "${validationarray.Contains(\"FirmID\")}"
+                    }
+                  ],
+                  "name": "col1",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-2 text-md-right",
+                  "components": [
+                    {
+                      "name": "label1",
+                      "text": "Payable To",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col12",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-4",
+                  "components": [
+                    {
+                      "name": "PayableTo",
+                      "placeholder": "",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "type": "textbox",
+                      "value": "${payableTo}"
+                    },
+                    {
+                      "name": "label8",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "display": "block",
+                        "fontSize": "12px"
+                      },
+                      "text": "Must enter payable To",
+                      "type": "label",
+                      "visible": "${validationarray.Contains(\"PayableTo\")}"
+                    }
+                  ],
+                  "name": "col13",
+                  "type": "col"
+                }
+              ],
+              "name": "row0",
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "name": "label2",
+                      "text": "Select File To Upload",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col10",
+                  "type": "col"
+                },
+                {
+                  "class": "align-items-center d-flex col-md-10",
+                  "components": [
+                    {
+                      "accept": "excel/*.xls",
+                      "chooseText": "Browse",
+                      "events": {
+                        "complete": [
+                          {
+                            "name": "UploadCompleted",
+                            "parameters": [
+                              {
+                                "name": "args",
+                                "type": "Radzen.UploadCompleteEventArgs",
+                                "value": "args"
+                              }
+                            ],
+                            "schema": {
+                              "$ref": "#/definitions/Void",
+                              "dotnetType": "void"
+                            },
+                            "type": "invoke-method"
+                          }
+                        ],
+                        "progress": []
+                      },
+                      "name": "upload0",
+                      "type": "upload",
+                      "url": "upload/invoice"
+                    },
+                    {
+                      "name": "label12",
+                      "text": "${invoiceuploadfile.Filename}",
+                      "type": "label"
+                    },
+                    {
+                      "name": "label9",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "display": "block",
+                        "fontSize": "12px"
+                      },
+                      "text": "Must Choose a File",
+                      "type": "label",
+                      "visible": "${validationarray.Contains(\"InvoiceFile\")}"
+                    }
+                  ],
+                  "name": "col11",
+                  "type": "col"
+                }
+              ],
+              "name": "row5",
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "name": "label3",
+                      "text": "Enter Invoice #",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col8",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-3",
+                  "components": [
+                    {
+                      "autoComplete": false,
+                      "name": "InvoiceNumber",
+                      "placeholder": "",
+                      "type": "textbox",
+                      "value": "${invoicenumber}"
+                    },
+                    {
+                      "name": "label10",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "display": "block",
+                        "fontSize": "12px"
+                      },
+                      "text": "Must Enter a Invoice Number",
+                      "type": "label",
+                      "visible": "${validationarray.Contains(\"InvoiceNumber\")}"
+                    }
+                  ],
+                  "name": "col9",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-3 text-md-right",
+                  "components": [
+                    {
+                      "name": "label4",
+                      "text": "Invoices Uploaded as of Date",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col6",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-4",
+                  "components": [
+                    {
+                      "dateFormat": "yyyy-MM-dd",
+                      "name": "InvoiceDate",
+                      "placeholder": "",
+                      "showTimeOkButton": false,
+                      "type": "datepicker",
+                      "value": "${invoicedate}"
+                    },
+                    {
+                      "name": "label11",
+                      "style": {
+                        "color": "rgb(249, 119, 127)",
+                        "display": "block",
+                        "fontSize": "12px"
+                      },
+                      "text": "Must Enter a Invoice Date",
+                      "type": "label",
+                      "visible": "${validationarray.Contains(\"InvoiceDate\")}"
+                    }
+                  ],
+                  "name": "col7",
+                  "type": "col"
+                }
+              ],
+              "name": "row4",
+              "style": {
+                "marginBottom": "1rem"
+              },
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "component": "textBox1",
+                      "name": "label5",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "text": "Comments",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col14",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-9",
+                  "components": [
+                    {
+                      "name": "Comments",
+                      "placeholder": "",
+                      "rows": 3,
+                      "style": {
+                        "width": "80%"
+                      },
+                      "type": "textarea",
+                      "value": "${comments}"
+                    }
+                  ],
+                  "name": "col15",
+                  "type": "col"
+                }
+              ],
+              "name": "row7",
+              "style": {
+                "marginBottom": "1rem"
+              },
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "class": "col-md-2",
+                  "components": [
+                    {
+                      "component": "textBox1",
+                      "name": "label7",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "text": "Sending Instructions",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col19",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-9",
+                  "components": [
+                    {
+                      "name": "SendingInstructions",
+                      "placeholder": "",
+                      "rows": 3,
+                      "style": {
+                        "width": "80%"
+                      },
+                      "type": "textarea",
+                      "value": "${sendinginstructions}"
+                    }
+                  ],
+                  "name": "col20",
+                  "type": "col"
+                }
+              ],
+              "name": "row9",
+              "style": {
+                "marginBottom": "1rem"
+              },
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "class": "text-md-center col-md-9",
+                  "components": [
+                    {
+                      "buttonType": "submit",
+                      "icon": "save_alt",
+                      "name": "button0",
+                      "text": "Submit",
+                      "type": "button"
+                    }
+                  ],
+                  "name": "col16",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-3",
+                  "components": [
+                    {
+                      "events": {
+                        "click": [
+                          {
+                            "error": [
+                              {
+                                "severity": "error",
+                                "summary": "There was an error",
+                                "type": "notify"
+                              }
+                            ],
+                            "name": "GeneratePDF",
+                            "schema": {
+                              "$ref": "#/definitions/Void",
+                              "dotnetType": "void"
+                            },
+                            "type": "invoke-method"
+                          },
+                          {
+                            "severity": "success",
+                            "summary": "Succeeded",
+                            "type": "notify"
+                          }
+                        ]
+                      },
+                      "name": "buttonGenerateInvoice",
+                      "template": "",
+                      "text": "Generate Invoice",
+                      "type": "button",
+                      "visible": "${Security.IsInRole(\"Program Manager\")}"
+                    }
+                  ],
+                  "name": "col2",
+                  "type": "col"
+                }
+              ],
+              "name": "row8",
+              "style": {
+                "marginTop": "1rem"
+              },
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "components": [
+                    {
+                      "class": "col-md-12",
+                      "components": [
+                        {
+                          "events": {
+                            "click": [
+                              {
+                                "fileName": "invoiceuploaderrors",
+                                "format": "xlsx",
+                                "name": "RECODb.getInvoiceUploadRowErrors",
+                                "type": "export"
+                              }
+                            ]
+                          },
+                          "icon": "get_app",
+                          "name": "buttonExportErrors",
+                          "text": "Export",
+                          "type": "button",
+                          "visible": "${uploaderrors != null && uploaderrors.Count() >  0}"
+                        }
+                      ],
+                      "name": "col4",
+                      "type": "col"
+                    }
+                  ],
+                  "name": "row2",
+                  "type": "row"
+                },
+                {
+                  "columns": [
+                    {
+                      "property": "RowNumber",
+                      "title": "Row #",
+                      "width": "100px"
+                    },
+                    {
+                      "property": "Problem",
+                      "title": "Problem"
+                    }
+                  ],
+                  "data": "${uploaderrors}",
+                  "itemType": "RecoCms6.Models.RecoDb.InvoiceUploadRowError",
+                  "name": "gridErrors",
+                  "type": "grid"
+                }
+              ],
+              "name": "fieldset0",
+              "text": "Errors",
+              "type": "fieldset",
+              "visible": "${uploaderrors != null}"
+            }
+          ],
+          "data": "${invoiceuploadfile}",
+          "events": {
+            "submit": [
+              {
+                "name": "Validate",
+                "schema": {
+                  "dotnetType": "bool",
+                  "type": "boolean"
+                },
+                "then": [
+                  {
+                    "name": "isValid",
+                    "type": "set",
+                    "value": "${result}",
+                    "valueType": "bool"
+                  },
+                  {
+                    "condition": "${!isValid}",
+                    "severity": "warn",
+                    "summary": "Fix Errors On Form",
+                    "then": [
+                      {
+                        "code": "return;",
+                        "type": "execute"
+                      }
+                    ],
+                    "type": "notify"
+                  }
+                ],
+                "type": "invoke-method"
+              },
+              {
+                "condition": "",
+                "name": "RECODb.ClearInvoiceUploadData",
+                "then": [],
+                "type": "invoke"
+              },
+              {
+                "condition": "",
+                "name": "ProcessInvoiceFile",
+                "schema": {
+                  "$ref": "#/definitions/Void",
+                  "dotnetType": "void"
+                },
+                "type": "invoke-method"
+              },
+              {
+                "name": "RECODb.getInvoiceUploadRowErrors",
+                "then": [
+                  {
+                    "name": "uploaderrors",
+                    "type": "set",
+                    "value": "${result}",
+                    "valueType": "IEnumerable<RecoCms6.Models.RecoDb.InvoiceUploadRowError>"
+                  }
+                ],
+                "type": "invoke"
+              },
+              {
+                "code": "await gridErrors.Reload();",
+                "condition": "${uploaderrors.Count() > 0}",
+                "type": "execute"
+              },
+              {
+                "condition": "${uploaderrors != null && uploaderrors.Count() > 0}",
+                "detail": "See Grid For Details",
+                "severity": "warn",
+                "summary": "Row Errors",
+                "type": "notify"
+              },
+              {
+                "condition": "${uploaderrors.Count() == 0 && isValid}",
+                "severity": "success",
+                "summary": "Invoice Has Been Uploaded",
+                "type": "notify"
+              }
+            ]
+          },
+          "itemType": "RecoCms6.Models.RecoDb.InvoiceUploadFile",
+          "method": "",
+          "name": "templateForm0",
+          "type": "template-form",
+          "visible": "${invoiceuploadfile != null}"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getFirms",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getFirmList",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Firm>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "payableTo",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      },
+      {
+        "name": "selectedFirmID",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "comments",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      },
+      {
+        "name": "invoicenumber",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      },
+      {
+        "name": "sendinginstructions",
+        "type": "set",
+        "value": "String.Empty",
+        "valueType": "string"
+      },
+      {
+        "name": "invoicedate",
+        "type": "set",
+        "value": "DateTime.Today",
+        "valueType": "DateTime"
+      },
+      {
+        "name": "RECODb.ClearInvoiceUploadData",
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getInvoiceUploads",
+        "parameters": [],
+        "then": [
+          {
+            "name": "uploadeddata",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.InvoiceUpload>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getInvoiceUploadRowErrors",
+        "then": [
+          {
+            "name": "uploaderrors",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.InvoiceUploadRowError>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "invoiceuploadfile",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.InvoiceUploadFile()",
+        "valueType": "RecoCms6.Models.RecoDb.InvoiceUploadFile"
+      },
+      {
+        "name": "validationarray",
+        "type": "set",
+        "value": "new System.Collections.ArrayList()",
+        "valueType": "System.Collections.ArrayList"
+      },
+      {
+        "name": "processing",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "RECODb.getSystemTemplates",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "TemplateName",
+                "type": "string",
+                "value": "\"Invoice\""
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "generatedinvoicetemplate",
+            "type": "set",
+            "value": "${result.FirstOrDefault()}",
+            "valueType": "RecoCms6.Models.RecoDb.SystemTemplate"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getServiceProviderDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "UserID",
+                "type": "string",
+                "value": "${Security.User.Id}"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "currentuser",
+            "type": "set",
+            "value": "${result.FirstOrDefault()}",
+            "valueType": "RecoCms6.Models.RecoDb.ServiceProviderDetail"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "isValid",
+        "type": "set",
+        "value": "false",
+        "valueType": "bool"
+      },
+      {
+        "name": "claimNoList",
+        "type": "set",
+        "value": "new List<string>()",
+        "valueType": "List<string>"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Claim Initiation\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"BrokerageOnly\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"File Type\""
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getDemandLetterID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p=>p.ParamTypeDesc == \"Claim Initiation\" && p.ParamDesc == \"Demand Letter\").ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getSmallClaimID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p=>p.ParamTypeDesc == \"Claim Initiation\" && p.ParamDesc == \"Small Claim\").ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getSuperiorCourtID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p=>p.ParamTypeDesc == \"Claim Initiation\" && p.ParamDesc == \"Superior Court\").ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getBrokerageOnlyID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p => p.ParamTypeDesc == \"BrokerageOnly\" && p.ParamDesc == \"Brokerage Only\").ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getRegistrantOnlyID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p => p.ParamTypeDesc == \"BrokerageOnly\" && p.ParamDesc == \"Registrant Only\").ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getPaymentRequestID",
+            "type": "set",
+            "value": "${result.FirstOrDefault(p => p.ParamTypeDesc == \"File Type\" && p.ParamDesc == \"Payment Request\").ParameterID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getInvoiceUploadRowErrors",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "RowNumber"
+              },
+              {
+                "direction": "asc",
+                "property": "Problem"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "uploaderrors",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.InvoiceUploadRowError>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Upload Invoice"
+}

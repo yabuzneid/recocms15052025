@@ -1,0 +1,128 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "allowFiltering": true,
+              "data": "${getClaimEmailAddressesResult}",
+              "events": {
+                "loadData": []
+              },
+              "multiple": true,
+              "name": "listboxEmails",
+              "style": {
+                "height": "306px",
+                "marginBottom": "20px",
+                "width": "100%"
+              },
+              "template": "",
+              "textProperty": "EmailAddress",
+              "type": "listbox",
+              "value": "${result}",
+              "valueProperty": "EmailAddress"
+            }
+          ],
+          "events": {
+            "submit": []
+          },
+          "name": "templateForm0",
+          "type": "template-form"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12 justify-content-center d-flex",
+              "components": [
+                {
+                  "buttonStyle": "primary",
+                  "events": {
+                    "click": [
+                      {
+                        "result": "${result}",
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "name": "buttonAdd",
+                  "style": {
+                    "float": "left"
+                  },
+                  "text": "Add\n",
+                  "type": "button"
+                },
+                {
+                  "buttonStyle": "light",
+                  "events": {
+                    "click": [
+                      {
+                        "code": "result = Enumerable.Empty<string>();",
+                        "type": "execute"
+                      },
+                      {
+                        "result": "${result}",
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "name": "buttonCancel",
+                  "text": "Cancel",
+                  "type": "button"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "result",
+        "type": "set",
+        "value": "new List<string>()",
+        "valueType": "IEnumerable<string>"
+      },
+      {
+        "name": "RECODb.getClaimEmailAddresses",
+        "parameters": [
+          {
+            "name": "ClaimID",
+            "value": "(int)${parameters.ClaimID}"
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "EmailAddress"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getClaimEmailAddressesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimEmailAddress>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "DialogSelectEmail"
+}

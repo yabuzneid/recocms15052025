@@ -1,0 +1,65 @@
+﻿@page "/dialog-select-note/{ClaimID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.DialogSelectNoteComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenGrid @ref="grid0" AllowColumnResize="true"  SelectionMode="DataGridSelectionMode.Multiple" Visible="false" RowDeselect="@Grid0RowDeselect" RowSelect="@Grid0RowSelect" TItem="ClaimActivityLog">
+          <Columns>
+            <RadzenGridColumn TItem="ClaimActivityLog" FormatString="{0:g}" Property="EntryDate" Title="Entry Date">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ClaimActivityLog" Property="Subject" Title="Subject">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ClaimActivityLog" Filterable="false" Property="Details" Sortable="false" Title="Details">
+              <Template Context="data">
+              @((MarkupString)data.Details)
+              </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ClaimActivityLog" Property="NoteType" Title="Note Type">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ClaimActivityLog" Property="Name" Title="Entered By">
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+        <RadzenDataGrid @ref="datagridNotes" AllowColumnResize="true" AllowRowSelectOnRowClick="false" Data="@activityLog"  TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" @bind-Value="@SelectedNotes">
+          <Columns>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Width="50px">
+              <Template Context="recoCms6ModelsRecoDbClaimActivityLog">
+                <RadzenCheckBox Value="@(SelectedNotes != null && SelectedNotes.Contains(recoCms6ModelsRecoDbClaimActivityLog))"  Name="Checkbox0" Change="@((args) =>Checkbox0Change(args, recoCms6ModelsRecoDbClaimActivityLog))" TValue="bool">
+                </RadzenCheckBox>
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" FormatString="{0:d}" Property="EntryDate" Title="Entry Date">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Property="Subject" Title="Subject">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimActivityLog" Property="Details" Title="Details" Width="70%">
+              <Template Context="data">
+              @((MarkupString)data.Details)
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" style="text-align: center">
+        <RadzenButton ButtonStyle="ButtonStyle.Primary" style="display: inline-block; float: none" Text="Add" Click="@Button1Click">
+        </RadzenButton>
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@ButtonCancelClick">
+        </RadzenButton>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

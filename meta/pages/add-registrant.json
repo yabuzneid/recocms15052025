@@ -1,0 +1,816 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "BrokerageID",
+                              "name": "BrokerageIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Brokerage",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col9",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-7",
+                          "components": [
+                            {
+                              "columns": [
+                                {
+                                  "property": "Name",
+                                  "title": "Brokerage Name"
+                                }
+                              ],
+                              "data": "${getBrokeragesResult}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "itemType": "RecoCms6.Models.RecoDb.Brokerage",
+                              "name": "BrokerageID",
+                              "pageNumbersCount": 4,
+                              "responsive": true,
+                              "style": {
+                                "display": "block"
+                              },
+                              "textProperty": "Name",
+                              "type": "dropdown-datagrid",
+                              "value": "${registrant.BrokerageID}",
+                              "valueProperty": "BrokerageID",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "BrokerageID",
+                              "defaultValue": "0",
+                              "name": "BrokerageIDRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Brokerage is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "name": "col10",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "events": {
+                                "click": [
+                                  {
+                                    "path": "add-brokerage",
+                                    "then": [
+                                      {
+                                        "condition": "",
+                                        "name": "newbrokerage",
+                                        "type": "set",
+                                        "value": "${result}",
+                                        "valueType": "dynamic"
+                                      },
+                                      {
+                                        "name": "RECODb.getBrokerages",
+                                        "parameters": [
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "Name"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getBrokeragesResult",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Brokerage>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      },
+                                      {
+                                        "condition": "${newbrokerage != null}",
+                                        "name": "registrant.BrokerageID",
+                                        "type": "set",
+                                        "value": "${newbrokerage.BrokerageID}",
+                                        "valueType": "dynamic"
+                                      }
+                                    ],
+                                    "type": "popup",
+                                    "width": 800
+                                  }
+                                ]
+                              },
+                              "icon": "add_circle_outline",
+                              "name": "buttonNewBrokerage",
+                              "text": "New",
+                              "type": "button"
+                            }
+                          ],
+                          "name": "col6",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Name",
+                              "name": "NameLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Name",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 100,
+                              "name": "Name",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${registrant.Name}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "Name",
+                              "name": "NameRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Name is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "YearsOfExperience",
+                              "name": "YearsOfExperienceLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Years Of Experience",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col11",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "autoComplete": false,
+                              "name": "YearsOfExperience",
+                              "showUpDown": false,
+                              "style": {},
+                              "type": "numeric",
+                              "value": "${registrant.YearsOfExperience}",
+                              "valueType": "Int16?"
+                            }
+                          ],
+                          "name": "col12",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "RegistrantNo",
+                              "name": "RegistrantNoLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Registrant #",
+                              "type": "label",
+                              "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "maxLength": 7,
+                              "name": "RegistrantNo",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${registrant.RegistrantNo}",
+                              "valueType": "string",
+                              "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "RegistrationExpiryDate",
+                              "name": "RegistrationExpiryDateLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Registration Expiry Date",
+                              "type": "label",
+                              "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                            }
+                          ],
+                          "name": "col7",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "dateFormat": "MM/dd/yyyy",
+                              "name": "RegistrationExpiryDate",
+                              "style": {},
+                              "type": "datepicker",
+                              "value": "${registrant.RegistrationExpiryDate}",
+                              "valueType": "DateTime?",
+                              "visible": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}"
+                            }
+                          ],
+                          "name": "col8",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "Address",
+                              "name": "AddressLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Address",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 450,
+                              "name": "Address",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${registrant.Address}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "City",
+                              "name": "CityLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "City",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "maxLength": 100,
+                              "name": "City",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${registrant.City}",
+                              "valueType": "string"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "component": "ProvinceID",
+                              "name": "ProvinceIDLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Province",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "allowFiltering": true,
+                              "data": "${getProvinceList}",
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "ProvinceID",
+                              "placeholder": "Choose Province",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "textProperty": "ParamDesc",
+                              "type": "dropdown",
+                              "value": "${registrant.ProvinceID}",
+                              "valueProperty": "ParameterID",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-1",
+                          "components": [
+                            {
+                              "component": "PostalCode",
+                              "name": "PostalCodeLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Postal Code",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col2",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "maxLength": 7,
+                              "name": "PostalCode",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${registrant.PostalCode}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "PostalCode",
+                              "name": "regexValidator0",
+                              "pattern": "([ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ])\\ ?([0-9][ABCEGHJKLMNPRSTVWXYZ][0-9])",
+                              "style": {
+                                "display": "block",
+                                "position": "absolute",
+                                "width": "100%"
+                              },
+                              "text": "Not a valid postal code",
+                              "type": "regex-validator"
+                            }
+                          ],
+                          "name": "col3",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "EmailAddress",
+                              "name": "EmailAddressLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Email Address",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "maxLength": 450,
+                              "name": "EmailAddress",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${registrant.EmailAddress}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "EmailAddress",
+                              "name": "emailValidator0",
+                              "text": "Not a valid email address",
+                              "type": "email-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "BusinessPhoneNum",
+                              "name": "BusinessPhoneNumLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Business Phone #",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "BusinessPhoneNum",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "mask",
+                              "value": "${registrant.BusinessPhoneNum}",
+                              "visible": true
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-2",
+                          "components": [
+                            {
+                              "component": "CellPhoneNum",
+                              "name": "CellPhoneNumLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Cell Phone #",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col4",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "mask": "(***) ***-****",
+                              "name": "CellPhoneNum",
+                              "pattern": "[^0-9]",
+                              "placeholder": "(000) 000-0000",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "type": "mask",
+                              "value": "${registrant.CellPhoneNum}",
+                              "visible": true
+                            }
+                          ],
+                          "name": "col5",
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${registrant}",
+                  "events": {
+                    "submit": [
+                      {
+                        "name": "bDuplicateRegNo",
+                        "type": "set",
+                        "value": "false",
+                        "valueType": "bool"
+                      },
+                      {
+                        "condition": "${Globals.generalsettings.ApplicationName == \"RECO CMS\"}",
+                        "name": "RECODb.getRegistrants",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "operation": "eq",
+                                "property": "RegistrantNo",
+                                "type": "string",
+                                "value": "${registrant.RegistrantNo}"
+                              },
+                              {
+                                "operation": "ne",
+                                "property": "RegistrantID",
+                                "type": "integer",
+                                "value": "${registrant.RegistrantID}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "bDuplicateRegNo",
+                            "type": "set",
+                            "value": "${result.Count() > 0}",
+                            "valueType": "bool"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${!bDuplicateRegNo}",
+                        "error": [
+                          {
+                            "detail": "Unable to create new Registrant!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "RECODb.createRegistrant",
+                        "parameters": [
+                          {
+                            "name": "Registrant",
+                            "value": "${registrant}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${registrant}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "condition": "${bDuplicateRegNo}",
+                        "detail": "Registrant No is already in the system",
+                        "severity": "warn",
+                        "summary": "Unable to Save",
+                        "type": "notify"
+                      }
+                    ]
+                  },
+                  "itemType": "RecoCms6.Models.RecoDb.Registrant",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${registrant != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "RECODb.getRegistrants",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getRegistrantsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Registrant>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$filter",
+            "operator": "or",
+            "value": [
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Method Of Communication\""
+              },
+              {
+                "operation": "eq",
+                "property": "ParamTypeDesc",
+                "type": "string",
+                "value": "\"Province\""
+              }
+            ]
+          },
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getProvinceList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getCommunicationMethodList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Method Of Communication\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getBrokerages",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "Name"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getBrokeragesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Brokerage>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "registrant",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Registrant(){}",
+        "valueType": "RecoCms6.Models.RecoDb.Registrant"
+      },
+      {
+        "code": "registrant.ID = Guid.NewGuid();",
+        "type": "execute"
+      },
+      {
+        "name": "registrant.ProvinceID",
+        "type": "set",
+        "value": "${Globals.defaultProvinceID}",
+        "valueType": "int"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Registrant"
+}

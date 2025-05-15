@@ -1,0 +1,339 @@
+﻿@page "/add-transaction/{ClaimID}/{TransactionID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.AddTransactionComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using RecoCms6.Models.RecoDb
+@using Microsoft.AspNetCore.Identity;
+@using RecoCms6.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenGrid @ref="gridTotalIncurred" AllowColumnResize="true" Data="@getTotalIncurredResult" TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory">
+      <Columns>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="IndemnityReserve" Title="Indemnity Reserve">
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="IndemnityPayment" Title="Indemnity Payment">
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="AdjustingReserve" Title="Adjusting Reserve" Visible="@((bool)Globals.generalsettings.ShowAdjusting)">
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="AdjustingPayment" Title="Adjusting Payment" Visible="@((bool)Globals.generalsettings.ShowAdjusting)">
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="LegalReserve" Title="Legal Reserve" Visible="@((bool)Globals.generalsettings.ShowLegal)">
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="LegalPayment" Title="Legal Payment" Visible="@((bool)Globals.generalsettings.ShowLegal)">
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" Format="decimal" FormatString="{0:C}" Property="ExpenseReserve" Title="Expense Reserve" Visible="@((bool)Globals.generalsettings.ShowExpense)" Type="number">
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" Format="decimal" FormatString="{0:C}" Property="ExpensePayment" Title="Expense Payment" Visible="@((bool)Globals.generalsettings.ShowExpense)" Type="number">
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="Deductible" Title="Deductible" Visible="@((bool)Globals.generalsettings.ShowRecovery)">
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="Subrogation" Title="@(Globals.generalsettings.SubrogationName)" Visible="@((bool)Globals.generalsettings.ShowRecovery)">
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimTotalIncurredByCategory" FormatString="{0:C}" Property="TotalIncurred" Title="Total Incurred">
+        </RadzenGridColumn>
+      </Columns>
+    </RadzenGrid>
+    <div  class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@transaction" TItem="RecoCms6.Models.RecoDb.Transaction" Visible="@(transaction != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 0.25em; margin-top: 0.25em" class="row">
+              <div class="col-md-2 text-md-right">
+                <RadzenLabel Component="IncurredCategoryID" style="width: 100%" Text="Category">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-2">
+                <RadzenDropDown AllowFiltering="true" Data="@getAvailableIncurredCategoryList" Disabled="@bReadOnly" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Category" style="display: block; width: 100%" TextProperty="ParamDesc" @bind-Value="@(transaction.IncurredCategoryID)" ValueProperty="ParameterID" Name="IncurredCategoryID" Change="@IncurredCategoryIdChange">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="IncurredCategoryID" DefaultValue="0" style="display: inline-block; position: relative" Text="Category Is Required">
+                </RadzenRequiredValidator>
+              </div>
+              <div class="text-md-right col-md-2">
+                <RadzenLabel Component="IncurredTypeID" style="width: 100%" Text="Type">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-2">
+                <RadzenDropDown AllowFiltering="true" Data="@getAvailableIncurredTypeList" Disabled="@bReadOnly" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Type" style="display: block; width: 100%" TextProperty="ParamDesc" @bind-Value="@(transaction.IncurredTypeID)" ValueProperty="ParameterID" Name="IncurredTypeID" Change="@IncurredTypeIdChange">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="IncurredTypeID" DefaultValue="0" style="position: relative" Text="Type is required">
+                </RadzenRequiredValidator>
+              </div>
+              <div class="col-md-2 text-md-right">
+                <RadzenLabel Text="Legal Expense" Visible="@(transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getLegalID)">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-1">
+                <RadzenCheckBox Disabled="@bReadOnly" @bind-Value="@bLegalExpense" TValue="bool" Visible="@(transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getLegalID)" Name="Checkbox0" Change="@Checkbox0Change">
+                </RadzenCheckBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 0.25em; padding-bottom: 0.25em" class="row">
+              <div class="col-md-2 text-md-right">
+                <RadzenLabel Component="TransactionDate" style="width: 100%" Text="Transaction Date">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-2">
+                <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@bReadOnly" style="display: block; width: 100%" @bind-Value="@(transaction.TransactionDate)" Name="TransactionDate">
+                </RadzenDatePicker>
+                <RadzenRequiredValidator Component="TransactionDate" style="position: absolute" Text="Transaction Date is required">
+                </RadzenRequiredValidator>
+              </div>
+              <div class="col-md-2 text-md-right">
+                <RadzenLabel Text="Reserve Reason" Visible="@(transaction.IncurredCategoryID == getReserveID && Globals.generalsettings.ApplicationName == "REIX CMS")">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-3">
+                <RadzenDropDown AllowFiltering="true" Data="@getReserveReasonList" Disabled="@bReadOnly" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Reason For Reserve" style="display: block; width: 100%" TextProperty="ParamDesc" @bind-Value="@(transaction.ReserveTypeID)" ValueProperty="ParameterID" Visible="@(transaction.IncurredCategoryID == getReserveID && Globals.generalsettings.ApplicationName == "REIX CMS")" Name="ReserveTypeID">
+                </RadzenDropDown>
+              </div>
+            </div>
+            <div style="margin-bottom: 0.25em" class="row">
+              <div class="col-md-2 text-md-right">
+                <RadzenLabel Component="Amount" style="width: 100%" Text="Amount">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-2">
+                <RadzenNumeric AutoComplete="false" Format="N2" ReadOnly="@bReadOnly" ShowUpDown="false" style="display: block; width: 100%" @bind-Value="@(transaction.Amount)" TValue="decimal" Name="Amount" Change="@AmountChange">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="Amount" style="position: absolute" Text="Amount is required">
+                </RadzenRequiredValidator>
+                <RadzenCompareValidator Component="Amount" Operator="CompareOperator.GreaterThan" Text="Amount Must Be Greater Than Zero" Value="@zeroamount" Visible="@(Globals.generalsettings.ApplicationName=="REIX CMS")">
+                </RadzenCompareValidator>
+              </div>
+              <div class="col-md-2 text-md-right">
+                <RadzenLabel Component="ApplicableDeductible" style="width: 100%" Text="Applicable Deductible" Visible="@(transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getIndemnityID && (bool)Globals.generalsettings.ShowRecovery)">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-2">
+                <RadzenNumeric AutoComplete="false" Format="0.00" ReadOnly="@bReadOnly" ShowUpDown="false" style="width: 100%" @bind-Value="@(transaction.ApplicableDeductible)" Visible="@(transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getIndemnityID && (bool)Globals.generalsettings.ShowRecovery)" Name="ApplicableDeductible">
+                </RadzenNumeric>
+                <RadzenCompareValidator Component="ApplicableDeductible" Operator="CompareOperator.LessThanEqual" Text="Deductible Cannot be Larger Than Amount" Value="@(transaction.Amount)" Visible="@(transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getIndemnityID && (bool)Globals.generalsettings.ShowRecovery)">
+                </RadzenCompareValidator>
+              </div>
+              <div class="col-md-2 text-md-right">
+                <RadzenLabel Component="ApplicableDeductible" style="width: 100%" Text="Total Payable" Visible="@(transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getIndemnityID && (bool)Globals.generalsettings.ShowRecovery)">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-2">
+                <RadzenNumeric AutoComplete="false" Format="0.00" ReadOnly="true" ShowUpDown="false" style="width: 100%" Value="@(transaction.Amount - transaction.ApplicableDeductible)" Visible="@(transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getIndemnityID && (bool)Globals.generalsettings.ShowRecovery)" Name="Numeric0">
+                </RadzenNumeric>
+              </div>
+            </div>
+            <div style="margin-bottom: 0.25em" class="row">
+              <div class="col-md-1">
+                <RadzenLabel Component="Comments" style="width: 100%" Text="Comments">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-10">
+                <RadzenTextBox AutoComplete="false" MaxLength="255" ReadOnly="@bReadOnly" style="width: 100%" @bind-Value="@(transaction.Comments)" Name="Comments">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <RadzenFieldset style="margin-bottom: .25em" Text="Payment Details" Visible="@(transaction.IncurredCategoryID == getPaymentID)">
+              <ChildContent>
+                <div  class="row">
+                  <div class="col-md-2">
+                    <RadzenLabel Component="FirmID" style="width: 100%" Text="Firm" Visible="true">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-6">
+                    <RadzenDropDown AllowFiltering="true" Data="@getFirmsResult" Disabled="@bReadOnly" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Firm" style="width: 100%" TextProperty="Name" @bind-Value="@(transaction.FirmID)" ValueProperty="FirmID" Visible="true" Name="FirmID" Change="@FirmIdChange">
+                    </RadzenDropDown>
+                  </div>
+                  <div class="col-md-3">
+                    <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Text="New" Visible="@(!bReadOnly)" Click="@ButtonNewFirmClick">
+                    </RadzenButton>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2">
+                    <RadzenLabel Text="Service Provider" Visible="@(Globals.generalsettings.ApplicationName == "REIX CMS")">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-6">
+                    <RadzenDropDown AllowFiltering="true" Data="@getServiceProviderList" Disabled="@bReadOnly" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Choose Service Provider" style="width: 100%" TextProperty="NameandFirm" @bind-Value="@(transaction.ServiceProviderID)" ValueProperty="ServiceProviderID" Visible="@(Globals.generalsettings.ApplicationName == "REIX CMS")" Name="ServiceProviderID" Change="@ServiceProviderIdChange">
+                    </RadzenDropDown>
+                  </div>
+                  <div class="col-md-3">
+                    <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="add_circle_outline" Text="New" Visible="@(!bReadOnly && Globals.generalsettings.ApplicationName == "REIX CMS")" Click="@ButtonNewServiceProviderClick">
+                    </RadzenButton>
+                  </div>
+                </div>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-2">
+                    <RadzenLabel Component="PayableTo" style="width: 100%" Text="Payable To" Visible="@(transaction.IncurredCategoryID == getPaymentID)">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-6">
+                    <RadzenTextBox AutoComplete="false" MaxLength="255" ReadOnly="@bReadOnly" style="width: 100%" @bind-Value="@(transaction.PayableTo)" Name="PayableTo">
+                    </RadzenTextBox>
+                  </div>
+                </div>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-2">
+                    <RadzenLabel Component="InvoiceNum" style="width: 100%" Text="Invoice Date" Visible="true">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@bReadOnly" ShowTimeOkButton="false" @bind-Value="@(transaction.InvoiceDate)" Name="InvoiceDate">
+                    </RadzenDatePicker>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenLabel Component="InvoiceNum" style="width: 100%" Text="Invoice Num" Visible="true">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenTextBox AutoComplete="false" MaxLength="25" ReadOnly="@bReadOnly" style="width: 100%" @bind-Value="@(transaction.InvoiceNum)" Visible="true" Name="InvoiceNum">
+                    </RadzenTextBox>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenLabel Component="ChequeNum" style="width: 100%" Text="Cheque Num" Visible="@(Globals.generalsettings.ApplicationName == "RECO CMS")">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenTextBox AutoComplete="false" MaxLength="50" ReadOnly="@bReadOnly" style="width: 100%" @bind-Value="@(transaction.ChequeNum)" Visible="@(Globals.generalsettings.ApplicationName == "RECO CMS")" Name="ChequeNum">
+                    </RadzenTextBox>
+                  </div>
+                </div>
+                <div style="padding-bottom: 0.15em" class="row">
+                  <div class="col-md-2">
+                    <RadzenLabel Text="Period Start Date" Visible="@(Globals.generalsettings.ApplicationName == "REIX CMS")">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@bReadOnly" @bind-Value="@(transaction.InvoicePeriodStartDate)" Visible="@(Globals.generalsettings.ApplicationName == "REIX CMS")" Name="Datepicker0">
+                    </RadzenDatePicker>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenLabel Text="Period End Date" Visible="@(Globals.generalsettings.ApplicationName == "REIX CMS")">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenDatePicker DateFormat="yyyy-MM-dd" Disabled="@bReadOnly" @bind-Value="@(transaction.InvoicePeriodEndDate)" Visible="@(Globals.generalsettings.ApplicationName == "REIX CMS")" Name="Datepicker1">
+                    </RadzenDatePicker>
+                  </div>
+                </div>
+                <div style="padding-bottom: 0.15em" class="row">
+                  <div class="col-md-2">
+                    <RadzenLabel Text="Sending Instructions" Visible="true">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-10">
+                    <RadzenTextArea ReadOnly="@bReadOnly" Rows="3" style="width: 100%" @bind-Value="@(transaction.SendingInstructions)" Visible="true" Name="Textarea0">
+                    </RadzenTextArea>
+                  </div>
+                </div>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-2">
+                    <RadzenLabel Component="textBox1" style="width: 100%" Text="Notes" Visible="@(Globals.generalsettings.ApplicationName=="REIX CMS")">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-8">
+                    <RadzenTextArea Disabled="false" ReadOnly="true" style="width: 100%" @bind-Value="@Notes" Visible="@(Globals.generalsettings.ApplicationName=="REIX CMS")" Name="Textarea1">
+                    </RadzenTextArea>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenButton ButtonStyle="ButtonStyle.Secondary" style="margin-left: 10px; position: absolute" Text="Add" Visible="@(!bReadOnly && Globals.generalsettings.ApplicationName=="REIX CMS")" Click="@ButtonAddNotesClick">
+                    </RadzenButton>
+                  </div>
+                </div>
+                <div  class="row">
+                  <div class="col-md-2">
+                    <RadzenLabel Component="textBox1" style="width: 100%" Text="Claim Files" Visible="true">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-8">
+                    <RadzenDataGrid @ref="datagridClaimFiles" AllowColumnResize="false" Data="@(newRecoMail.ClaimFiles)" TItem="RecoCms6.Models.RecoDb.File">
+                      <Columns>
+                        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" FormatString="{0:g}" Property="EntryDate" Title="Entry Date" Width="150px">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" Property="Subject" Title="Subject">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" Width="100px">
+                          <Template Context="recoCms6ModelsRecoDbFile">
+                            <div class="col-md-12">
+                              <RadzenButton ButtonStyle="ButtonStyle.Secondary" ButtonType="ButtonType.Button" Icon="open_in_new" Size="ButtonSize.Small" Text="Download" Visible="@(!docExtensions.Contains(recoCms6ModelsRecoDbFile.Extension.ToLower()) && !imageExtensions.Contains(recoCms6ModelsRecoDbFile.Extension.ToLower()))" Click="@((args) =>Button0Click(args, recoCms6ModelsRecoDbFile))">
+                              </RadzenButton>
+                              <RadzenImage Path="@(string.Format("{0}download/file/FileID={1}", Globals.Uri, recoCms6ModelsRecoDbFile.ID))" style="height: 50px" Visible="@(recoCms6ModelsRecoDbFile.Extension.ToLower()==".jpg" || recoCms6ModelsRecoDbFile.Extension.ToLower()==".jpeg" || recoCms6ModelsRecoDbFile.Extension.ToLower()==".png" || recoCms6ModelsRecoDbFile.Extension.ToLower()==".gif")">
+                              </RadzenImage>
+                              <RadzenLink Icon="open_in_new" Path="@($"image-viewer/{recoCms6ModelsRecoDbFile.ID}")" style="float: left; vertical-align: baseline" Target="_blank" Text="View Image" Visible="@(imageExtensions.Contains(recoCms6ModelsRecoDbFile.Extension.ToLower()))">
+                              </RadzenLink>
+                              <RadzenLink Icon="open_in_new" Path="@($"file-viewer/{recoCms6ModelsRecoDbFile.ID}")" style="float: left; vertical-align: baseline" Target="_blank" Text="View File" Visible="@(docExtensions.Contains(recoCms6ModelsRecoDbFile.Extension.ToLower()))">
+                              </RadzenLink>
+                            </div>
+                          </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.File" Visible="false" Width="50px">
+                          <Template Context="recoCms6ModelsRecoDbFile">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <RadzenButton Icon="clear" Size="ButtonSize.Small" Click="@((args) =>ButtonDeleteFileClick(args, recoCms6ModelsRecoDbFile))">
+                                </RadzenButton>
+                              </div>
+                            </div>
+                          </Template>
+                        </RadzenDataGridColumn>
+                      </Columns>
+                    </RadzenDataGrid>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenButton ButtonStyle="ButtonStyle.Secondary" style="margin-left: 10px; position: absolute" Text="Add" Visible="@(!bReadOnly || Security.IsInRole("Program Manager"))" Click="@ButtonAddAttachmentsClick">
+                    </RadzenButton>
+                  </div>
+                </div>
+              </ChildContent>
+            </RadzenFieldset>
+            <RadzenFieldset style="margin-bottom: 0.25em" Text="Legal/Adjusting Details" Visible="@(transaction.IncurredCategoryID == getPaymentID && transaction.IncurredTypeID == getLegalID && Globals.generalsettings.ApplicationName=="RECO CMS")">
+              <ChildContent>
+                <div  class="row">
+                  <div class="col-md-1">
+                    <RadzenLabel Component="Fees" style="width: 100%" Text="Fees" Visible="true">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenNumeric AutoComplete="false" Format="c" ReadOnly="true" ShowUpDown="true" style="width: 100%" @bind-Value="@(transaction.Fees)" Visible="true" Name="Fees">
+                    </RadzenNumeric>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenLabel Component="Disbursements" style="width: 100%" Text="Disbursements" Visible="@(transaction.IncurredCategoryID == getPaymentID)">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenNumeric AutoComplete="false" Format="c" ReadOnly="true" ShowUpDown="false" style="width: 100%" @bind-Value="@(transaction.Disbursements)" Visible="true" Name="Disbursements">
+                    </RadzenNumeric>
+                  </div>
+                  <div class="col-md-1">
+                    <RadzenLabel Component="Taxes" style="width: 100%" Text="Taxes" Visible="true">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenNumeric AutoComplete="false" Format="c" ReadOnly="true" ShowUpDown="false" style="width: 100%" @bind-Value="@(transaction.Taxes)" Visible="@(transaction.IncurredCategoryID == getPaymentID)" Name="Taxes">
+                    </RadzenNumeric>
+                  </div>
+                </div>
+              </ChildContent>
+            </RadzenFieldset>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Visible="@(!bReadOnly)">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Visible="@(!bReadOnly)" Click="@Button6Click">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Text="Request Increase" Visible="@bRequestIncrease" Click="@ButtonRequestIncreaseClick">
+                </RadzenButton>
+                <RadzenButton Text="Resend Payment Request" Visible="@(bReadOnly && Security.IsInRole("Program Manager") && transaction.IncurredCategoryID==getPaymentID)" Click="@ButtonResendInvoiceClick">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

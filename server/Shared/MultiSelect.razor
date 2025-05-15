@@ -1,0 +1,54 @@
+﻿@using Syncfusion.Blazor.DropDowns
+@using Microsoft.IdentityModel.Tokens
+<SfMultiSelect @bind-Value=Data
+               DataSource="@DataSource" AllowCustomValue="true"
+               Mode="@VisualMode.Box">
+
+    <MultiSelectFieldSettings Text="EmailAddress" Value="EmailAddress"></MultiSelectFieldSettings>
+</SfMultiSelect>
+
+
+@code {
+
+    private List<string> _data = new List<string>() { };
+    [Parameter]
+    public List<string> Data
+    {
+        get => _data;
+        set
+        {
+            if (_data == value) return;
+            _data = value;
+            DataChanged.InvokeAsync(_data);
+        }
+    }
+
+    private List<string> _dataContainer = null;
+
+    [Parameter]
+    public EventCallback<List<string>> DataChanged { get; set; }
+
+    [Parameter]
+    public IEnumerable<RecoCms6.Models.RecoDb.StandardEmailAddress> DataSource { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (!_data.IsNullOrEmpty())
+        {
+            _dataContainer = Data;
+            Data = new();
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRenderAsync(firstRender);
+        if (_dataContainer is not null)
+        {
+            Data = _dataContainer;
+            _dataContainer = null;
+        }
+    }
+
+}

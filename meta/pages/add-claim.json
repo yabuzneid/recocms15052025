@@ -1,0 +1,3186 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "action": "",
+          "components": [
+            {
+              "components": [
+                {
+                  "class": "col-md-12",
+                  "components": [
+                    {
+                      "events": {
+                        "change": [
+                          {
+                            "name": "previousStep",
+                            "type": "set",
+                            "value": "${currentStep}",
+                            "valueType": "int"
+                          },
+                          {
+                            "name": "currentStep",
+                            "type": "set",
+                            "value": "${event}",
+                            "valueType": "int"
+                          },
+                          {
+                            "condition": "${currentStep == 1}",
+                            "name": "RECODb.getClaimInsureds",
+                            "parameters": [
+                              {
+                                "name": "$filter",
+                                "operator": "and",
+                                "value": [
+                                  {
+                                    "operation": "eq",
+                                    "property": "ClaimID",
+                                    "type": "integer",
+                                    "value": "${claim.ClaimID}"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "$orderby",
+                                "value": [
+                                  {
+                                    "direction": "asc",
+                                    "property": "DisplayOrder"
+                                  }
+                                ]
+                              }
+                            ],
+                            "then": [
+                              {
+                                "name": "getInsuredsList",
+                                "type": "set",
+                                "value": "${result}",
+                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimInsured>"
+                              }
+                            ],
+                            "type": "invoke"
+                          },
+                          {
+                            "condition": "${currentStep == 2}",
+                            "name": "RECODb.getClaimClaimants",
+                            "parameters": [
+                              {
+                                "name": "$filter",
+                                "operator": "and",
+                                "value": [
+                                  {
+                                    "operation": "eq",
+                                    "property": "ClaimID",
+                                    "type": "integer",
+                                    "value": "${claim.ClaimID}"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "$orderby",
+                                "value": [
+                                  {
+                                    "direction": "asc",
+                                    "property": "ClaimantOrder"
+                                  }
+                                ]
+                              }
+                            ],
+                            "then": [
+                              {
+                                "name": "getClaimantsList",
+                                "type": "set",
+                                "value": "${result}",
+                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimClaimant>"
+                              }
+                            ],
+                            "type": "invoke"
+                          },
+                          {
+                            "condition": "${claim.ClaimID == 0}",
+                            "error": [
+                              {
+                                "detail": "Please select Program, Contract Year and Claim Number",
+                                "severity": "error",
+                                "summary": "Unable To Save Claim",
+                                "type": "notify"
+                              }
+                            ],
+                            "name": "RECODb.createClaim",
+                            "parameters": [
+                              {
+                                "name": "Claim",
+                                "value": "claim"
+                              }
+                            ],
+                            "then": [
+                              {
+                                "condition": "${isEOProgram}",
+                                "name": "claimdetails.ClaimID",
+                                "type": "set",
+                                "value": "${claim.ClaimID}",
+                                "valueType": "int"
+                              },
+                              {
+                                "condition": "${Globals.generalsettings.ApplicationName==\"RECO CMS\"}",
+                                "name": "claim.Deductible",
+                                "type": "set",
+                                "value": "${getInitialDeductibleID}",
+                                "valueType": "int"
+                              },
+                              {
+                                "name": "RECODb.StoreClaimAuditTrails",
+                                "parameters": [
+                                  {
+                                    "name": "ClaimID",
+                                    "value": "${claim.ClaimID}"
+                                  },
+                                  {
+                                    "name": "UserID",
+                                    "value": "${Security.User.Id}"
+                                  }
+                                ],
+                                "type": "invoke"
+                              },
+                              {
+                                "name": "RECODb.SetProgramManagerAsReports",
+                                "parameters": [
+                                  {
+                                    "name": "ClaimID",
+                                    "value": "${claim.ClaimID}"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ],
+                            "type": "invoke"
+                          },
+                          {
+                            "condition": "${isEOProgram} && ${newClaim}",
+                            "name": "RECODb.createEoClaimDetail",
+                            "parameters": [
+                              {
+                                "name": "EoClaimDetail",
+                                "value": "${claimdetails}"
+                              }
+                            ],
+                            "then": [
+                              {
+                                "name": "RECODb.SetAutoResizes",
+                                "parameters": [
+                                  {
+                                    "name": "ClaimID",
+                                    "value": "${claim.ClaimID}"
+                                  },
+                                  {
+                                    "name": "UserID",
+                                    "value": "${Security.User.Id}"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ],
+                            "type": "invoke"
+                          },
+                          {
+                            "condition": "${newClaim}",
+                            "name": "claimstatushistory",
+                            "type": "set",
+                            "value": "new RecoCms6.Models.RecoDb.ClaimStatusHistory() ",
+                            "valueType": "RecoCms6.Models.RecoDb.ClaimStatusHistory"
+                          },
+                          {
+                            "condition": "${newClaim}",
+                            "name": "claimstatushistory.ClaimID",
+                            "type": "set",
+                            "value": "${claim.ClaimID}",
+                            "valueType": "int"
+                          },
+                          {
+                            "condition": "${newClaim}",
+                            "name": "claimstatushistory.NewStatusID",
+                            "type": "set",
+                            "value": "${claim.ClaimStatusID}",
+                            "valueType": "int"
+                          },
+                          {
+                            "condition": "${newClaim}",
+                            "name": "RECODb.createClaimStatusHistory",
+                            "parameters": [
+                              {
+                                "name": "ClaimStatusHistory",
+                                "value": "${claimstatushistory}"
+                              }
+                            ],
+                            "type": "invoke"
+                          },
+                          {
+                            "name": "newClaim",
+                            "type": "set",
+                            "value": "false",
+                            "valueType": "bool"
+                          },
+                          {
+                            "condition": "${currentStep == 3}",
+                            "name": "RECODb.getTradeDetails",
+                            "parameters": [
+                              {
+                                "name": "$filter",
+                                "operator": "and",
+                                "value": [
+                                  {
+                                    "operation": "eq",
+                                    "property": "ClaimID",
+                                    "type": "integer",
+                                    "value": "${claim.ClaimID}"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "$orderby",
+                                "value": [
+                                  {
+                                    "direction": "asc",
+                                    "property": "DisplayOrder"
+                                  }
+                                ]
+                              }
+                            ],
+                            "then": [
+                              {
+                                "name": "getTradesList",
+                                "type": "set",
+                                "value": "${result}",
+                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.TradeDetail>"
+                              }
+                            ],
+                            "type": "invoke"
+                          },
+                          {
+                            "condition": "${currentStep == 1}",
+                            "name": "RECODb.getXRefClaims",
+                            "parameters": [
+                              {
+                                "name": "$filter",
+                                "operator": "and",
+                                "value": [
+                                  {
+                                    "operation": "eq",
+                                    "property": "BaseClaimID",
+                                    "type": "integer",
+                                    "value": "${claim.ClaimID}"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "$orderby",
+                                "value": [
+                                  {
+                                    "direction": "asc",
+                                    "property": "XRefClaimNo"
+                                  }
+                                ]
+                              }
+                            ],
+                            "then": [
+                              {
+                                "name": "getXRefClaimsList",
+                                "type": "set",
+                                "value": "${result}",
+                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.XRefClaim>"
+                              }
+                            ],
+                            "type": "invoke"
+                          }
+                        ]
+                      },
+                      "items": [
+                        {
+                          "components": [
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "ProgramID",
+                                      "name": "ProgramIDLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Select Program",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col0",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-5",
+                                  "components": [
+                                    {
+                                      "data": "${getProgramsList}",
+                                      "events": {
+                                        "change": [
+                                          {
+                                            "condition": "${claim.ContractYearID != 0} && ${claim.ProgramID == EOProgramID}",
+                                            "name": "RECODb.getGenerateClaimNumbers",
+                                            "parameters": [
+                                              {
+                                                "name": "ProgramID",
+                                                "value": "${claim.ProgramID}"
+                                              },
+                                              {
+                                                "name": "ContractYear",
+                                                "value": "${claim.ContractYearID}"
+                                              },
+                                              {
+                                                "name": "SelectedOccurrence",
+                                                "value": "null"
+                                              },
+                                              {
+                                                "name": "IsIncident",
+                                                "value": "${claimdetails.ClaimOrIncident}"
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "claim.ClaimNo",
+                                                "type": "set",
+                                                "value": "${result.First().NewNumber}",
+                                                "valueType": "string"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          },
+                                          {
+                                            "condition": "${claim.ContractYearID != 0 && claim.ProgramID != 0}",
+                                            "name": "RECODb.getOccurrences",
+                                            "parameters": [
+                                              {
+                                                "name": "$filter",
+                                                "operator": "and",
+                                                "value": [
+                                                  {
+                                                    "operation": "eq",
+                                                    "property": "ProgramID",
+                                                    "type": "integer",
+                                                    "value": "${claim.ProgramID}"
+                                                  },
+                                                  {
+                                                    "operation": "eq",
+                                                    "property": "ContractYearID",
+                                                    "type": "integer",
+                                                    "value": "${claim.ContractYearID}"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "name": "$orderby",
+                                                "value": [
+                                                  {
+                                                    "direction": "desc",
+                                                    "property": "OccurrenceNo"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "getOccurrencesList",
+                                                "type": "set",
+                                                "value": "${result}",
+                                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Occurrence>"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          },
+                                          {
+                                            "condition": "${claim.ContractYearID != 0} && ${claim.ProgramID != EOProgramID} && ${claim.ProgramID != 0} && ${claim.OccurrenceID != 0}",
+                                            "name": "RECODb.getGenerateClaimNumbers",
+                                            "parameters": [
+                                              {
+                                                "name": "ProgramID",
+                                                "value": "${claim.ProgramID}"
+                                              },
+                                              {
+                                                "name": "ContractYear",
+                                                "value": "${claim.ContractYearID}"
+                                              },
+                                              {
+                                                "name": "SelectedOccurrence",
+                                                "value": "${claim.OccurrenceID}"
+                                              },
+                                              {
+                                                "name": "IsIncident",
+                                                "value": "null"
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "claim.ClaimNo",
+                                                "type": "set",
+                                                "value": "${result.First().NewNumber}",
+                                                "valueType": "string"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          },
+                                          {
+                                            "name": "isEOProgram",
+                                            "type": "set",
+                                            "value": "${claim.ProgramID == EOProgramID}",
+                                            "valueType": "bool"
+                                          }
+                                        ]
+                                      },
+                                      "name": "ProgramID",
+                                      "placeholder": "Choose Program",
+                                      "style": {
+                                        "display": "block",
+                                        "width": "100%"
+                                      },
+                                      "template": "",
+                                      "textProperty": "ParamDesc",
+                                      "type": "dropdown",
+                                      "value": "${claim.ProgramID}",
+                                      "valueProperty": "ParameterID",
+                                      "valueType": "int"
+                                    },
+                                    {
+                                      "attributes": [],
+                                      "component": "ProgramID",
+                                      "defaultValue": "0",
+                                      "name": "ProgramIDRequiredValidator",
+                                      "style": {
+                                        "position": "absolute"
+                                      },
+                                      "text": "Please Select a Program",
+                                      "type": "required-validator"
+                                    }
+                                  ],
+                                  "name": "col1",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label2",
+                                      "text": "${Globals.generalsettings.IncidentName}",
+                                      "type": "label",
+                                      "visible": "${isEOProgram && claimdetails != null && Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col55",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-1",
+                                  "components": [
+                                    {
+                                      "events": {
+                                        "change": [
+                                          {
+                                            "condition": "${claim.ContractYearID != 0} && ${claim.ProgramID == EOProgramID}",
+                                            "name": "RECODb.getGenerateClaimNumbers",
+                                            "parameters": [
+                                              {
+                                                "name": "ProgramID",
+                                                "value": "${claim.ProgramID}"
+                                              },
+                                              {
+                                                "name": "ContractYear",
+                                                "value": "${claim.ContractYearID}"
+                                              },
+                                              {
+                                                "name": "SelectedOccurrence",
+                                                "value": "null"
+                                              },
+                                              {
+                                                "name": "IsIncident",
+                                                "value": "${claimdetails.ClaimOrIncident}"
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "claim.ClaimNo",
+                                                "type": "set",
+                                                "value": "${result.First().NewNumber}",
+                                                "valueType": "string"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          },
+                                          {
+                                            "condition": "${Globals.generalsettings.ApplicationName==\"REIX CMS\" && selectedProvince != defaultProvinceID}",
+                                            "name": "claim.ClaimNo",
+                                            "type": "set",
+                                            "value": "${claim.ClaimNo} + \"SK\"",
+                                            "valueType": "string"
+                                          }
+                                        ]
+                                      },
+                                      "name": "ClaimOrIncident",
+                                      "triState": false,
+                                      "type": "checkbox",
+                                      "value": "${claimdetails.ClaimOrIncident}",
+                                      "valueType": "bool",
+                                      "visible": "${isEOProgram && claimdetails != null && Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col56",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row0",
+                              "style": {
+                                "marginBottom": "1 rem"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "ContractYearID",
+                                      "name": "ContractYearIDLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "Select Policy Year",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col2",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "data": "${getContractYearList.Reverse()}",
+                                      "events": {
+                                        "change": [
+                                          {
+                                            "condition": "${claim.ContractYearID != 0 && claim.ProgramID != 0 && claim.ProgramID != EOProgramID}",
+                                            "name": "RECODb.getOccurrences",
+                                            "parameters": [
+                                              {
+                                                "name": "$filter",
+                                                "operator": "and",
+                                                "value": [
+                                                  {
+                                                    "operation": "eq",
+                                                    "property": "ProgramID",
+                                                    "type": "integer",
+                                                    "value": "${claim.ProgramID}"
+                                                  },
+                                                  {
+                                                    "operation": "eq",
+                                                    "property": "ContractYearID",
+                                                    "type": "integer",
+                                                    "value": "${claim.ContractYearID}"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "name": "$orderby",
+                                                "value": [
+                                                  {
+                                                    "direction": "desc",
+                                                    "property": "OccurrenceNo"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "getOccurrencesList",
+                                                "type": "set",
+                                                "value": "${result}",
+                                                "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Occurrence>"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          },
+                                          {
+                                            "condition": "${claim.ContractYearID != 0} && ${claim.ProgramID == EOProgramID}",
+                                            "name": "RECODb.getGenerateClaimNumbers",
+                                            "parameters": [
+                                              {
+                                                "name": "ProgramID",
+                                                "value": "${claim.ProgramID}"
+                                              },
+                                              {
+                                                "name": "ContractYear",
+                                                "value": "${claim.ContractYearID}"
+                                              },
+                                              {
+                                                "name": "SelectedOccurrence",
+                                                "value": "null"
+                                              },
+                                              {
+                                                "name": "IsIncident",
+                                                "value": "${claimdetails.ClaimOrIncident}"
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "claim.ClaimNo",
+                                                "type": "set",
+                                                "value": "${result.First().NewNumber}",
+                                                "valueType": "string"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          }
+                                        ]
+                                      },
+                                      "name": "ContractYearID",
+                                      "placeholder": "Choose Policy Year",
+                                      "style": {
+                                        "display": "block",
+                                        "width": "100%"
+                                      },
+                                      "template": "",
+                                      "textProperty": "ParamDesc",
+                                      "type": "dropdown",
+                                      "value": "${claim.ContractYearID}",
+                                      "valueProperty": "ParameterID",
+                                      "valueType": "int"
+                                    },
+                                    {
+                                      "component": "ContractYearID",
+                                      "defaultValue": "0",
+                                      "name": "ContractYearIDRequiredValidator",
+                                      "style": {
+                                        "position": "absolute"
+                                      },
+                                      "text": "Please select a Contract Year",
+                                      "type": "required-validator"
+                                    }
+                                  ],
+                                  "name": "col3",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "name": "label1",
+                                      "text": "Report Date",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col53",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "dateFormat": "d",
+                                      "events": {
+                                        "change": [
+                                          {
+                                            "name": "claim.ClaimDate",
+                                            "type": "set",
+                                            "value": "${claim.ReportDate}",
+                                            "valueType": "DateTime?"
+                                          }
+                                        ]
+                                      },
+                                      "name": "ReportDate",
+                                      "placeholder": "",
+                                      "showTime": false,
+                                      "showTimeOkButton": false,
+                                      "type": "datepicker",
+                                      "value": "${claim.ReportDate}"
+                                    },
+                                    {
+                                      "component": "ReportDate",
+                                      "name": "requiredValidator0",
+                                      "text": "Please enter a Report Date",
+                                      "type": "required-validator"
+                                    }
+                                  ],
+                                  "name": "col54",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row4",
+                              "style": {
+                                "marginBottom": "1rem",
+                                "marginTop": "1rem"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-12",
+                                  "components": [
+                                    {
+                                      "allowCollapse": true,
+                                      "components": [
+                                        {
+                                          "components": [
+                                            {
+                                              "class": "col-md-1",
+                                              "components": [
+                                                {
+                                                  "name": "label4",
+                                                  "text": "Claim Type",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col14",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-3",
+                                              "components": [
+                                                {
+                                                  "data": "${getTradeTypeList}",
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "name": "ClaimTypeID",
+                                                  "placeholder": "Choose Claim Type",
+                                                  "style": {
+                                                    "width": "100%"
+                                                  },
+                                                  "textProperty": "ParamDesc",
+                                                  "type": "dropdown",
+                                                  "value": "${claim.ClaimTypeID}",
+                                                  "valueProperty": "ParameterID",
+                                                  "valueType": "int?",
+                                                  "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                                }
+                                              ],
+                                              "name": "col17",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-1",
+                                              "components": [
+                                                {
+                                                  "component": "BoardJurisdictionID",
+                                                  "name": "label65",
+                                                  "style": {
+                                                    "width": "100%"
+                                                  },
+                                                  "text": "Board",
+                                                  "type": "label",
+                                                  "visible": "${Globals.generalsettings.ApplicationName==\"REIX CMS\"}"
+                                                }
+                                              ],
+                                              "name": "col223",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-3",
+                                              "components": [
+                                                {
+                                                  "data": "${getBoardJurisdictionList}",
+                                                  "disabled": "${Security.IsInRole(\"Auditor\")}",
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "name": "BoardJurisdictionID",
+                                                  "placeholder": "Choose Board",
+                                                  "style": {
+                                                    "width": "100%"
+                                                  },
+                                                  "template": "",
+                                                  "textProperty": "ParamDesc",
+                                                  "type": "dropdown",
+                                                  "value": "${claimdetails.BoardJurisdictionID}",
+                                                  "valueProperty": "ParameterID",
+                                                  "valueType": "int?",
+                                                  "visible": "${Globals.generalsettings.ApplicationName==\"REIX CMS\"}"
+                                                }
+                                              ],
+                                              "name": "col224",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-1",
+                                              "components": [
+                                                {
+                                                  "name": "label5",
+                                                  "text": "Litigation Type",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col16",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-3",
+                                              "components": [
+                                                {
+                                                  "data": "${getLitigationTypeList}",
+                                                  "disabled": "${Security.IsInRole(\"Auditor\")}",
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "name": "LitigationTypeID",
+                                                  "placeholder": "Choose Litigation Type",
+                                                  "style": {
+                                                    "width": "100%"
+                                                  },
+                                                  "template": "",
+                                                  "textProperty": "ParamDesc",
+                                                  "type": "dropdown",
+                                                  "value": "${claimdetails.LitigationTypeID}",
+                                                  "valueProperty": "ParameterID",
+                                                  "valueType": "int?"
+                                                }
+                                              ],
+                                              "name": "col15",
+                                              "type": "col"
+                                            }
+                                          ],
+                                          "name": "row7",
+                                          "type": "row"
+                                        },
+                                        {
+                                          "components": [
+                                            {
+                                              "class": "col-md-1",
+                                              "components": [
+                                                {
+                                                  "name": "label6",
+                                                  "text": "Deductible",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col18",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "data": "${getDeductibleList}",
+                                                  "disabled": "${Security.IsInRole(\"Auditor\")}",
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "name": "Deductible",
+                                                  "placeholder": "Choose Deductible",
+                                                  "style": {
+                                                    "width": "100%"
+                                                  },
+                                                  "template": "",
+                                                  "textProperty": "ParamDesc",
+                                                  "type": "dropdown",
+                                                  "value": "${claim.Deductible}",
+                                                  "valueProperty": "ParameterID",
+                                                  "valueType": "int?",
+                                                  "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                                }
+                                              ],
+                                              "name": "col19",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-1",
+                                              "components": [
+                                                {
+                                                  "name": "label7",
+                                                  "text": "Allegation",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col20",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-3",
+                                              "components": [
+                                                {
+                                                  "data": "${getAllegationList}",
+                                                  "disabled": "${Security.IsInRole(\"Auditor\")}",
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "name": "AllegationID",
+                                                  "placeholder": "Choose Allegation",
+                                                  "style": {
+                                                    "display": "block",
+                                                    "width": "100%"
+                                                  },
+                                                  "textProperty": "ParamDesc",
+                                                  "type": "dropdown",
+                                                  "value": "${claimdetails.AllegationID}",
+                                                  "valueProperty": "ParameterID",
+                                                  "valueType": "int?",
+                                                  "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                                }
+                                              ],
+                                              "name": "col21",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "component": "LossCauseID",
+                                                  "name": "LossCauseIDLabel",
+                                                  "style": {
+                                                    "width": "100%"
+                                                  },
+                                                  "text": "${Globals.generalsettings.LossCauseName}",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col35",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-3",
+                                              "components": [
+                                                {
+                                                  "data": "${getLossCauseResult}",
+                                                  "disabled": "${Security.IsInRole(\"Auditor\")}",
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "name": "LossCauseID",
+                                                  "placeholder": "Choose Loss Cause",
+                                                  "style": {
+                                                    "width": "100%"
+                                                  },
+                                                  "template": "",
+                                                  "textProperty": "ParamDesc",
+                                                  "type": "dropdown",
+                                                  "value": "${claim.LossCauseID}",
+                                                  "valueProperty": "ParameterID",
+                                                  "valueType": "int?"
+                                                }
+                                              ],
+                                              "name": "col36",
+                                              "type": "col"
+                                            }
+                                          ],
+                                          "name": "row9",
+                                          "type": "row"
+                                        },
+                                        {
+                                          "components": [
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "name": "label11",
+                                                  "text": "Claim Amount",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col29",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "autoComplete": false,
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "format": "N2",
+                                                  "min": 0,
+                                                  "name": "numeric7",
+                                                  "placeholder": "",
+                                                  "readOnly": "${Security.IsInRole(\"Auditor\")}",
+                                                  "showUpDown": false,
+                                                  "type": "numeric",
+                                                  "value": "${claim.AmountClaimed}",
+                                                  "valueType": "decimal?",
+                                                  "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                                }
+                                              ],
+                                              "name": "col30",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "name": "label12",
+                                                  "text": "Misrepresentation",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col31",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "autoComplete": false,
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "format": "N2",
+                                                  "name": "Misrepresentation",
+                                                  "placeholder": "",
+                                                  "showUpDown": false,
+                                                  "type": "numeric",
+                                                  "value": "${claimdetails.Misrepresentation}",
+                                                  "valueType": "decimal?"
+                                                }
+                                              ],
+                                              "name": "col32",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "name": "label13",
+                                                  "text": "Punitive Amount",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col33",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "autoComplete": false,
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "format": "N2",
+                                                  "name": "PunitiveAmount",
+                                                  "placeholder": "",
+                                                  "showUpDown": false,
+                                                  "type": "numeric",
+                                                  "value": "${claimdetails.PunitiveAmount}",
+                                                  "valueType": "decimal?"
+                                                }
+                                              ],
+                                              "name": "col34",
+                                              "type": "col"
+                                            }
+                                          ],
+                                          "name": "row12",
+                                          "style": {
+                                            "marginBottom": "0.5em"
+                                          },
+                                          "type": "row"
+                                        },
+                                        {
+                                          "components": [
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "name": "label15",
+                                                  "text": "Negligent Misrep.",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col41",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "autoComplete": false,
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "format": "N2",
+                                                  "name": "NegligentMisrep",
+                                                  "placeholder": "",
+                                                  "showUpDown": false,
+                                                  "type": "numeric",
+                                                  "value": "${claimdetails.NegligentMisrep}",
+                                                  "valueType": "decimal?"
+                                                }
+                                              ],
+                                              "name": "col42",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "name": "label17",
+                                                  "text": "Negligence",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col43",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "autoComplete": false,
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "format": "N2",
+                                                  "name": "Negligence",
+                                                  "placeholder": "",
+                                                  "showUpDown": false,
+                                                  "type": "numeric",
+                                                  "value": "${claimdetails.Negligence}",
+                                                  "valueType": "decimal?"
+                                                }
+                                              ],
+                                              "name": "col44",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "name": "col45",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "name": "col46",
+                                              "type": "col"
+                                            }
+                                          ],
+                                          "name": "row14",
+                                          "style": {
+                                            "marginBottom": "0.5em"
+                                          },
+                                          "type": "row"
+                                        },
+                                        {
+                                          "components": [
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "name": "label14",
+                                                  "text": "Fraud",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col37",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "autoComplete": false,
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "format": "N2",
+                                                  "name": "Fraud",
+                                                  "placeholder": "",
+                                                  "showUpDown": false,
+                                                  "type": "numeric",
+                                                  "value": "${claimdetails.Fraud}",
+                                                  "valueType": "decimal?"
+                                                }
+                                              ],
+                                              "name": "col38",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "name": "label18",
+                                                  "text": "Other Amount",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col39",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-2",
+                                              "components": [
+                                                {
+                                                  "autoComplete": false,
+                                                  "events": {
+                                                    "change": [
+                                                      {
+                                                        "name": "isDirty",
+                                                        "type": "set",
+                                                        "value": "true",
+                                                        "valueType": "bool"
+                                                      }
+                                                    ]
+                                                  },
+                                                  "format": "N2",
+                                                  "name": "OtherAmount",
+                                                  "placeholder": "",
+                                                  "showUpDown": false,
+                                                  "type": "numeric",
+                                                  "value": "${claimdetails.OtherAmount}",
+                                                  "valueType": "decimal?"
+                                                }
+                                              ],
+                                              "name": "col40",
+                                              "type": "col"
+                                            }
+                                          ],
+                                          "name": "row13",
+                                          "style": {
+                                            "marginBottom": "0.5em"
+                                          },
+                                          "type": "row"
+                                        },
+                                        {
+                                          "components": [
+                                            {
+                                              "class": "col-md-3",
+                                              "components": [
+                                                {
+                                                  "name": "label10",
+                                                  "text": "Description",
+                                                  "type": "label"
+                                                }
+                                              ],
+                                              "name": "col27",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-9",
+                                              "components": [
+                                                {
+                                                  "cols": 50,
+                                                  "name": "ClaimDescription",
+                                                  "style": {
+                                                    "width": "100%"
+                                                  },
+                                                  "type": "textarea",
+                                                  "value": "${claim.ClaimDescription}"
+                                                }
+                                              ],
+                                              "name": "col28",
+                                              "type": "col"
+                                            }
+                                          ],
+                                          "name": "row11",
+                                          "type": "row"
+                                        }
+                                      ],
+                                      "name": "fieldset0",
+                                      "text": "Additional Claim Details",
+                                      "type": "fieldset",
+                                      "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col4",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row3",
+                              "style": {
+                                "marginBottom": "1rem"
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "component": "ClaimNo",
+                                      "name": "ClaimNoLabel",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "New Claim Number",
+                                      "type": "label"
+                                    }
+                                  ],
+                                  "name": "col8",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "autoComplete": false,
+                                      "disabled": false,
+                                      "events": {
+                                        "change": []
+                                      },
+                                      "maxLength": 20,
+                                      "name": "ClaimNo",
+                                      "readOnly": true,
+                                      "style": {
+                                        "display": "block",
+                                        "width": "100%"
+                                      },
+                                      "type": "textbox",
+                                      "value": "${claim.ClaimNo}",
+                                      "valueType": "string"
+                                    },
+                                    {
+                                      "component": "ClaimNo",
+                                      "defaultValue": "",
+                                      "name": "ClaimNoRequiredValidator",
+                                      "style": {
+                                        "position": "absolute"
+                                      },
+                                      "text": "Claim No is required",
+                                      "type": "required-validator"
+                                    }
+                                  ],
+                                  "name": "col9",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-2",
+                                  "components": [
+                                    {
+                                      "name": "label3",
+                                      "text": "Province?",
+                                      "type": "label",
+                                      "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                    },
+                                    {
+                                      "component": "ClaimInitiationID",
+                                      "name": "label79",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "text": "${Globals.generalsettings.ClaimInitiation}",
+                                      "type": "label",
+                                      "visible": "${Globals.generalsettings.ApplicationName != \"REIX CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col12",
+                                  "type": "col"
+                                },
+                                {
+                                  "class": "col-md-3",
+                                  "components": [
+                                    {
+                                      "data": "${getProvincesList}",
+                                      "events": {
+                                        "change": [
+                                          {
+                                            "condition": "${Globals.generalsettings.ApplicationName==\"REIX CMS\" && selectedProvince != defaultProvinceID}",
+                                            "name": "claim.ClaimNo",
+                                            "type": "set",
+                                            "value": "${claim.ClaimNo} + \"SK\"",
+                                            "valueType": "string"
+                                          },
+                                          {
+                                            "condition": "${selectedProvince == defaultProvinceID}",
+                                            "name": "RECODb.getGenerateClaimNumbers",
+                                            "parameters": [
+                                              {
+                                                "name": "ProgramID",
+                                                "value": "${claim.ProgramID}"
+                                              },
+                                              {
+                                                "name": "ContractYear",
+                                                "value": "${claim.ContractYearID}"
+                                              },
+                                              {
+                                                "name": "SelectedOccurrence",
+                                                "value": "null"
+                                              },
+                                              {
+                                                "name": "IsIncident",
+                                                "value": "${claimdetails.ClaimOrIncident}"
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "name": "claim.ClaimNo",
+                                                "type": "set",
+                                                "value": "${result.First().NewNumber}",
+                                                "valueType": "string"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          }
+                                        ]
+                                      },
+                                      "name": "dropdown0",
+                                      "template": "",
+                                      "textProperty": "ParamAbbrev",
+                                      "type": "dropdown",
+                                      "value": "${selectedProvince}",
+                                      "valueProperty": "ParameterID",
+                                      "valueType": "int",
+                                      "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                    },
+                                    {
+                                      "allowFiltering": true,
+                                      "data": "${getClaimInitiationList}",
+                                      "disabled": "${Security.IsInRole(\"Auditor\")}",
+                                      "events": {
+                                        "change": [
+                                          {
+                                            "name": "isDirty",
+                                            "type": "set",
+                                            "value": "true",
+                                            "valueType": "bool"
+                                          }
+                                        ]
+                                      },
+                                      "name": "ClaimInitiationID",
+                                      "placeholder": "Choose Initial Trigger",
+                                      "style": {
+                                        "width": "100%"
+                                      },
+                                      "template": "",
+                                      "textProperty": "ParamDesc",
+                                      "type": "dropdown",
+                                      "value": "${claimdetails.ClaimInitiationID}",
+                                      "valueProperty": "ParameterID",
+                                      "valueType": "int?",
+                                      "visible": "${Globals.generalsettings.ApplicationName != \"REIX CMS\"}"
+                                    },
+                                    {
+                                      "component": "ClaimInitiationID",
+                                      "name": "requiredValidator1",
+                                      "text": "Claim Initiation is required",
+                                      "type": "required-validator",
+                                      "visible": "${Globals.generalsettings.ApplicationName != \"REIX CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col13",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row6",
+                              "style": {
+                                "marginBottom": "",
+                                "marginTop": ""
+                              },
+                              "type": "row"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "components": [
+                                    {
+                                      "class": "col-md-3",
+                                      "components": [
+                                        {
+                                          "name": "label0",
+                                          "text": "Select Occurrence",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col5",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-6",
+                                      "components": [
+                                        {
+                                          "allowFiltering": true,
+                                          "allowPaging": true,
+                                          "columns": [
+                                            {
+                                              "format": "",
+                                              "property": "OccurrenceNo",
+                                              "title": "Occurrence No",
+                                              "type": "string"
+                                            }
+                                          ],
+                                          "data": "${getOccurrencesList}",
+                                          "events": {
+                                            "rowSelect": [
+                                              {
+                                                "name": "claim.OccurrenceID",
+                                                "type": "set",
+                                                "value": "${event.OccurrenceID}",
+                                                "valueType": "int"
+                                              },
+                                              {
+                                                "name": "RECODb.getGenerateClaimNumbers",
+                                                "parameters": [
+                                                  {
+                                                    "name": "ProgramID",
+                                                    "value": "${claim.ProgramID}"
+                                                  },
+                                                  {
+                                                    "name": "ContractYear",
+                                                    "value": "${claim.ContractYearID}"
+                                                  },
+                                                  {
+                                                    "name": "SelectedOccurrence",
+                                                    "value": "${claim.OccurrenceID}"
+                                                  },
+                                                  {
+                                                    "name": "IsIncident",
+                                                    "value": "null"
+                                                  }
+                                                ],
+                                                "then": [
+                                                  {
+                                                    "name": "claim.ClaimNo",
+                                                    "type": "set",
+                                                    "value": "${result.First().NewNumber}",
+                                                    "valueType": "string"
+                                                  }
+                                                ],
+                                                "type": "invoke"
+                                              },
+                                              {
+                                                "name": "RECODb.getTrades",
+                                                "parameters": [
+                                                  {
+                                                    "name": "$filter",
+                                                    "operator": "and",
+                                                    "value": [
+                                                      {
+                                                        "operation": "eq",
+                                                        "property": "OccurrenceID",
+                                                        "type": "integer",
+                                                        "value": "${event.OccurrenceID}"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "then": [
+                                                  {
+                                                    "condition": "${result.FirstOrDefault() != null}",
+                                                    "name": "occurrencetrade",
+                                                    "type": "set",
+                                                    "value": "${result.FirstOrDefault()}",
+                                                    "valueType": "RecoCms6.Models.RecoDb.Trade"
+                                                  }
+                                                ],
+                                                "type": "invoke"
+                                              }
+                                            ]
+                                          },
+                                          "itemType": "RecoCms6.Models.RecoDb.Occurrence",
+                                          "name": "OccurrenceID",
+                                          "pageSize": 5,
+                                          "type": "grid",
+                                          "value": ""
+                                        }
+                                      ],
+                                      "name": "col7",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-3",
+                                      "components": [
+                                        {
+                                          "events": {
+                                            "click": [
+                                              {
+                                                "name": "RECODb.getGenerateNewOccurrences",
+                                                "parameters": [
+                                                  {
+                                                    "name": "ProgramID",
+                                                    "value": "${claim.ProgramID}"
+                                                  },
+                                                  {
+                                                    "name": "ContractYear",
+                                                    "value": "${claim.ContractYearID}"
+                                                  },
+                                                  {
+                                                    "name": "UserID",
+                                                    "value": "${Security.User.Id}"
+                                                  }
+                                                ],
+                                                "then": [
+                                                  {
+                                                    "code": "await occurrenceId.Reload();",
+                                                    "type": "execute"
+                                                  },
+                                                  {
+                                                    "name": "claim.OccurrenceID",
+                                                    "type": "set",
+                                                    "value": "Int32.Parse(${result.First().NewOccurrenceID.ToString()})",
+                                                    "valueType": "int"
+                                                  },
+                                                  {
+                                                    "code": "await InvokeAsync(() => {StateHasChanged();});",
+                                                    "type": "execute"
+                                                  }
+                                                ],
+                                                "type": "invoke"
+                                              },
+                                              {
+                                                "name": "RECODb.getOccurrences",
+                                                "parameters": [
+                                                  {
+                                                    "name": "$filter",
+                                                    "operator": "and",
+                                                    "value": [
+                                                      {
+                                                        "operation": "eq",
+                                                        "property": "OccurrenceID",
+                                                        "type": "integer",
+                                                        "value": "${claim.OccurrenceID}"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "then": [
+                                                  {
+                                                    "name": "occurrenceId.Value",
+                                                    "type": "set",
+                                                    "value": "${result.First()}",
+                                                    "valueType": "RecoCms6.Models.RecoDb.Occurrence"
+                                                  }
+                                                ],
+                                                "type": "invoke"
+                                              }
+                                            ]
+                                          },
+                                          "icon": "add_circle_outline",
+                                          "name": "buttonAddOccurrence",
+                                          "text": "New",
+                                          "type": "button"
+                                        }
+                                      ],
+                                      "name": "col6",
+                                      "type": "col"
+                                    }
+                                  ],
+                                  "name": "row5",
+                                  "type": "row"
+                                }
+                              ],
+                              "name": "fieldsetOccurrence",
+                              "style": {
+                                "marginBottom": "1 rem"
+                              },
+                              "text": "Assign Occurrence",
+                              "type": "fieldset",
+                              "visible": false
+                            }
+                          ],
+                          "selected": true,
+                          "text": "New Claim"
+                        },
+                        {
+                          "components": [
+                            {
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "ClaimID",
+                                        "value": "${claim.ClaimID}"
+                                      },
+                                      {
+                                        "name": "InsuredID",
+                                        "value": "0"
+                                      }
+                                    ],
+                                    "path": "add-insured",
+                                    "then": [
+                                      {
+                                        "name": "RECODb.getClaimInsureds",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${claim.ClaimID}"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "DisplayOrder"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getInsuredsList",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimInsured>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      },
+                                      {
+                                        "code": "await InvokeAsync(() => {StateHasChanged();});",
+                                        "type": "execute"
+                                      }
+                                    ],
+                                    "type": "popup",
+                                    "width": 1024
+                                  }
+                                ]
+                              },
+                              "icon": "add_circle_outline",
+                              "name": "buttonAddInsured",
+                              "text": "Add Insured",
+                              "type": "button"
+                            },
+                            {
+                              "columns": [
+                                {
+                                  "format": "",
+                                  "property": "Name",
+                                  "title": "Name",
+                                  "type": "string"
+                                },
+                                {
+                                  "format": "",
+                                  "property": "RegistrantNo",
+                                  "title": "Registrant No",
+                                  "type": "string"
+                                },
+                                {
+                                  "format": "",
+                                  "property": "Address",
+                                  "title": "Address",
+                                  "type": "string"
+                                },
+                                {
+                                  "filterProperty": "",
+                                  "format": "",
+                                  "property": "Brokerage",
+                                  "title": "Brokerage",
+                                  "type": "string"
+                                },
+                                {
+                                  "format": "",
+                                  "property": "BrokerOfRecord",
+                                  "title": "Broker Of Record",
+                                  "type": "string"
+                                }
+                              ],
+                              "count": "",
+                              "data": "${getInsuredsList}",
+                              "events": {
+                                "rowSelect": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "ClaimID",
+                                        "value": "${claim.ClaimID}"
+                                      },
+                                      {
+                                        "name": "InsuredID",
+                                        "value": "${event.InsuredID}"
+                                      }
+                                    ],
+                                    "path": "add-insured",
+                                    "then": [
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "RECODb.getClaimInsureds",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${claim.ClaimID}"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "DisplayOrder"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getInsuredsList",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimInsured>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      },
+                                      {
+                                        "code": "await InvokeAsync(() => {StateHasChanged();});",
+                                        "condition": "${result != null}",
+                                        "type": "execute"
+                                      }
+                                    ],
+                                    "type": "popup",
+                                    "width": 1024
+                                  }
+                                ]
+                              },
+                              "itemType": "RecoCms6.Models.RecoDb.ClaimInsured",
+                              "name": "gridInsureds",
+                              "type": "grid"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-12",
+                                  "components": [
+                                    {
+                                      "allowCollapse": true,
+                                      "collapsed": false,
+                                      "components": [
+                                        {
+                                          "components": [
+                                            {
+                                              "class": "col-md-9",
+                                              "components": [
+                                                {
+                                                  "allowColumnResize": true,
+                                                  "allowPaging": true,
+                                                  "allowSorting": true,
+                                                  "columns": [
+                                                    {
+                                                      "format": "",
+                                                      "property": "XRefClaimNo",
+                                                      "title": "Claim No",
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "format": "",
+                                                      "property": "XRefInsureds",
+                                                      "title": "Insureds",
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "format": "",
+                                                      "property": "FileHandler",
+                                                      "title": "File Handler",
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "format": "",
+                                                      "property": "DefenceCounsel",
+                                                      "title": "Defence Counsel",
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "filterable": false,
+                                                      "sortable": false,
+                                                      "template": [
+                                                        {
+                                                          "events": {
+                                                            "click": [
+                                                              {
+                                                                "name": "strXRefClaimID",
+                                                                "type": "set",
+                                                                "value": "StringExtensions.ToBase64(${data.XRefClaimID})",
+                                                                "valueType": "string"
+                                                              },
+                                                              {
+                                                                "code": "UriHelper.NavigateTo($\"edit-claim/{strXRefClaimID}\", /* force reload */ true);",
+                                                                "type": "execute"
+                                                              }
+                                                            ]
+                                                          },
+                                                          "icon": "search",
+                                                          "name": "buttonViewClaim",
+                                                          "text": "",
+                                                          "type": "button"
+                                                        },
+                                                        {
+                                                          "events": {
+                                                            "click": [
+                                                              {
+                                                                "condition": "await DialogService.Confirm(\"Are you sure you want to delete this record?\") == true",
+                                                                "name": "RECODb.RemoveCrossReferences",
+                                                                "parameters": [
+                                                                  {
+                                                                    "name": "BaseClaimID",
+                                                                    "value": "${claim.ClaimID}"
+                                                                  },
+                                                                  {
+                                                                    "name": "XRefClaimID",
+                                                                    "value": "${data.XRefClaimID}"
+                                                                  }
+                                                                ],
+                                                                "type": "invoke"
+                                                              },
+                                                              {
+                                                                "code": "await gridCrossRefFiles.Reload();",
+                                                                "type": "execute"
+                                                              }
+                                                            ]
+                                                          },
+                                                          "icon": "delete",
+                                                          "name": "buttonDeleteCrossRef",
+                                                          "text": "",
+                                                          "type": "button",
+                                                          "visible": "${!Security.IsInRole(\"Auditor\")}"
+                                                        }
+                                                      ]
+                                                    }
+                                                  ],
+                                                  "count": "",
+                                                  "data": "${getXRefClaimsList}",
+                                                  "itemType": "RecoCms6.Models.RecoDb.XRefClaim",
+                                                  "name": "gridCrossRefFiles",
+                                                  "pageSize": 3,
+                                                  "type": "grid"
+                                                }
+                                              ],
+                                              "name": "col197",
+                                              "type": "col"
+                                            },
+                                            {
+                                              "class": "col-md-3 justify-content-center align-items-center d-flex",
+                                              "components": [
+                                                {
+                                                  "events": {
+                                                    "click": [
+                                                      {
+                                                        "parameters": [
+                                                          {
+                                                            "name": "ProgramID",
+                                                            "value": "${claim.ProgramID}"
+                                                          },
+                                                          {
+                                                            "name": "ExcludeClaimID",
+                                                            "value": "${claim.ClaimID}"
+                                                          },
+                                                          {
+                                                            "name": "SelectClaim",
+                                                            "value": "true"
+                                                          }
+                                                        ],
+                                                        "path": "claims",
+                                                        "then": [
+                                                          {
+                                                            "condition": "${result != null && result != 0}",
+                                                            "name": "crossRefClaim",
+                                                            "type": "set",
+                                                            "value": "new RecoCms6.Models.RecoDb.CrossReferencedClaim()",
+                                                            "valueType": "RecoCms6.Models.RecoDb.CrossReferencedClaim"
+                                                          },
+                                                          {
+                                                            "condition": "${result != null && result != 0}",
+                                                            "name": "crossRefClaim.ClaimID",
+                                                            "type": "set",
+                                                            "value": "${claim.ClaimID}",
+                                                            "valueType": "int"
+                                                          },
+                                                          {
+                                                            "condition": "${result != null && result != 0}",
+                                                            "name": "crossRefClaim.XRefClaimID",
+                                                            "type": "set",
+                                                            "value": "${result}",
+                                                            "valueType": "int"
+                                                          },
+                                                          {
+                                                            "condition": "${result != null && result != 0}",
+                                                            "name": "RECODb.createCrossReferencedClaim",
+                                                            "parameters": [
+                                                              {
+                                                                "name": "CrossReferencedClaim",
+                                                                "value": "crossRefClaim"
+                                                              }
+                                                            ],
+                                                            "type": "invoke"
+                                                          },
+                                                          {
+                                                            "code": "await gridCrossRefFiles.Reload();",
+                                                            "condition": "${result != null && result != 0}",
+                                                            "type": "execute"
+                                                          }
+                                                        ],
+                                                        "type": "popup",
+                                                        "width": 1024
+                                                      }
+                                                    ]
+                                                  },
+                                                  "icon": "add_circle_outline",
+                                                  "name": "buttonAddCrossReferenceClaims",
+                                                  "template": "",
+                                                  "text": "New X-Ref",
+                                                  "type": "button",
+                                                  "visible": "${!Security.IsInRole(\"Auditor\")}"
+                                                }
+                                              ],
+                                              "name": "col198",
+                                              "type": "col"
+                                            }
+                                          ],
+                                          "name": "row62",
+                                          "style": {
+                                            "marginBottom": "1rem"
+                                          },
+                                          "type": "row"
+                                        }
+                                      ],
+                                      "name": "fieldset11",
+                                      "text": "Cross Referenced Files",
+                                      "type": "fieldset",
+                                      "visible": "${Globals.generalsettings.ApplicationName == \"REIX CMS\"}"
+                                    }
+                                  ],
+                                  "name": "col11",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row2",
+                              "type": "row"
+                            }
+                          ],
+                          "selected": false,
+                          "text": "Insured(s)"
+                        },
+                        {
+                          "components": [
+                            {
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "ClaimID",
+                                        "value": "${claim.ClaimID}"
+                                      },
+                                      {
+                                        "name": "ClaimantID",
+                                        "value": "0"
+                                      }
+                                    ],
+                                    "path": "add-claimant",
+                                    "then": [
+                                      {
+                                        "name": "RECODb.getClaimClaimants",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${claim.ClaimID}"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "ClaimantOrder"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getClaimantsList",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimClaimant>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      },
+                                      {
+                                        "code": "await InvokeAsync(() => { StateHasChanged();});",
+                                        "type": "execute"
+                                      }
+                                    ],
+                                    "title": "Add ${Globals.generalsettings.ClaimantName}",
+                                    "type": "popup",
+                                    "width": 800
+                                  }
+                                ]
+                              },
+                              "icon": "add_circle_outline",
+                              "name": "buttonAddClaimant",
+                              "text": "Add",
+                              "type": "button"
+                            },
+                            {
+                              "columns": [
+                                {
+                                  "format": "",
+                                  "property": "Name",
+                                  "title": "Name",
+                                  "type": "string"
+                                },
+                                {
+                                  "format": "",
+                                  "property": "ClaimantSolicitor",
+                                  "title": "Lawyer",
+                                  "type": "string"
+                                },
+                                {
+                                  "format": "",
+                                  "property": "SolicitorFirm",
+                                  "title": "Law Firm",
+                                  "type": "string"
+                                }
+                              ],
+                              "data": "${getClaimantsList}",
+                              "events": {
+                                "rowSelect": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "ClaimID",
+                                        "value": "${claim.ClaimID}"
+                                      },
+                                      {
+                                        "name": "ClaimantID",
+                                        "value": "${event.ClaimantID}"
+                                      }
+                                    ],
+                                    "path": "add-claimant",
+                                    "then": [
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "RECODb.getClaimClaimants",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${claim.ClaimID}"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "ClaimantOrder"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getClaimantsList",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ClaimClaimant>"
+                                          },
+                                          {
+                                            "code": "await InvokeAsync(() => { StateHasChanged();});",
+                                            "type": "execute"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ],
+                                    "title": "",
+                                    "type": "popup",
+                                    "width": 1024
+                                  }
+                                ]
+                              },
+                              "itemType": "RecoCms6.Models.RecoDb.ClaimClaimant",
+                              "name": "gridClaimants",
+                              "type": "grid"
+                            },
+                            {
+                              "components": [
+                                {
+                                  "class": "col-md-12 justify-content-center text-xl-center",
+                                  "components": [],
+                                  "name": "col52",
+                                  "type": "col"
+                                }
+                              ],
+                              "name": "row15",
+                              "style": {
+                                "marginBottom": "1em",
+                                "marginTop": "1em"
+                              },
+                              "type": "row"
+                            }
+                          ],
+                          "selected": false,
+                          "text": "${Globals.generalsettings.ClaimantName}"
+                        },
+                        {
+                          "components": [
+                            {
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "TradeID",
+                                        "value": "0"
+                                      },
+                                      {
+                                        "name": "ClaimID",
+                                        "value": "${claim.ClaimID}"
+                                      }
+                                    ],
+                                    "path": "add-trade",
+                                    "then": [
+                                      {
+                                        "condition": "${result != null}",
+                                        "name": "RECODb.getTradeDetails",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "operator": "and",
+                                            "value": [
+                                              {
+                                                "operation": "eq",
+                                                "property": "ClaimID",
+                                                "type": "integer",
+                                                "value": "${claim.ClaimID}"
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "name": "$orderby",
+                                            "value": [
+                                              {
+                                                "direction": "asc",
+                                                "property": "DisplayOrder"
+                                              }
+                                            ]
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getTradesList",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.TradeDetail>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ],
+                                    "title": "${Globals.generalsettings.LocationName}",
+                                    "type": "popup",
+                                    "width": 1024
+                                  }
+                                ]
+                              },
+                              "icon": "add_circle_outline",
+                              "name": "buttonAddTrade",
+                              "text": "New",
+                              "type": "button",
+                              "visible": false
+                            },
+                            {
+                              "allowCollapse": true,
+                              "components": [
+                                {
+                                  "components": [
+                                    {
+                                      "class": "col-md-2",
+                                      "components": [
+                                        {
+                                          "component": "Address1",
+                                          "name": "label21",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "Address 1",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col22",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-7",
+                                      "components": [
+                                        {
+                                          "maxLength": 450,
+                                          "name": "tradeAddress1",
+                                          "style": {
+                                            "display": "block",
+                                            "width": "100%"
+                                          },
+                                          "type": "textbox",
+                                          "value": "${claimtrade.Address1}",
+                                          "valueType": "string"
+                                        }
+                                      ],
+                                      "name": "col23",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-1",
+                                      "components": [
+                                        {
+                                          "component": "UnitNumber",
+                                          "name": "label32",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "Unit #",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col25",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-2",
+                                      "components": [
+                                        {
+                                          "maxLength": 20,
+                                          "name": "tradeUnitNumber",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "type": "textbox",
+                                          "value": "${claimtrade.UnitNumber}",
+                                          "valueType": "string"
+                                        }
+                                      ],
+                                      "name": "col26",
+                                      "type": "col"
+                                    }
+                                  ],
+                                  "name": "row10",
+                                  "style": {
+                                    "marginBottom": ".25em"
+                                  },
+                                  "type": "row"
+                                },
+                                {
+                                  "components": [
+                                    {
+                                      "class": "col-md-2",
+                                      "components": [
+                                        {
+                                          "component": "Address2",
+                                          "name": "label33",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "Address 2",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col47",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-9",
+                                      "components": [
+                                        {
+                                          "maxLength": 450,
+                                          "name": "tradeAddress2",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "type": "textbox",
+                                          "value": "${claimtrade.Address2}",
+                                          "valueType": "string"
+                                        }
+                                      ],
+                                      "name": "col48",
+                                      "type": "col"
+                                    }
+                                  ],
+                                  "name": "row17",
+                                  "style": {
+                                    "marginBottom": ".25em"
+                                  },
+                                  "type": "row"
+                                },
+                                {
+                                  "components": [
+                                    {
+                                      "class": "col-md-2",
+                                      "components": [
+                                        {
+                                          "component": "City",
+                                          "name": "label36",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "City",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col58",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-5",
+                                      "components": [
+                                        {
+                                          "data": "${getCityList}",
+                                          "name": "tradeCity",
+                                          "schema": "ParameterDetail",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "textProperty": "ParamDesc",
+                                          "type": "autocomplete",
+                                          "value": "${claimtrade.City}"
+                                        }
+                                      ],
+                                      "name": "col59",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-2",
+                                      "components": [
+                                        {
+                                          "component": "PostalCode",
+                                          "name": "label37",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "Postal Code",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col60",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-3",
+                                      "components": [
+                                        {
+                                          "autoComplete": false,
+                                          "events": {
+                                            "change": [
+                                              {
+                                                "condition": "claimtrade.PostalCode.Length == 7",
+                                                "name": "GetPostalCodeDetails",
+                                                "schema": {
+                                                  "$ref": "#/definitions/Void",
+                                                  "dotnetType": "void"
+                                                },
+                                                "type": "invoke-method"
+                                              }
+                                            ]
+                                          },
+                                          "maxLength": 7,
+                                          "name": "tradePostalCode",
+                                          "placeholder": "A1A 1A1",
+                                          "style": {},
+                                          "type": "textbox",
+                                          "value": "${claimtrade.PostalCode}",
+                                          "valueType": "string"
+                                        }
+                                      ],
+                                      "name": "col61",
+                                      "type": "col"
+                                    }
+                                  ],
+                                  "name": "row20",
+                                  "style": {
+                                    "marginBottom": "0.25em"
+                                  },
+                                  "type": "row"
+                                },
+                                {
+                                  "components": [
+                                    {
+                                      "class": "col-md-2",
+                                      "components": [
+                                        {
+                                          "component": "Province",
+                                          "name": "label34",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "Province",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col49",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-2",
+                                      "components": [
+                                        {
+                                          "data": "${getProvinceList}",
+                                          "events": {
+                                            "change": [
+                                              {
+                                                "name": "RECODb.getParameterDetails",
+                                                "parameters": [
+                                                  {
+                                                    "name": "$filter",
+                                                    "operator": "and",
+                                                    "value": [
+                                                      {
+                                                        "operation": "eq",
+                                                        "property": "ParamTypeDesc",
+                                                        "type": "string",
+                                                        "value": "\"City\""
+                                                      },
+                                                      {
+                                                        "operation": "eq",
+                                                        "property": "ParentParameterID",
+                                                        "type": "integer",
+                                                        "value": "${claimtrade.Province}"
+                                                      }
+                                                    ]
+                                                  },
+                                                  {
+                                                    "name": "$orderby",
+                                                    "value": [
+                                                      {
+                                                        "direction": "asc",
+                                                        "property": "ParamDesc"
+                                                      }
+                                                    ]
+                                                  }
+                                                ],
+                                                "then": [
+                                                  {
+                                                    "name": "getCityList",
+                                                    "type": "set",
+                                                    "value": "${result}",
+                                                    "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+                                                  }
+                                                ],
+                                                "type": "invoke"
+                                              }
+                                            ]
+                                          },
+                                          "name": "tradeProvince",
+                                          "placeholder": "Choose Province",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "template": "",
+                                          "textProperty": "ParamDesc",
+                                          "type": "dropdown",
+                                          "value": "${claimtrade.Province}",
+                                          "valueProperty": "ParameterID",
+                                          "valueType": "int?"
+                                        }
+                                      ],
+                                      "name": "col50",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-1",
+                                      "components": [
+                                        {
+                                          "component": "Country",
+                                          "name": "label35",
+                                          "style": {
+                                            "width": "100%"
+                                          },
+                                          "text": "Country",
+                                          "type": "label"
+                                        }
+                                      ],
+                                      "name": "col51",
+                                      "type": "col"
+                                    },
+                                    {
+                                      "class": "col-md-2",
+                                      "components": [
+                                        {
+                                          "data": "${getCountryList}",
+                                          "name": "tradeCountry",
+                                          "placeholder": "Choose Country",
+                                          "style": {},
+                                          "template": "",
+                                          "textProperty": "ParamDesc",
+                                          "type": "dropdown",
+                                          "value": "${claimtrade.Country}",
+                                          "valueProperty": "ParameterID",
+                                          "valueType": "int?"
+                                        }
+                                      ],
+                                      "name": "col57",
+                                      "type": "col"
+                                    }
+                                  ],
+                                  "name": "row18",
+                                  "style": {
+                                    "marginBottom": ".25em"
+                                  },
+                                  "type": "row"
+                                },
+                                {
+                                  "components": [
+                                    {
+                                      "class": "col-md-12 justify-content-center d-flex text-md-center",
+                                      "components": [
+                                        {
+                                          "events": {
+                                            "click": [
+                                              {
+                                                "condition": "${claimtrade.Address1 == null}",
+                                                "severity": "error",
+                                                "summary": "Address is required",
+                                                "then": [
+                                                  {
+                                                    "code": "return;",
+                                                    "type": "execute"
+                                                  }
+                                                ],
+                                                "type": "notify"
+                                              },
+                                              {
+                                                "name": "SaveTrade",
+                                                "schema": {
+                                                  "async": true,
+                                                  "dotnetType": "System.Threading.Tasks.Task<bool>",
+                                                  "type": "boolean"
+                                                },
+                                                "then": [
+                                                  {
+                                                    "condition": "${result == true}",
+                                                    "summary": "Address Saved",
+                                                    "type": "notify"
+                                                  }
+                                                ],
+                                                "type": "invoke-method"
+                                              }
+                                            ]
+                                          },
+                                          "icon": "",
+                                          "name": "buttonSaveTrade",
+                                          "template": "",
+                                          "text": "Save",
+                                          "type": "button"
+                                        },
+                                        {
+                                          "buttonStyle": "secondary",
+                                          "events": {
+                                            "click": [
+                                              {
+                                                "condition": "${claimtrade.Address1 != null && claimtrade.Address1 != String.Empty}",
+                                                "name": "SaveTrade",
+                                                "schema": {
+                                                  "async": true,
+                                                  "dotnetType": "System.Threading.Tasks.Task<bool>",
+                                                  "type": "boolean"
+                                                },
+                                                "type": "invoke-method"
+                                              },
+                                              {
+                                                "result": "${claim}",
+                                                "type": "close-popup"
+                                              },
+                                              {
+                                                "condition": "",
+                                                "parameters": [
+                                                  {
+                                                    "name": "ClaimID",
+                                                    "value": "${claim.ClaimID.ToBase64()}"
+                                                  }
+                                                ],
+                                                "path": "edit-claim",
+                                                "type": "navigate"
+                                              }
+                                            ]
+                                          },
+                                          "icon": "",
+                                          "name": "buttonCloseForm",
+                                          "text": "Finish",
+                                          "type": "button"
+                                        }
+                                      ],
+                                      "name": "col62",
+                                      "type": "col"
+                                    }
+                                  ],
+                                  "name": "row19",
+                                  "type": "row"
+                                }
+                              ],
+                              "name": "fieldset1",
+                              "text": "Primary Location",
+                              "type": "fieldset",
+                              "visible": true
+                            }
+                          ],
+                          "selected": false,
+                          "text": "${Globals.generalsettings.LocationName}"
+                        }
+                      ],
+                      "name": "steps0",
+                      "selectedIndex": "",
+                      "type": "steps"
+                    }
+                  ],
+                  "name": "col24",
+                  "type": "col"
+                }
+              ],
+              "name": "row8",
+              "style": {
+                "marginBottom": "1rem"
+              },
+              "type": "row"
+            }
+          ],
+          "data": "${claim}",
+          "itemType": "RecoCms6.Models.RecoDb.Claim",
+          "name": "templateForm0",
+          "type": "template-form"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "claim",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Claim(){}",
+        "valueType": "RecoCms6.Models.RecoDb.Claim"
+      },
+      {
+        "name": "occurrence",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Occurrence()",
+        "valueType": "RecoCms6.Models.RecoDb.Occurrence"
+      },
+      {
+        "name": "claimtrade",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.Trade()",
+        "valueType": "RecoCms6.Models.RecoDb.Trade"
+      },
+      {
+        "name": "claimdetails",
+        "type": "set",
+        "value": "new RecoCms6.Models.RecoDb.EoClaimDetail()",
+        "valueType": "RecoCms6.Models.RecoDb.EoClaimDetail"
+      },
+      {
+        "name": "RECODb.getParameterDetails",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": [
+              {
+                "direction": "asc",
+                "property": "ParamDesc"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getProgramsList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\" && p.ParamAbbrev==\"EO\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getOpenStatusID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Claim Status\" && p.ParamDesc==\"Open\").First()}.ParameterID",
+            "valueType": "int"
+          },
+          {
+            "name": "getContractYearList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Contract Year\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProvincesList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\" && p.ParamValue>0)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getYesNoList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"YesNoNA\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "EOProgramID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"ProgramID\" && p.ParamAbbrev==\"EO\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "defaultProvinceID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\" && p.ParamValue==1).First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "claimtrade.Province",
+            "type": "set",
+            "value": "defaultProvinceID",
+            "valueType": "int"
+          },
+          {
+            "name": "claim.ProgramID",
+            "type": "set",
+            "value": "${EOProgramID}",
+            "valueType": "int"
+          },
+          {
+            "condition": "DateTime.Now.Month >= (${Globals.generalsettings.FiscalYear}.Month)",
+            "name": "defaultContractYearID",
+            "type": "set",
+            "value": "${getContractYearList.Where(cy=>cy.ParamValue == DateTime.Now.Year).FirstOrDefault().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "condition": "DateTime.Now.Month < (${Globals.generalsettings.FiscalYear}.Month)",
+            "name": "defaultContractYearID",
+            "type": "set",
+            "value": "${getContractYearList.Where(cy=>cy.ParamValue == (DateTime.Now.Year - 1)).FirstOrDefault().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "condition": "${defaultContractYearID > 0}",
+            "name": "claim.ContractYearID",
+            "type": "set",
+            "value": "${defaultContractYearID}",
+            "valueType": "int"
+          },
+          {
+            "name": "defaultCountryID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Country\" && p.ParamDesc==\"Canada\").First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "name": "claimtrade.Country",
+            "type": "set",
+            "value": "${defaultCountryID}",
+            "valueType": "int"
+          },
+          {
+            "name": "selectedProvince",
+            "type": "set",
+            "value": "${defaultProvinceID}",
+            "valueType": "int"
+          },
+          {
+            "name": "getLossCauseResult",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Loss Cause\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getTradeTypeList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Trade Type\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getLitigationTypeList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Litigation Type\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getAllegationList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Allegation\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "condition": "${Globals.generalsettings.ApplicationName==\"RECO CMS\"}",
+            "name": "getDeductibleList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Deductible\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getProvinceList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Province\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getCountryList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Country\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getCityList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"City\" && p.ParentParameterID==defaultProvinceID)}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "claim.PolicyID",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Policy No\" && p.ParamValue==claim.ContractYearID).First().ParameterID}",
+            "valueType": "int"
+          },
+          {
+            "condition": "${Globals.generalsettings.ApplicationName==\"REIX CMS\"}",
+            "name": "getDeductibleList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Deductible\" && p.ParamDesc != \"2500\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getBoardJurisdictionList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Board Jurisdiction\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getClaimInitiationList",
+            "type": "set",
+            "value": "${result.Where(p=>p.ParamTypeDesc==\"Claim Initiation\")}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ParameterDetail>"
+          },
+          {
+            "name": "getInitialDeductibleID",
+            "type": "set",
+            "value": "${getDeductibleList.First().ParameterID}",
+            "valueType": "int"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getServiceProviders",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getServiceProvidersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.ServiceProvider>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getBrokerages",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getBrokeragesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Brokerage>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "RECODb.getOccurrences",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getOccurrencesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<RecoCms6.Models.RecoDb.Occurrence>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "claim.ClaimStatusID",
+        "type": "set",
+        "value": "${getOpenStatusID}",
+        "valueType": "int"
+      },
+      {
+        "code": "claim.ID = Guid.NewGuid();",
+        "type": "execute"
+      },
+      {
+        "name": "currentStep",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "previousStep",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "isEOProgram",
+        "type": "set",
+        "value": "true",
+        "valueType": "bool"
+      },
+      {
+        "name": "claimdetails.ClaimOrIncident",
+        "type": "set",
+        "value": "true",
+        "valueType": "bool"
+      },
+      {
+        "name": "claim.Deductible",
+        "type": "set",
+        "value": "${getInitialDeductibleID}",
+        "valueType": "int"
+      },
+      {
+        "name": "newClaim",
+        "type": "set",
+        "value": "true",
+        "valueType": "bool"
+      },
+      {
+        "name": "RECODb.getGenerateClaimNumbers",
+        "parameters": [
+          {
+            "name": "ProgramID",
+            "value": "${claim.ProgramID}"
+          },
+          {
+            "name": "ContractYear",
+            "value": "${claim.ContractYearID}"
+          },
+          {
+            "name": "SelectedOccurrence",
+            "value": "null"
+          },
+          {
+            "name": "IsIncident",
+            "value": "${claimdetails.ClaimOrIncident}"
+          }
+        ],
+        "then": [
+          {
+            "name": "claim.ClaimNo",
+            "type": "set",
+            "value": "${result.First().NewNumber}",
+            "valueType": "string"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Claim"
+}

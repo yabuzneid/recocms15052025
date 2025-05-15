@@ -1,0 +1,85 @@
+﻿@page "/edit-issue-reporting/{IssueReportingID}"
+@layout MainLayout
+@inherits RecoCms6.Pages.EditIssueReportingComponent
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@issuereporting" TItem="RecoCms6.Models.RecoDb.IssueReporting" Visible="@(issuereporting != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="DateEntered" style="width: 100%" Text="Date Entered">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-5">
+                <RadzenDatePicker AllowInput="false" Disabled="true" ShowTime="true" ShowTimeOkButton="false" style="display: block; width: 100%" @bind-Value="@(issuereporting.DateEntered)" Name="DateEntered">
+                </RadzenDatePicker>
+                <RadzenRequiredValidator Component="DateEntered" style="position: absolute" Text="DateEntered is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="EnteredById" style="width: 100%" Text="Entered By">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenDropDown AllowSelectAll="false" Data="@getServiceProviderList" ReadOnly="true" style="display: block; width: 100%" TextProperty="Name" @bind-Value="@(issuereporting.EnteredById)" ValueProperty="UserID" Name="EnteredById">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="EnteredById" style="position: absolute" Text="Entered By is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Subject" style="width: 100%" Text="Subject">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="100" style="display: block; width: 100%" @bind-Value="@(issuereporting.Subject)" Name="Subject">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Subject" style="position: absolute" Text="Subject is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Issue" style="width: 100%" Text="Issue">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenHtmlEditor style="height: 400px" UploadUrl="upload/image" @bind-Value="@(issuereporting.Issue)" Name="Issue">
+                </RadzenHtmlEditor>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="IssueStatusID" style="width: 100%" Text="Status">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-4">
+                <RadzenDropDown AllowSelectAll="false" Data="@getParametersForIssueStatusIDResult" style="display: block" TextProperty="ParamDesc" @bind-Value="@(issuereporting.IssueStatusID)" ValueProperty="ParameterID" Name="IssueStatusID">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="IssueStatusID" DefaultValue="0" style="position: absolute" Text="Issue Status is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" style="margin-left: 1rem" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

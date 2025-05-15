@@ -1,0 +1,45 @@
+@using Radzen.Blazor
+@using System.ComponentModel.DataAnnotations
+
+@typeparam TItem
+
+<RadzenDataGridColumn TItem="TItem" Visible="@(!Security?.IsInRole("Auditor") ?? false)" Filterable="false" Sortable="false" >
+    <Template Context="row">
+        <RadzenButton Icon="delete_forever" Click="@((args) => DeleteRowPopup(args, row))" @onclick:stopPropagation="@OnClickStopPropagation">
+        </RadzenButton>
+    </Template>
+</RadzenDataGridColumn>
+
+@code {
+
+    [Parameter]
+    [Required]
+    public RadzenDataGrid<TItem> DataGrid { get; set; }
+
+    [Parameter]
+    public bool OnClickStopPropagation { get; set; } = true;
+    
+    [Parameter]
+    [Required]
+    public Func<TItem, Task> DeleteRow { get; set; }
+    
+    [Inject]
+    protected DialogService DialogService { get; set; }
+    
+    [Inject]
+    protected SecurityService Security { get; set; }
+    
+    private async Task DeleteRowPopup(MouseEventArgs args, TItem row)
+    {
+        if (await DialogService.Confirm("Are you sure you want to delete this record?") == true)
+        {
+            await DeleteRow(row);
+        }
+        
+        var reloadTask = DataGrid?.Reload();
+        if (reloadTask is not null)
+        {
+            await reloadTask;
+        }
+    }
+}
