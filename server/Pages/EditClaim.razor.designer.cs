@@ -666,6 +666,24 @@ namespace RecoCms6.Pages
             }
         }
 
+        List<RecoCms6.Models.RecoDb.ServiceProvider> _defenseCounsels = new List<ServiceProvider>();
+        protected List<RecoCms6.Models.RecoDb.ServiceProvider> defenseCounsels
+        {
+            get
+            {
+                return _defenseCounsels;
+            }
+            set
+            {
+                if (!object.Equals(_defenseCounsels, value))
+                {
+                    var args = new PropertyChangedEventArgs() { Name = "defenseCounsels", NewValue = value, OldValue = _defenseCounsels };
+                    _defenseCounsels = value;
+                    OnPropertyChanged(args);
+                    Reload();
+                }
+            }
+        }
 
         List<RecoCms6.Models.RecoDb.ParameterDetail> _getYesNoPendingList = new List<ParameterDetail>();
         protected List<RecoCms6.Models.RecoDb.ParameterDetail> getYesNoPendingList

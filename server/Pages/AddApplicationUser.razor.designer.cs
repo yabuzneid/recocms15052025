@@ -258,6 +258,39 @@ namespace RecoCms6.Pages
 
             var recoDbGetFirmsResult = await RecoDb.GetFirms(new Query() { OrderBy = $"Name asc" });
             getFirmsResult = recoDbGetFirmsResult;
+
+            var recoDbGetServiceProviderDetailsResult = await RecoDb.GetServiceProviderDetails(new Query
+            {
+                Filter = @"i => i.ServiceProviderRole == @0 || i.ServiceProviderRole == @1",
+                FilterParameters = new object[] { "Defense Counsel", "Legal Assistants" },
+                OrderBy = "NameandFirm asc"
+            });
+            getServiceProvidersResult = recoDbGetServiceProviderDetailsResult.ToList();
+        }
+
+        protected async System.Threading.Tasks.Task OnRoleChanged(dynamic args)
+        {
+            if(this.RoleName == "Defense Counsel")
+            {
+                roleCounterpartLabel = "Legal Assistants";
+
+            } else if(this.RoleName == "Legal Assistants")
+            {
+                roleCounterpartLabel = "Defense Counsel";
+            }
+        }
+
+        protected async System.Threading.Tasks.Task OnFirmChanged(dynamic args)
+        {
+            if (this.RoleName == "Defense Counsel")
+            {
+                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.ServiceProviderRole == "Legal Assistants" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
+
+            }
+            else if (this.RoleName == "Legal Assistants")
+            {
+                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.ServiceProviderRole == "Defense Counsel" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
+            }
         }
 
         protected async System.Threading.Tasks.Task Form0Submit(ApplicationUser args)
@@ -293,12 +326,28 @@ namespace RecoCms6.Pages
 
                 serviceprovider.EmailAddress = user.Email;
 
-                if (RoleName == "Adjuster" || RoleName == "Claims Admin" || RoleName == "Defense Counsel" ||
+                if (RoleName == "Defense Counsel")
+                {
+                    serviceprovider.AsDefenseCounsel = ServiceProviders.Select(legalAssistantId => new LegalAssistants
+                    {
+                        DefenseCounselID = serviceprovider.ServiceProviderID,
+                        LegalAssistantID = legalAssistantId
+                    }).ToList();
+                } else if (RoleName == "Legal Assistants")
+                {
+                    serviceprovider.AsLegalAssistant = ServiceProviders.Select(defenseCounselID => new LegalAssistants
+                    {
+                        DefenseCounselID = defenseCounselID,
+                        LegalAssistantID = serviceprovider.ServiceProviderID
+                    }).ToList();
+                }
+
+                if (RoleName == "Adjuster" || RoleName == "Claims Admin" || RoleName == "Defense Counsel" || RoleName == "Legal Assistants" ||
                     RoleName == "Claims Manager" || RoleName == "Program Manager" || RoleName == "Accountant" || RoleName == "Coverage Counsel" || RoleName == "Actuary")
                 {
                     serviceprovider.ServiceProviderRoleID = getServiceProviderRoleList.Where(sp => sp.ParamDesc == RoleName).First().ParameterID;
                 }
-                if (RoleName == "Adjuster" || RoleName == "Claims Admin" || RoleName == "Defense Counsel" || RoleName == "Claims Manager" || RoleName == "Program Manager" || RoleName == "Accountant" || RoleName == "Coverage Counsel" || RoleName == "Actuary")
+                if (RoleName == "Adjuster" || RoleName == "Claims Admin" || RoleName == "Defense Counsel" || RoleName == "Claims Manager" || RoleName == "Legal Assistants" ||  RoleName == "Program Manager" || RoleName == "Accountant" || RoleName == "Coverage Counsel" || RoleName == "Actuary")
                 {
                     if (serviceProviderByEmail is null)
                     {
@@ -308,13 +357,13 @@ namespace RecoCms6.Pages
                     {
                         await RecoDb.UpdateServiceProvider(serviceprovider.ID, serviceprovider);
                     }
-                    if (RoleName == "Adjuster" || RoleName == "Claims Admin" || RoleName == "Defense Counsel" || RoleName == "Claims Manager" || RoleName == "Program Manager" || RoleName == "Accountant" || RoleName == "Coverage Counsel" || RoleName == "Actuary")
+                    if (RoleName == "Adjuster" || RoleName == "Claims Admin" || RoleName == "Defense Counsel" || RoleName == "Legal Assistants"  || RoleName == "Claims Manager" || RoleName == "Program Manager" || RoleName == "Accountant" || RoleName == "Coverage Counsel" || RoleName == "Actuary")
                     {
                         DialogService.Close(serviceprovider);
                     }
                 }
 
-                if (RoleName != "Adjuster" && RoleName != "Claims Admin" && RoleName != "Defense Counsel" && RoleName != "Claims Manager" && RoleName != "Program Manager" && RoleName != "Accountant" && RoleName != "Coverage Counsel" && RoleName != "Actuary")
+                if (RoleName != "Adjuster" && RoleName != "Claims Admin" && RoleName != "Defense Counsel" && RoleName == "Legal Assistants" && RoleName != "Claims Manager" && RoleName != "Program Manager" && RoleName != "Accountant" && RoleName != "Coverage Counsel" && RoleName != "Actuary")
                 {
                     DialogService.Close(null);
                 }
@@ -377,6 +426,7 @@ namespace RecoCms6.Pages
                 var recoDbGetFirmsResult = await RecoDb.GetFirms(new Query() { OrderBy = $"Name asc" });
                 getFirmsResult = recoDbGetFirmsResult;
             }
+            await OnFirmChanged(null);
         }
 
         protected async System.Threading.Tasks.Task Button3Click(MouseEventArgs args)

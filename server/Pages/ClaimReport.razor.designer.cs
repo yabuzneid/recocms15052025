@@ -247,6 +247,25 @@ namespace RecoCms6.Pages
             }
         }
 
+        List<RecoCms6.Models.RecoDb.ServiceProvider> _defenseCounsels = new List<ServiceProvider>();
+        protected List<RecoCms6.Models.RecoDb.ServiceProvider> defenseCounsels
+        {
+            get
+            {
+                return _defenseCounsels;
+            }
+            set
+            {
+                if (!object.Equals(_defenseCounsels, value))
+                {
+                    var args = new PropertyChangedEventArgs() { Name = "defenseCounsels", NewValue = value, OldValue = _defenseCounsels };
+                    _defenseCounsels = value;
+                    OnPropertyChanged(args);
+                    Reload();
+                }
+            }
+        }
+
         bool _isEOProgram;
         protected bool isEOProgram
         {
@@ -867,6 +886,17 @@ namespace RecoCms6.Pages
 
             var recoDbGetParameterDetailsResult = await RecoDb.GetParameterDetails(new Query() { Filter = $@"i => i.ParamTypeDesc == @0 || i.ParamTypeDesc == @1 || i.ParamTypeDesc == @2", FilterParameters = new object[] { "Claim Report Flag", "ProgramID", "File Type" }, OrderBy = $"ParamDesc asc" });
             parameterFlags = recoDbGetParameterDetailsResult.Where(p=>p.ParamTypeDesc=="Claim Report Flag");
+
+            var defenseCounselsResult = await RecoDb.GetServiceProviders(new Query()
+            {
+                Filter = "i => @0.Contains(i.ServiceProviderID)",
+                FilterParameters = [serviceprovider.AsLegalAssistant
+                .Select(la => la.DefenseCounselID)
+                .Distinct()
+                .ToList()]
+            });
+
+            defenseCounsels = [.. defenseCounselsResult];
 
             isEOProgram = recoDbGetParameterDetailsResult.Where(p=>p.ParamTypeDesc=="ProgramID" && p.ParamAbbrev=="EO").First().ParameterID == claim.ProgramID;
 

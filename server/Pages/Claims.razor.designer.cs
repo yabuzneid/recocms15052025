@@ -615,13 +615,13 @@ namespace RecoCms6.Pages
             var recoDbGetXRefClaimsResult = await RecoDb.GetXRefClaims(new Query() { Filter = $@"i => i.BaseClaimID == @0", FilterParameters = new object[] { excludedClaimID }, OrderBy = $"XRefClaimID asc" });
             excludedIDs = new HashSet<int>(recoDbGetXRefClaimsResult.Select(p => p.XRefClaimID));
 
-            if (!Security.IsInRole("Defense Counsel") && 1==0)
+            if (!Security.IsInRole("Defense Counsel", "Legal Assistants") && 1==0)
             {
                 var recoDbGetClaimSearchListsResult = await RecoDb.GetClaimSearchLists(new Query() { Filter = $@"i => i.ClaimID != @0", FilterParameters = new object[] { excludedClaimID }, OrderBy = $"ContractYearID desc,ClaimNo desc" });
                 getClaimListsResult = recoDbGetClaimSearchListsResult.Where(c=> c.ProgramID == Globals.selectedProgramID && !excludedIDs.Contains(c.ClaimID));
             }
 
-            if (Security.IsInRole("Defense Counsel") && 1==0)
+            if (Security.IsInRole("Defense Counsel", "Legal Assistants") && 1==0)
             {
                 var recoDbGetClaimSearchListsResult0 = await RecoDb.GetClaimSearchLists(new Query() { Filter = $@"i => i.DefenseCounselID == @0", FilterParameters = new object[] { serviceprovider.ServiceProviderID }, OrderBy = $"ClaimNo desc" });
                 getClaimListsResult = recoDbGetClaimSearchListsResult0.Where(c=> c.ProgramID == Globals.selectedProgramID);
@@ -675,7 +675,7 @@ namespace RecoCms6.Pages
 
             showNewClaimButtons = false;
 
-            if (SelectClaim == null && !Security.IsInRole("Auditor") && !Security.IsInRole("Defense Counsel") && Globals.generalsettings.ApplicationName == "RECO CMS" && !Security.IsInRole("Actuary")) {
+            if (SelectClaim == null && !Security.IsInRole("Auditor") && !Security.IsInRole("Defense Counsel", "Legal Assistants") && Globals.generalsettings.ApplicationName == "RECO CMS" && !Security.IsInRole("Actuary")) {
                 showNewClaimButtons = true;
             }
 
@@ -773,17 +773,17 @@ namespace RecoCms6.Pages
 
             GenerateRndParameter();
 
-            if (SelectClaim == null && !Security.IsInRole("Defense Counsel") && args.Program=="Errors And Omissions")
+            if (SelectClaim == null && !Security.IsInRole("Defense Counsel", "Legal Assistants") && args.Program=="Errors And Omissions")
             {
                 UriHelper.NavigateTo($"edit-claim/{args.ClaimID.ToBase64()}");
             }
 
-            if (SelectClaim == null && Security.IsInRole("Defense Counsel"))
+            if (SelectClaim == null && Security.IsInRole("Defense Counsel", "Legal Assistants"))
             {
                 UriHelper.NavigateTo($"claim-report/{args.ClaimID.ToBase64()}");
             }
 
-            if (SelectClaim == null && !Security.IsInRole("Defense Counsel") && args.Program != "Errors And Omissions")
+            if (SelectClaim == null && !Security.IsInRole("Defense Counsel", "Legal Assistants") && args.Program != "Errors And Omissions")
             {
                 UriHelper.NavigateTo($"edit-commission-claim/{args.ClaimID.ToBase64()}");
             }

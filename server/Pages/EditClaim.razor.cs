@@ -1976,8 +1976,21 @@ namespace RecoCms6.Pages
             
             parameterFlags = recoDbGetParameterDetailsResult.Where(p => p.ParamTypeDesc == "Claim Report Flag").ToList();
             report = await getClaimReport(claim.ClaimID);
+         
+            var defenseCounselIds = serviceprovider.AsLegalAssistant
+                .Select(la => la.DefenseCounselID)
+                .Distinct()
+                .ToList();
+
+            var defenseCounselsResult = await RecoDb.GetServiceProviders(new Query()
+            {
+                Filter = "i => @0.Contains(i.ServiceProviderID)",
+                FilterParameters = [defenseCounselIds]
+            });
+
+            defenseCounsels = [.. defenseCounselsResult];
         }
-        
+
         private bool _emailTabLoaded;
         private async Task LoadEmailTabData()
         {

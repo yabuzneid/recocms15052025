@@ -139,7 +139,7 @@ public partial class MainLayoutComponent
 
             var claim = getClaimListsResult.First();
 
-            if (!Security.IsInRole("Defense Counsel"))
+            if (!Security.IsInRole("Defense Counsel", "Legal Assistants"))
                 if (claim.Program == "Errors And Omissions")
                     UriHelper.NavigateTo($"edit-claim/{claim.ClaimID.ToBase64()}",true);
                 else
@@ -171,7 +171,7 @@ public partial class MainLayoutComponent
         var filterQuery = String.Empty;
 
 
-        if (Security.IsInRole("Defense Counsel"))
+        if (Security.IsInRole("Defense Counsel", "Legal Assistants"))
             if (Globals.userdetails.PrimeUser == true)
                 filterQuery = filterQuery + $@"&& i.DefenseCounselFirmID == {Globals.userdetails.FirmID} ";
             else

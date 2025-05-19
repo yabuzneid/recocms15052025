@@ -1859,6 +1859,16 @@
             </RadzenDropDown>
           </div>
         </div>
+        <div style="margin-bottom: 1rem" class="row">
+                <div class="col-md-2">
+                <RadzenLabel Component="textBox1" style="width: 100%" Text="Submitted On Behalf Of" Visible="@(Security.IsInRole("Legal Assistants"))">
+                </RadzenLabel>
+            </div>
+                <div class="col-md-3">
+                <RadzenDropDown Visible="@(Security.IsInRole("Legal Assistants"))" AllowFiltering="true" Data="@defenseCounsels" style="display: block; width: 100%" TextProperty="Name" @bind-Value="@(report.SubmittedOnBehalfOf)" ValueProperty="Name" Name="DropdownFlag">
+                </RadzenDropDown>
+            </div>
+        </div>
         <RadzenTabs style="margin-bottom: 0.5em">
         <Tabs>
         <RadzenTabsItem Selected="true" Text="Reports">
@@ -1880,6 +1890,8 @@
                 <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Format="date-time" FormatString="{0:d}" Property="DateLastModified" Title="Last Modified" Type="string">
                 </RadzenGridColumn>
                 <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Format="date-time" FormatString="{0:d}" Property="DateSubmitted" Title="Submitted" Type="string">
+                </RadzenGridColumn>
+                <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="SubmittedOnBehalfOf" Sortable="false" Title="Submitted On Behalf Of" Type="string" Visible="@(Security.IsInRole("Legal Assistants"))">
                 </RadzenGridColumn>
               </Columns>
             </RadzenGrid>

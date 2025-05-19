@@ -29,7 +29,7 @@
                 </RadzenLabel>
               </div>
               <div class="col-md-9">
-                <RadzenDropDown Data="@roles" Multiple="true" style="width: 100%" TextProperty="Name" @bind-Value="@(user.RoleNames)" ValueProperty="Name" Name="RoleNames">
+                 <RadzenDropDown Data="@roles" Multiple="true" style="width: 100%" TextProperty="Name" @bind-Value="@(user.RoleNames)" ValueProperty="Name" Name="RoleNames" Change="@OnRoleChanged">
                 </RadzenDropDown>
               </div>
             </div>
@@ -139,7 +139,7 @@
                     </RadzenLabel>
                   </div>
                   <div class="col-md-6">
-                    <RadzenDropDown Data="@getFirmsResult" Placeholder="Choose Firm" style="display: block; width: 100%" TextProperty="Name" @bind-Value="@(serviceprovider.FirmID)" ValueProperty="FirmID" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("System Admin"))" Name="FirmID">
+                    <RadzenDropDown Data="@getFirmsResult" Placeholder="Choose Firm" style="display: block; width: 100%" TextProperty="Name" @bind-Value="@(serviceprovider.FirmID)" ValueProperty="FirmID" Change="@OnFirmChanged"  Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("System Admin"))" Name="FirmID">
                     </RadzenDropDown>
                     <RadzenRequiredValidator Component="FirmID" DefaultValue="0" style="position: absolute" Text="Firm is required" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("System Admin"))">
                     </RadzenRequiredValidator>
@@ -148,6 +148,20 @@
                     <RadzenButton Icon="add_circle_outline" Text="New" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("System Admin"))" Click="@ButtonNewFirmClick">
                     </RadzenButton>
                   </div>
+                </div>
+                <div style="margin-bottom: 1rem" class="row">
+                    <div class="col-md-2">
+                        <RadzenLabel Component="@roleCounterpartLabel" style="width: 100%" Text="@roleCounterpartLabel" Visible="@(RoleName=="Defense Counsel" || RoleName=="Legal Assistants")">
+                        </RadzenLabel>
+                    </div>
+                    <div class="col-md-9">
+                        <GenericMultiSelect TItem="RecoCms6.Models.RecoDb.ServiceProviderDetail"
+                                            SelectedKeys="@ServiceProviders"
+                                            SelectedKeysChanged="@ServiceProvidersChanged"
+                                            DataSource="@getServiceProvidersList"
+                                            TextField="Name" ValueField="ServiceProviderID"
+                                            Visible="@(RoleName=="Defense Counsel" || RoleName=="Legal Assistants")" />
+                    </div>
                 </div>
                 <RadzenFieldset Text="Flags" Visible="@(Security.User.Id != user.Id)">
                   <ChildContent>

@@ -100,7 +100,7 @@ namespace RecoCms6.Pages
             {
                 var claim = getClaimListsResult.First();
 
-                if (Security.IsInRole("Defense Counsel"))
+                if (Security.IsInRole("Defense Counsel", "Legal Assistants"))
                     UriHelper.NavigateTo($"claim-report/{claim.ClaimID.ToBase64()}", true);
                 else if (claim.Program == "Errors And Omissions")
                     UriHelper.NavigateTo($"edit-claim/{claim.ClaimID.ToBase64()}", true);
@@ -175,7 +175,7 @@ namespace RecoCms6.Pages
             if (Globals.selectedProgramID > 0)
                 filterQuery = filterQuery + $@"&& i.ProgramID == {Globals.selectedProgramID} ";
 
-            if (Security.IsInRole("Defense Counsel"))
+            if (Security.IsInRole("Defense Counsel", "Legal Assistants"))
             {
                 if (serviceprovider.PrimeUser == true) //Let Prime users see all files in the firm
                     filterQuery = filterQuery + $@"&& i.DefenseCounselFirmID == {serviceprovider.FirmID} ";

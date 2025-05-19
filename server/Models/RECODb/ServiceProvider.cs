@@ -40,7 +40,10 @@ namespace RecoCms6.Models.RecoDb
     public ICollection<CourtDate> CourtDates { get; set; }
     public ICollection<OtherParty> OtherParties { get; set; }
     public ICollection<ServiceProviderClaimPreference> ServiceProviderClaimPreferences { get; set; }
-    public string Name
+    public ICollection<LegalAssistants> AsDefenseCounsel { get; set; } = new List<LegalAssistants>();
+    public ICollection<LegalAssistants> AsLegalAssistant { get; set; } = new List<LegalAssistants>();
+
+        public string Name
     {
       get;
       set;

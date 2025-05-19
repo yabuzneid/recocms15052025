@@ -21,7 +21,7 @@
             </RadzenHeading>
           </div>
           <div class="col-md-5">
-            <RadzenHeading Size="H3" Text="@(claim.ClaimNo)" Visible="@(Security.IsInRole("Defense Counsel"))">
+                        <RadzenHeading Size="H3" Text="@(claim.ClaimNo)" Visible="@(Security.IsInRole("Defense Counsel", "Legal Assistants"))">
             </RadzenHeading>
           </div>
           <div class="col-md-2">
@@ -29,7 +29,7 @@
             </RadzenHeading>
           </div>
           <div class="col-md-3">
-            <RadzenTextBox ReadOnly="@(!Security.IsInRole("Defense Counsel"))" style="width: 100%" @bind-Value="@(claim.CounselFileNo)" Name="Textbox0">
+            <RadzenTextBox ReadOnly="@(!Security.IsInRole("Defense Counsel", "Legal Assistants"))" style="width: 100%" @bind-Value="@(claim.CounselFileNo)" Name="Textbox0">
             </RadzenTextBox>
           </div>
         </div>
@@ -86,6 +86,16 @@
             <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@parameterFlags" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" style="display: block; width: 100%" TextProperty="ParamDesc" @bind-Value="@(report.ClaimReportFlagID)" ValueProperty="ParameterID" Name="DropdownFlag">
             </RadzenDropDown>
           </div>
+        </div>
+        <div style="margin-bottom: 1rem" class="row">
+            <div class="col-md-2">
+                <RadzenLabel Component="textBox1" style="width: 100%" Text="Submitted On Behalf Of" Visible="@(Security.IsInRole("Legal Assistants"))">
+                </RadzenLabel>
+            </div>
+            <div class="col-md-3">
+                <RadzenDropDown Visible="@(Security.IsInRole("Legal Assistants"))" AllowFiltering="true" Data="@defenseCounsels" style="display: block; width: 100%" TextProperty="Name" @bind-Value="@(report.SubmittedOnBehalfOf)" ValueProperty="Name" Name="DropdownFlag">
+                </RadzenDropDown>
+            </div>
         </div>
         <RadzenTabs style="margin-bottom: .25em">
           <Tabs>
@@ -422,6 +432,8 @@
                     <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Format="date-time" FormatString="{0:d}" Property="DateLastModified" Title="Last Modified" Type="string">
                     </RadzenGridColumn>
                     <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Format="date-time" FormatString="{0:d}" Property="DateSubmitted" Title="Submitted" Type="string">
+                    </RadzenGridColumn>
+                    <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail" Property="SubmittedOnBehalfOf" Sortable="false" Title="Submitted On Behalf Of" Type="string" Visible="@(Security.IsInRole("Legal Assistants"))">
                     </RadzenGridColumn>
                     <RadzenGridColumn TItem="RecoCms6.Models.RecoDb.ClaimReportDetail">
                       <Template Context="recoCms6ModelsRecoDbClaimReportDetail">

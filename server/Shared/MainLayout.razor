@@ -58,13 +58,13 @@
           <ChildContent>
             <RadzenPanelMenuItem Path="/" Target="_self" Text="Claims" Visible="@(Security.IsAuthenticated())">
             </RadzenPanelMenuItem>
-                        <RadzenPanelMenuItem Path="upload-invoice" Text="Upload Invoice" Visible="@(Security.IsAuthenticated()&& !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
+                        <RadzenPanelMenuItem Path="upload-invoice" Text="Upload Invoice" Visible="@(Security.IsAuthenticated()&& !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Legal Assistants") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
             </RadzenPanelMenuItem>
-                        <RadzenPanelMenuItem Path="/service-providers" Text="Service Provider" Visible="@(Security.IsAuthenticated()&& !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
+                        <RadzenPanelMenuItem Path="/service-providers" Text="Service Provider" Visible="@(Security.IsAuthenticated()&& !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Legal Assistants") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
             </RadzenPanelMenuItem>
-                        <RadzenPanelMenuItem Path="brokerage" Text="Brokerage" Visible="@(Security.IsAuthenticated()&& !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
+                        <RadzenPanelMenuItem Path="brokerage" Text="Brokerage" Visible="@(Security.IsAuthenticated()&& !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Legal Assistants") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
             </RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="Reports" Visible="@(Security.IsAuthenticated() && !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
+            <RadzenPanelMenuItem Text="Reports" Visible="@(Security.IsAuthenticated() && !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Legal Assistants") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
               <ChildContent>
                 <RadzenPanelMenuItem Path="active-user-diary-report" Text="Active User Diary" Visible="@(Security.IsAuthenticated())">
                 </RadzenPanelMenuItem>
@@ -92,7 +92,7 @@
                 </RadzenPanelMenuItem>
               </ChildContent>
             </RadzenPanelMenuItem>
-                        <RadzenPanelMenuItem Path="claimant-solicitor" Text="Claimant Solicitor" Visible="@(Security.IsAuthenticated()&& !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
+                        <RadzenPanelMenuItem Path="claimant-solicitor" Text="Claimant Solicitor" Visible="@(Security.IsAuthenticated()&& !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Legal Assistants") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
             </RadzenPanelMenuItem>
             <RadzenPanelMenuItem Text="My Profile" Visible="@(Security.IsAuthenticated())">
               <ChildContent>
@@ -102,7 +102,7 @@
                 </RadzenPanelMenuItem>
               </ChildContent>
             </RadzenPanelMenuItem>
-                        <RadzenPanelMenuItem Text="Administrator" Visible="@(Security.IsAuthenticated()&& !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
+                        <RadzenPanelMenuItem Text="Administrator" Visible="@(Security.IsAuthenticated()&& !Security.IsInRole("Defense Counsel") && !Security.IsInRole("Legal Assistants") && !Security.IsInRole("Coverage Counsel") && !Security.IsInRole("Claims Admin"))">
                 <ChildContent>
                     <RadzenPanelMenuItem Path="audit-trail" Text="Audit Trail" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("System Admin"))">
                     </RadzenPanelMenuItem>

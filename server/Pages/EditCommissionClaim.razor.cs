@@ -1490,7 +1490,17 @@ namespace RecoCms6.Pages
             report = await getClaimReport(claim.ClaimID);
             
             parameterFlags = await RecoDb.GetParameterDetails(new Query() { Filter = $@"i => i.ParamTypeDesc == @0", FilterParameters = new object[] { "Claim Report Flag" } });
-            
+
+            var defenseCounselsResult = await RecoDb.GetServiceProviders(new Query()
+            {
+                Filter = "i => @0.Contains(i.ServiceProviderID)",
+                FilterParameters = [serviceprovider.AsLegalAssistant
+                .Select(la => la.DefenseCounselID)
+                .Distinct()
+                .ToList()]
+            });
+            defenseCounsels = [.. defenseCounselsResult];
+
             claimreports = await RecoDb.GetClaimReportDetails(new Query() { Filter = $@"i => i.ClaimID == @0", FilterParameters = new object[] { claim.ClaimID }, OrderBy = $"ClaimReportID desc" });
             previousClaimReports = claimreports.Where(cr=>cr.DateSubmitted != null && cr.HandlingFirmID==serviceprovider.FirmID).ToList();
             previousFacts = previousClaimReports.Where(cr=>!string.IsNullOrEmpty(cr.Facts));

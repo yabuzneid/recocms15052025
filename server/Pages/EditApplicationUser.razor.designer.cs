@@ -67,6 +67,30 @@ namespace RecoCms6.Pages
         [Parameter]
         public dynamic Id { get; set; }
 
+        string _roleCounterpartLabel;
+        protected string roleCounterpartLabel
+        {
+            get
+            {
+                return _roleCounterpartLabel;
+            }
+            set
+            {
+                if (_roleCounterpartLabel != value)
+                {
+                    var args = new PropertyChangedEventArgs()
+                    {
+                        Name = nameof(roleCounterpartLabel),
+                        NewValue = value,
+                        OldValue = _roleCounterpartLabel
+                    };
+                    _roleCounterpartLabel = value;
+                    OnPropertyChanged(args);
+                    Reload();
+                }
+            }
+        }
+
         string _selectedID;
         protected string selectedID
         {
@@ -217,6 +241,38 @@ namespace RecoCms6.Pages
             }
         }
 
+        IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail> _getServiceProvidersResult;
+        protected IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail> getServiceProvidersResult
+        {
+            get
+            {
+                return _getServiceProvidersResult;
+            }
+            set
+            {
+                _getServiceProvidersResult = value;
+            }
+        }
+
+        IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail> _getServiceProvidersList;
+        protected IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail> getServiceProvidersList
+        {
+            get
+            {
+                return _getServiceProvidersList;
+            }
+            set
+            {
+                if (!object.Equals(_getServiceProvidersList, value))
+                {
+                    var args = new PropertyChangedEventArgs() { Name = "getServiceProvidersList", NewValue = value, OldValue = _getServiceProvidersList };
+                    _getServiceProvidersList = value;
+                    OnPropertyChanged(args);
+                    Reload();
+                }
+            }
+        }
+
         RecoCms6.Models.RecoDb.ServiceProvider _serviceprovider;
         protected RecoCms6.Models.RecoDb.ServiceProvider serviceprovider
         {
@@ -293,6 +349,46 @@ namespace RecoCms6.Pages
             }
         }
 
+        public void ServiceProvidersChanged(List<int> args)
+        {
+            ServiceProviders = args;
+        }
+
+        protected async System.Threading.Tasks.Task OnRoleChanged(dynamic args)
+        {
+            if (this.RoleName == "Defense Counsel")
+            {
+                roleCounterpartLabel = "Legal Assistants";
+
+            }
+            else if (this.RoleName == "Legal Assistants")
+            {
+                roleCounterpartLabel = "Defense Counsel";
+            }
+        }
+
+        protected async System.Threading.Tasks.Task OnFirmChanged(dynamic args)
+        {
+            if (this.RoleName == "Defense Counsel")
+            {
+                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.ServiceProviderRole == "Legal Assistants" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
+
+            }
+            else if (this.RoleName == "Legal Assistants")
+            {
+                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.ServiceProviderRole == "Defense Counsel" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
+            }
+        }
+
+        private List<int> _serviceProviders = new();
+        public List<int> ServiceProviders
+        {
+            get => _serviceProviders;
+            set
+            {
+                _serviceProviders = value ?? new List<int>();
+            }
+        }
 
         protected override async System.Threading.Tasks.Task OnInitializedAsync()
         {
@@ -327,12 +423,11 @@ namespace RecoCms6.Pages
 
             getServiceProviderRoleList = await recoDbGetParameterDetailsResult.Where(p => p.ParamTypeDesc == "Service Provider Role").ToListAsync();
 
-            if (RoleName == "Adjuster" || RoleName == "Claims Admin" || RoleName == "Claims Manager" || RoleName == "Program Manager" || RoleName == "Defense Counsel")
+            if (RoleName == "Adjuster" || RoleName == "Claims Admin" || RoleName == "Claims Manager" || RoleName == "Program Manager" || RoleName == "Defense Counsel" || RoleName == "Legal Assistants")
             {
                 var recoDbGetServiceProvidersResult = await RecoDb.GetServiceProviders(new Query() { Filter = $@"i => i.UserID == @0", FilterParameters = new object[] { selectedID } });
                 serviceprovider = recoDbGetServiceProvidersResult.FirstOrDefault();
             }
-
 
             if (serviceprovider == null)
             {
@@ -350,6 +445,34 @@ namespace RecoCms6.Pages
 
             var recoDbGetFirmsResult = await RecoDb.GetFirms(new Query() { OrderBy = $"Name asc" });
             getFirmsResult = await recoDbGetFirmsResult.ToListAsync();
+
+            if (RoleName == "Defense Counsel" || RoleName == "Legal Assistants")
+            {
+                // Fetch all service providers ordered by Name and Firm
+                getServiceProvidersResult = await RecoDb.GetServiceProviderDetails(new Query
+                {
+                    Filter = @"i => i.ServiceProviderRole == @0 || i.ServiceProviderRole == @1",
+                    FilterParameters = new object[] { "Defense Counsel", "Legal Assistants" },
+                    OrderBy = "NameandFirm asc"
+                });
+
+                bool isDefense = RoleName == "Defense Counsel";
+                string counterpartRole = isDefense ? "Legal Assistants" : "Defense Counsel";
+
+                // Set label for the counterpart role
+                roleCounterpartLabel = counterpartRole;
+
+                // Load associated counterpart service provider IDs
+                ServiceProviders = isDefense
+                    ? serviceprovider.AsDefenseCounsel.Select(x => x.LegalAssistantID).ToList()
+                    : serviceprovider.AsLegalAssistant.Select(x => x.DefenseCounselID).ToList();
+
+                // Filter providers by firm and counterpart role
+                getServiceProvidersList = getServiceProvidersResult
+                    .Where(sp => sp.ServiceProviderRole == counterpartRole
+                              && sp.FirmID != null
+                              && sp.FirmID == serviceprovider.FirmID);
+            }
         }
 
 
@@ -361,6 +484,25 @@ namespace RecoCms6.Pages
                     args.UserName = args.Email;
 
                 var securityUpdateUserResult = await Security.UpdateUser($"{selectedID}", args);
+
+                if (this.RoleName == "Defense Counsel")
+                {
+                    serviceprovider.AsDefenseCounsel?.Clear();
+                    serviceprovider.AsDefenseCounsel = ServiceProviders.Select(legalAssistantId => new LegalAssistants
+                    {
+                        DefenseCounselID = serviceprovider.ServiceProviderID,
+                        LegalAssistantID = legalAssistantId
+                    }).ToList();
+                } else if (this.RoleName == "Legal Assistants")
+                {
+                    serviceprovider.AsLegalAssistant?.Clear();
+                    serviceprovider.AsLegalAssistant = ServiceProviders.Select(defenseCounselID => new LegalAssistants
+                    {
+                        DefenseCounselID = defenseCounselID,
+                        LegalAssistantID = serviceprovider.ServiceProviderID
+                    }).ToList();
+                }
+
                 var recoDbUpdateServiceProviderResult = await RecoDb.UpdateServiceProvider(serviceprovider.ID, serviceprovider);
 
                 DialogService.Close(args);

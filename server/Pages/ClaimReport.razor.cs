@@ -213,7 +213,7 @@ namespace RecoCms6.Pages
                     StoredDocument = reportPdf,
                     UploadedById = Security.User.Id,
                     ContentType = "application/pdf",
-                    VisibleToCounsel = Security.IsInRole("Defense Counsel"),
+                    VisibleToCounsel = Security.IsInRole("Defense Counsel", "Legal Assistants"),
                     FileTypeID = getClaimReportFileTypeID
                 });
 
@@ -233,7 +233,7 @@ namespace RecoCms6.Pages
             try
             {
 
-                if (Security.IsInRole("Defense Counsel"))
+                if (Security.IsInRole("Defense Counsel", "Legal Assistants"))
                 {
                     var recoDbRemoveFutureDiariesResult = await RecoDb.RemoveFutureCounselDiaries(claim.ClaimID);
 

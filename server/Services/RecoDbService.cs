@@ -13114,6 +13114,10 @@ namespace RecoCms6
 
             items = items.Include(i => i.Parameter2);
 
+            items = items.Include(i => i.AsLegalAssistant);
+
+            items = items.Include(i => i.AsDefenseCounsel);
+
             if (query != null)
             {
                 if (!string.IsNullOrEmpty(query.Expand))

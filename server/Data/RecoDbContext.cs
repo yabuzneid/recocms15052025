@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 
 using RecoCms6.Models.RecoDb;
+using RecoCms6.Models;
+using System.Reflection.Emit;
 
 namespace RecoCms6.Data
 {
@@ -168,6 +170,20 @@ namespace RecoCms6.Data
         builder.Entity<RecoCms6.Models.RecoDb.ServiceProviderClaimPreference>().HasKey(table => new {
           table.ServiceProviderID, table.ClaimID
         });
+        builder.Entity<LegalAssistants>()
+              .HasOne(la => la.DefenseCounsel)
+              .WithMany(sp => sp.AsDefenseCounsel)
+              .HasForeignKey(la => la.DefenseCounselID)
+              .HasPrincipalKey(sp => sp.ServiceProviderID)
+              .OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<LegalAssistants>()
+                .HasOne(la => la.LegalAssistant)
+                .WithMany(sp => sp.AsLegalAssistant)
+                .HasForeignKey(la => la.LegalAssistantID)
+                .HasPrincipalKey(sp => sp.ServiceProviderID)
+                .OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<LegalAssistants>()
+                .HasKey(la => new { la.DefenseCounselID, la.LegalAssistantID });
         builder.Entity<RecoCms6.Models.RecoDb.Administrator>()
               .HasOne(i => i.Parameter)
               .WithMany(i => i.Administrators)

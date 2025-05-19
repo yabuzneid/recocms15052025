@@ -35,7 +35,7 @@
                 </RadzenLabel>
               </div>
               <div class="col-md-9">
-                <RadzenDropDown Data="@roles" Multiple="false" style="width: 100%" @bind-Value="@RoleName" TextProperty="Name" ValueProperty="Name" Name="RoleNames">
+                 <RadzenDropDown Data="@roles" Multiple="false" style="width: 100%" @bind-Value="@RoleName" TextProperty="Name" ValueProperty="Name" Name="RoleNames" Change="@OnRoleChanged">
                 </RadzenDropDown>
               </div>
             </div>
@@ -66,7 +66,7 @@
                 <RadzenCompareValidator Component="ConfirmPassword" Text="Confirm Password does not match Password" Value="@(user.Password)">
                 </RadzenCompareValidator>
               </div>
-            </div>
+            </div>  
             <div style="margin-bottom: 1rem" class="row">
               <div class="col-md-3">
                 <RadzenLabel Component="ConfirmPassword" style="width: 100%" Text="2FA">
@@ -79,7 +79,7 @@
             </div>
             <div style="padding-bottom: 1em" class="row">
               <div class="col-md-12">
-                <RadzenFieldset Text="Additional Details" Visible="@(RoleName != null && (RoleName=="Adjuster" || RoleName=="Claims Admin" || RoleName=="Claims Manager" || RoleName=="Program Manager" || RoleName=="Defense Counsel" || RoleName=="Accountant" || RoleName=="Coverage Counsel" || RoleName=="Actuary"))">
+                <RadzenFieldset Text="Additional Details" Visible="@(RoleName != null && (RoleName=="Adjuster" || RoleName=="Claims Admin" || RoleName=="Claims Manager" || RoleName=="Program Manager" || RoleName=="Defense Counsel" || RoleName=="Legal Assistants" || RoleName=="Accountant" || RoleName=="Coverage Counsel" || RoleName=="Actuary"))">
                   <ChildContent>
                     <div style="margin-bottom: 1rem" class="row">
                       <div class="col-md-3">
@@ -167,7 +167,7 @@
                         </RadzenLabel>
                       </div>
                       <div class="col-md-6">
-                        <RadzenDropDown Data="@getFirmsResult" Placeholder="Choose Firm" style="display: block; width: 100%" TextProperty="Name" @bind-Value="@(serviceprovider.FirmID)" ValueProperty="FirmID" Name="FirmID">
+                        <RadzenDropDown Data="@getFirmsResult" Placeholder="Choose Firm" style="display: block; width: 100%" TextProperty="Name" @bind-Value="@(serviceprovider.FirmID)" ValueProperty="FirmID" Name="FirmID"  Change="@OnFirmChanged">
                         </RadzenDropDown>
                         <RadzenRequiredValidator Component="FirmID" DefaultValue="0" style="position: absolute" Text="Firm is required">
                         </RadzenRequiredValidator>
@@ -176,6 +176,20 @@
                         <RadzenButton Icon="add_circle_outline" Text="New" Click="@ButtonNewFirmClick">
                         </RadzenButton>
                       </div>
+                    </div>
+                    <div style="margin-bottom: 1rem" class="row">
+                        <div class="col-md-3">
+                            <RadzenLabel Component="@roleCounterpartLabel" style="width: 100%" Text="@roleCounterpartLabel" Visible="@(RoleName=="Defense Counsel" || RoleName=="Legal Assistants")">
+                            </RadzenLabel>
+                        </div>
+                        <div class="col-md-9">
+                            <GenericMultiSelect TItem="RecoCms6.Models.RecoDb.ServiceProviderDetail"
+                                SelectedKeys="@ServiceProviders"
+                                SelectedKeysChanged="@ServiceProvidersChanged"
+                                DataSource="@getServiceProvidersList"
+                                TextField="Name" ValueField="ServiceProviderID" 
+                                Visible="@(RoleName=="Defense Counsel" || RoleName=="Legal Assistants")"/>
+                        </div>
                     </div>
                   </ChildContent>
                 </RadzenFieldset>

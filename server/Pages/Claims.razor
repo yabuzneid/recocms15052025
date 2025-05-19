@@ -38,9 +38,9 @@
     <div style="margin-bottom: 10px; margin-top: 10px" class="row">
     
       <div class="col-md-2">
-        <RadzenCheckBox style="margin-bottom: 5px; margin-top: 5px" TriState="false" @bind-Value="@filterCoverageIssue" TValue="bool" Visible="@(!Security.IsInRole("Defense Counsel"))" Name="ChkCoverageIssue" Change="@ChkCoverageIssueChange" @ref="chkCoverageIssue">
+        <RadzenCheckBox style="margin-bottom: 5px; margin-top: 5px" TriState="false" @bind-Value="@filterCoverageIssue" TValue="bool" Visible="@(!Security.IsInRole("Defense Counsel", "Legal Assistants"))" Name="ChkCoverageIssue" Change="@ChkCoverageIssueChange" @ref="chkCoverageIssue">
         </RadzenCheckBox>
-        <RadzenLabel Component="chkCoverageIssue" style="margin-bottom: 5px; margin-left: 8px; margin-top: 5px" Text="Coverage Issue" Visible="@(!Security.IsInRole("Defense Counsel"))">
+        <RadzenLabel Component="chkCoverageIssue" style="margin-bottom: 5px; margin-left: 8px; margin-top: 5px" Text="Coverage Issue" Visible="@(!Security.IsInRole("Defense Counsel", "Legal Assistants"))">
         </RadzenLabel>
       </div>
       <div class="col-md-3">
@@ -58,7 +58,7 @@
         </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="ClaimNo" Title="Claim #" Width="150px">
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="CounselFileNo" Title="Counsel File #" Visible="@(Security.IsInRole("Defense Counsel"))" Width="125px">
+        <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="CounselFileNo" Title="Counsel File #" Visible="@(Security.IsInRole("Defense Counsel", "Legal Assistants"))" Width="125px">
         </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="RecoCms6.Models.RecoDb.ClaimSearchList" Property="AdjusterClaimNo" Title="Adjuster File #" Visible="@(Security.IsInRole("Adjuster"))">
         </RadzenDataGridColumn>

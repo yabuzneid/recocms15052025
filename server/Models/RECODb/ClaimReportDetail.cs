@@ -32,7 +32,12 @@ namespace RecoCms6.Models.RecoDb
       get;
       set;
     }
-    public string Facts
+    public string SubmittedOnBehalfOf
+        {
+        get;
+        set;
+    }
+     public string Facts
     {
       get;
       set;
