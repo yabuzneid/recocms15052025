@@ -261,7 +261,7 @@ namespace RecoCms6.Pages
 
             var recoDbGetServiceProviderDetailsResult = await RecoDb.GetServiceProviderDetails(new Query
             {
-                Filter = @"i => i.ServiceProviderRole == @0 || i.ServiceProviderRole == @1",
+                Filter = @"i => i.SystemRole == @0 || i.SystemRole == @1",
                 FilterParameters = new object[] { "Defense Counsel", "Legal Assistants" },
                 OrderBy = "NameandFirm asc"
             });
@@ -284,12 +284,12 @@ namespace RecoCms6.Pages
         {
             if (this.RoleName == "Defense Counsel")
             {
-                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.ServiceProviderRole == "Legal Assistants" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
+                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.SystemRole == "Legal Assistants" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
 
             }
             else if (this.RoleName == "Legal Assistants")
             {
-                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.ServiceProviderRole == "Defense Counsel" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
+                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.SystemRole == "Defense Counsel" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
             }
         }
 

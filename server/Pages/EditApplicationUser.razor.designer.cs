@@ -371,12 +371,12 @@ namespace RecoCms6.Pages
         {
             if (this.RoleName == "Defense Counsel")
             {
-                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.ServiceProviderRole == "Legal Assistants" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
+                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.SystemRole == "Legal Assistants" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
 
             }
             else if (this.RoleName == "Legal Assistants")
             {
-                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.ServiceProviderRole == "Defense Counsel" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
+                getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.SystemRole == "Defense Counsel" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
             }
         }
 
@@ -451,7 +451,7 @@ namespace RecoCms6.Pages
                 // Fetch all service providers ordered by Name and Firm
                 getServiceProvidersResult = await RecoDb.GetServiceProviderDetails(new Query
                 {
-                    Filter = @"i => i.ServiceProviderRole == @0 || i.ServiceProviderRole == @1",
+                    Filter = @"i => i.SystemRole == @0 || i.SystemRole == @1",
                     FilterParameters = new object[] { "Defense Counsel", "Legal Assistants" },
                     OrderBy = "NameandFirm asc"
                 });
@@ -462,16 +462,16 @@ namespace RecoCms6.Pages
                 // Set label for the counterpart role
                 roleCounterpartLabel = counterpartRole;
 
+                // Filter providers by firm and counterpart role
+                getServiceProvidersList = getServiceProvidersResult
+                    .Where(sp => sp.SystemRole == counterpartRole
+                              && sp.FirmID != null
+                              && sp.FirmID == serviceprovider.FirmID);
+
                 // Load associated counterpart service provider IDs
                 ServiceProviders = isDefense
                     ? serviceprovider.AsDefenseCounsel.Select(x => x.LegalAssistantID).ToList()
                     : serviceprovider.AsLegalAssistant.Select(x => x.DefenseCounselID).ToList();
-
-                // Filter providers by firm and counterpart role
-                getServiceProvidersList = getServiceProvidersResult
-                    .Where(sp => sp.ServiceProviderRole == counterpartRole
-                              && sp.FirmID != null
-                              && sp.FirmID == serviceprovider.FirmID);
             }
         }
 
