@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RecoCms6.Models.RecoDb
 {
-  [Table("ServiceProviders", Schema = "dbo")]
+    [Table("ServiceProviders", Schema = "dbo")]
   public partial class ServiceProvider
   {
     [Key]

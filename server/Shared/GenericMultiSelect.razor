@@ -8,6 +8,7 @@
                    @bind-Value=SelectedKeys
                    DataSource=@DataSource
                    AllowCustomValue="true"
+                   Enabled="@ReadOnly"
                    Mode="@VisualMode.Box">
         <MultiSelectFieldSettings Text="@TextField" Value="@ValueField" />
     </SfMultiSelect>
@@ -48,6 +49,9 @@
 
     [Parameter]
     public bool Visible { get; set; } = true;
+
+    [Parameter]
+    public bool ReadOnly { get; set; } = false;
 
     private List<int> _dataContainer = null;
 

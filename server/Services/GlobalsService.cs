@@ -179,6 +179,25 @@ public class GlobalsService
         }
     }
 
+
+    IEnumerable<RecoCms6.Models.RecoDb.ServiceProvider> _DefenseCounsels;
+    public IEnumerable<RecoCms6.Models.RecoDb.ServiceProvider> DefenseCounsels
+    {
+        get
+        {
+            return _DefenseCounsels;
+        }
+        set
+        {
+            if (!object.Equals(_DefenseCounsels, value))
+            {
+                var args = new PropertyChangedEventArgs() { Name = "DefenseCounsels", NewValue = value, OldValue = _DefenseCounsels, IsGlobal = true };
+                _DefenseCounsels = value;
+                PropertyChanged?.Invoke(args);
+            }
+        }
+    }
+
     IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderClaimPreference> _ServiceProviderClaims;
     public IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderClaimPreference> ServiceProviderClaims
     {

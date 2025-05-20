@@ -1,7 +1,7 @@
-﻿using RecoCms6.Models.RecoDb;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using RecoCms6.Models.RecoDb;
 
-namespace RecoCms6.Models
+namespace RecoCms6.Models.RecoDb
 {
     [Table("LegalAssistants", Schema = "dbo")]
     public class LegalAssistants

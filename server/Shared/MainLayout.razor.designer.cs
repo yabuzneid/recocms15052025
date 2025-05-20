@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using Radzen.Blazor;
-using RecoCms6.Models.RecoDb;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using RecoCms6.Models;
-using RecoCms6.Pages;
 
 namespace RecoCms6.Layouts
 {
@@ -103,8 +96,12 @@ namespace RecoCms6.Layouts
                             FilterParameters = new object[] { Globals.userdetails.ServiceProviderID },
                             OrderBy = $"DateLastAccessed desc", Top = 10
                         });
-                    ;
                     Globals.ServiceProviderClaims = recoDbGetServiceProviderClaimPreferencesResult;
+
+                    if (Globals.userdetails != null && Globals.userdetails.Role == "Legal Assistants")
+                    {
+                        Globals.DefenseCounsels = (await RecoDb.GetDefenseCounselsForLegalAssistance(Globals.userdetails.ServiceProviderID.Value)).Select(s => s.DefenseCounsel).ToList();
+                    }
                 }
 
             }

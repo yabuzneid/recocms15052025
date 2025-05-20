@@ -887,17 +887,6 @@ namespace RecoCms6.Pages
             var recoDbGetParameterDetailsResult = await RecoDb.GetParameterDetails(new Query() { Filter = $@"i => i.ParamTypeDesc == @0 || i.ParamTypeDesc == @1 || i.ParamTypeDesc == @2", FilterParameters = new object[] { "Claim Report Flag", "ProgramID", "File Type" }, OrderBy = $"ParamDesc asc" });
             parameterFlags = recoDbGetParameterDetailsResult.Where(p=>p.ParamTypeDesc=="Claim Report Flag");
 
-            var defenseCounselsResult = await RecoDb.GetServiceProviders(new Query()
-            {
-                Filter = "i => @0.Contains(i.ServiceProviderID)",
-                FilterParameters = [serviceprovider.AsLegalAssistant
-                .Select(la => la.DefenseCounselID)
-                .Distinct()
-                .ToList()]
-            });
-
-            defenseCounsels = [.. defenseCounselsResult];
-
             isEOProgram = recoDbGetParameterDetailsResult.Where(p=>p.ParamTypeDesc=="ProgramID" && p.ParamAbbrev=="EO").First().ParameterID == claim.ProgramID;
 
             getClaimReportFileTypeID = recoDbGetParameterDetailsResult.FirstOrDefault(p=>p.ParamDesc=="Claim Report" && p.ParamTypeDesc=="File Type").ParameterID;
@@ -923,6 +912,20 @@ namespace RecoCms6.Pages
             previousRecommendations = previousClaimReports.Where(cr=>cr.Recommendations != null && cr.Recommendations != string.Empty);
 
             report = await getClaimReport(claim.ClaimID);
+
+            if(Security.IsInRole("Legal Assistants"))
+            {
+                var defenseCounselsResult = await RecoDb.GetServiceProviders(new Query()
+                {
+                    Filter = "i => @0.Contains(i.ServiceProviderID)",
+                    FilterParameters = [serviceprovider.AsLegalAssistant
+                .Select(la => la.DefenseCounselID)
+                .ToList()]
+                });
+
+                defenseCounsels = [.. defenseCounselsResult];
+                report.SubmittedOnBehalfOf = claim.ServiceProvider1.Name;
+            }
 
             var recoDbGetClaimCurrentReservesResult = await RecoDb.GetClaimCurrentReserves(new Query() { Filter = $@"i => i.IncurredType == @0 && i.ClaimID == @1", FilterParameters = new object[] { "Legal", claim.ClaimID } });
             if (recoDbGetClaimCurrentReservesResult.FirstOrDefault() != null && recoDbGetClaimCurrentReservesResult.FirstOrDefault().TotalReserve != null) {

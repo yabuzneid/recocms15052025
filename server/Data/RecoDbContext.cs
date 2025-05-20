@@ -5,14 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
-
-using RecoCms6.Models.RecoDb;
 using RecoCms6.Models;
 using System.Reflection.Emit;
 
 namespace RecoCms6.Data
 {
-  public partial class RecoDbContext : Microsoft.EntityFrameworkCore.DbContext
+    public partial class RecoDbContext : Microsoft.EntityFrameworkCore.DbContext
   {
     public RecoDbContext(DbContextOptions<RecoDbContext> options):base(options)
     {
@@ -170,19 +168,19 @@ namespace RecoCms6.Data
         builder.Entity<RecoCms6.Models.RecoDb.ServiceProviderClaimPreference>().HasKey(table => new {
           table.ServiceProviderID, table.ClaimID
         });
-        builder.Entity<LegalAssistants>()
+        builder.Entity<RecoCms6.Models.RecoDb.LegalAssistants>()
               .HasOne(la => la.DefenseCounsel)
               .WithMany(sp => sp.AsDefenseCounsel)
               .HasForeignKey(la => la.DefenseCounselID)
               .HasPrincipalKey(sp => sp.ServiceProviderID)
               .OnDelete(DeleteBehavior.Restrict);
-        builder.Entity<LegalAssistants>()
+        builder.Entity<RecoCms6.Models.RecoDb.LegalAssistants>()
                 .HasOne(la => la.LegalAssistant)
                 .WithMany(sp => sp.AsLegalAssistant)
                 .HasForeignKey(la => la.LegalAssistantID)
                 .HasPrincipalKey(sp => sp.ServiceProviderID)
                 .OnDelete(DeleteBehavior.Restrict);
-        builder.Entity<LegalAssistants>()
+        builder.Entity<RecoCms6.Models.RecoDb.LegalAssistants>()
                 .HasKey(la => new { la.DefenseCounselID, la.LegalAssistantID });
         builder.Entity<RecoCms6.Models.RecoDb.Administrator>()
               .HasOne(i => i.Parameter)
@@ -7725,6 +7723,12 @@ namespace RecoCms6.Data
     {
       get;
       set;
+    }
+
+    public DbSet<RecoCms6.Models.RecoDb.LegalAssistants> LegalAssistants
+    {
+        get;
+        set;
     }
 
     public DbSet<RecoCms6.Models.RecoDb.ServiceProviderBordereau> ServiceProviderBordereaus

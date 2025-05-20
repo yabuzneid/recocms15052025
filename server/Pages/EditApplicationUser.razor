@@ -160,6 +160,7 @@
                                             SelectedKeysChanged="@ServiceProvidersChanged"
                                             DataSource="@getServiceProvidersList"
                                             TextField="Name" ValueField="ServiceProviderID"
+                                            ReadOnly="@(!Security.IsInRole("Legal Assistants"))"
                                             Visible="@(RoleName=="Defense Counsel" || RoleName=="Legal Assistants")" />
                     </div>
                 </div>

@@ -177,6 +177,31 @@ public partial class MainLayoutComponent
             else
                 filterQuery = filterQuery + $@"&& i.DefenseCounselID == {Globals.userdetails.ServiceProviderID} ";
 
+
+        if (Security.IsInRole("Legal Assistants"))
+        {
+            var idsFilter = "";
+
+            foreach (var defenseCounsel in Globals.DefenseCounsels)
+            {
+                string condition;
+                if (defenseCounsel.PrimeUser == true)
+                    condition = $"i.DefenseCounselFirmID == {defenseCounsel.FirmID}";
+                else
+                    condition = $"i.DefenseCounselID == {defenseCounsel.ServiceProviderID}";
+
+                if (!string.IsNullOrEmpty(idsFilter))
+                    idsFilter += " || ";
+
+                idsFilter += condition;
+            }
+
+            if (!string.IsNullOrEmpty(idsFilter))
+                filterQuery += $" && ({idsFilter})";
+            // TODO: We should decide if the legal assistances can have own claims
+            else filterQuery += "&& 1 == 0";
+        }
+
         if (searchQuery == String.Empty && filterQuery != String.Empty) //Remove the first 2 ampersands if there's no search criteria
         {
             filterQuery = filterQuery.Substring(3);

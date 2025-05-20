@@ -175,15 +175,38 @@ namespace RecoCms6.Pages
             if (Globals.selectedProgramID > 0)
                 filterQuery = filterQuery + $@"&& i.ProgramID == {Globals.selectedProgramID} ";
 
-            if (Security.IsInRole("Defense Counsel", "Legal Assistants"))
+            if (Security.IsInRole("Defense Counsel"))
             {
                 if (serviceprovider.PrimeUser == true) //Let Prime users see all files in the firm
                     filterQuery = filterQuery + $@"&& i.DefenseCounselFirmID == {serviceprovider.FirmID} ";
                 else
                     filterQuery = filterQuery + $@"&& i.DefenseCounselID == {serviceprovider.ServiceProviderID} ";
             }
-                
 
+            if (Security.IsInRole("Legal Assistants"))
+            {
+                var idsFilter = "";
+
+                foreach (var item in Globals.DefenseCounsels)
+                {
+                    string condition;
+                    if (item.PrimeUser == true)
+                        condition = $"i.DefenseCounselFirmID == {item.FirmID}";
+                    else
+                        condition = $"i.DefenseCounselID == {item.ServiceProviderID}";
+
+                    if (!string.IsNullOrEmpty(idsFilter))
+                        idsFilter += " || ";
+
+                    idsFilter += condition;
+                }
+
+                if (!string.IsNullOrEmpty(idsFilter))
+                    filterQuery += $" && ({idsFilter})";
+                // TODO: We should decide if the legal assistances can have own claims
+                else filterQuery += "&& 1 == 0";
+            }
+            
             if (searchQuery == String.Empty && filterQuery != String.Empty) //Remove the first 2 ampersands if there's no search criteria
             {
                 filterQuery = filterQuery.Substring(3);

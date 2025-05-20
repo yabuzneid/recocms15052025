@@ -13162,6 +13162,15 @@ namespace RecoCms6
             return await Task.FromResult(items);
         }
 
+        public async Task<IQueryable<Models.RecoDb.LegalAssistants>> GetDefenseCounselsForLegalAssistance(int id)
+        {
+            var items = Context.LegalAssistants.AsNoTracking()
+                              .Include(e => e.DefenseCounsel)
+                              .Where(i => i.LegalAssistantID == id);
+
+            return await Task.FromResult(items);
+        }
+
         partial void OnServiceProviderCreated(Models.RecoDb.ServiceProvider item);
         partial void OnAfterServiceProviderCreated(Models.RecoDb.ServiceProvider item);
 

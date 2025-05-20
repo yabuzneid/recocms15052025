@@ -621,7 +621,7 @@ namespace RecoCms6.Pages
                 getClaimListsResult = recoDbGetClaimSearchListsResult.Where(c=> c.ProgramID == Globals.selectedProgramID && !excludedIDs.Contains(c.ClaimID));
             }
 
-            if (Security.IsInRole("Defense Counsel", "Legal Assistants") && 1==0)
+            if (Security.IsInRole("Defense Counsel") && 1==0)
             {
                 var recoDbGetClaimSearchListsResult0 = await RecoDb.GetClaimSearchLists(new Query() { Filter = $@"i => i.DefenseCounselID == @0", FilterParameters = new object[] { serviceprovider.ServiceProviderID }, OrderBy = $"ClaimNo desc" });
                 getClaimListsResult = recoDbGetClaimSearchListsResult0.Where(c=> c.ProgramID == Globals.selectedProgramID);
