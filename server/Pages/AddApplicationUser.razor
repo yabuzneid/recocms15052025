@@ -183,12 +183,10 @@
                             </RadzenLabel>
                         </div>
                         <div class="col-md-9">
-                            <GenericMultiSelect TItem="RecoCms6.Models.RecoDb.ServiceProviderDetail"
-                                SelectedKeys="@ServiceProviders"
-                                SelectedKeysChanged="@ServiceProvidersChanged"
-                                DataSource="@getServiceProvidersList"
-                                TextField="Name" ValueField="ServiceProviderID" 
-                                Visible="@(RoleName=="Defense Counsel" || RoleName=="Legal Assistants")"/>
+                            <RadzenDropDown Data="@getServiceProvidersList" Multiple="true" style="width: 100%" TextProperty="Name" @bind-Value="@(ServiceProviders)"
+                                                                ValueProperty="ServiceProviderID" Name="ServiceProviders"
+                                                                Visible="@(RoleName=="Defense Counsel" || RoleName=="Legal Assistants")">
+                            </RadzenDropDown>
                         </div>
                     </div>
                   </ChildContent>

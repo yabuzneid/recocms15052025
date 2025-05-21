@@ -252,7 +252,7 @@ namespace RecoCms6.Pages
             }
         }
 
-        IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail> _getServiceProvidersList;
+        IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail> _getServiceProvidersList = [];
         protected IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail> getServiceProvidersList
         {
             get
@@ -347,32 +347,43 @@ namespace RecoCms6.Pages
             }
         }
 
-        public void ServiceProvidersChanged(List<int> args)
-        {
-            ServiceProviders = args;
-        }
-
         protected async System.Threading.Tasks.Task OnRoleChanged(dynamic args)
         {
-            if (this.RoleName == "Defense Counsel")
-            {
-                roleCounterpartLabel = "Legal Assistants";
+            var selected = this.user.RoleNames.ToList();
 
-            }
-            else if (this.RoleName == "Legal Assistants")
+            const string defenseCounselRole = "Defense Counsel";
+            const string legalAssistantsRole = "Legal Assistants";
+
+            bool hasDefenseCounselRole = selected.Contains(defenseCounselRole);
+            bool hasLegalAssistantsRole = selected.Contains(legalAssistantsRole);
+
+            if (hasDefenseCounselRole && hasLegalAssistantsRole)
             {
-                roleCounterpartLabel = "Defense Counsel";
+                selected.Remove(legalAssistantsRole);
+
+                NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Warning,
+                    Summary = "Invalid Role Selection",
+                    Detail = $"You cannot select both {defenseCounselRole} and {legalAssistantsRole}",
+                    Duration = 3000
+                });
+
+                user.RoleNames = selected;
+                return;
             }
+
+            roleCounterpartLabel = hasDefenseCounselRole ? legalAssistantsRole : hasLegalAssistantsRole ? defenseCounselRole : string.Empty;
         }
 
         protected async System.Threading.Tasks.Task OnFirmChanged(dynamic args)
         {
-            if (this.RoleName == "Defense Counsel")
+            if (this.user.RoleNames.Contains("Defense Counsel"))
             {
                 getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.SystemRole == "Legal Assistants" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
 
             }
-            else if (this.RoleName == "Legal Assistants")
+            else if (this.user.RoleNames.Contains("Legal Assistants"))
             {
                 getServiceProvidersList = getServiceProvidersResult.Where(sp => sp.SystemRole == "Defense Counsel" && sp.FirmID != null && sp.FirmID == serviceprovider.FirmID);
             }
@@ -444,7 +455,8 @@ namespace RecoCms6.Pages
             var recoDbGetFirmsResult = await RecoDb.GetFirms(new Query() { OrderBy = $"Name asc" });
             getFirmsResult = await recoDbGetFirmsResult.ToListAsync();
 
-            if (RoleName == "Defense Counsel" || RoleName == "Legal Assistants")
+            var allowedRoles = new[] { "Defense Counsel", "Legal Assistants" };
+            if (this.user.RoleNames.Any(role => allowedRoles.Contains(role)))
             {
                 // Fetch all service providers ordered by Name and Firm
                 getServiceProvidersResult = await RecoDb.GetServiceProviderDetails(new Query
@@ -454,7 +466,7 @@ namespace RecoCms6.Pages
                     OrderBy = "NameandFirm asc"
                 });
 
-                bool isDefense = RoleName == "Defense Counsel";
+                bool isDefense = this.user.RoleNames.Contains("Defense Counsel");
                 string counterpartRole = isDefense ? "Legal Assistants" : "Defense Counsel";
 
                 // Set label for the counterpart role
@@ -464,7 +476,7 @@ namespace RecoCms6.Pages
                 getServiceProvidersList = getServiceProvidersResult
                     .Where(sp => sp.SystemRole == counterpartRole
                               && sp.FirmID != null
-                              && sp.FirmID == serviceprovider.FirmID);
+                              && sp.FirmID == serviceprovider.FirmID).ToList();
 
                 // Load associated counterpart service provider IDs
                 ServiceProviders = isDefense
@@ -483,7 +495,7 @@ namespace RecoCms6.Pages
 
                 var securityUpdateUserResult = await Security.UpdateUser($"{selectedID}", args);
 
-                if (this.RoleName == "Defense Counsel")
+                if (this.user.RoleNames.Contains("Defense Counsel"))
                 {
                     serviceprovider.AsDefenseCounsel?.Clear();
                     serviceprovider.AsDefenseCounsel = ServiceProviders.Select(legalAssistantId => new LegalAssistants
@@ -491,7 +503,7 @@ namespace RecoCms6.Pages
                         DefenseCounselID = serviceprovider.ServiceProviderID,
                         LegalAssistantID = legalAssistantId
                     }).ToList();
-                } else if (this.RoleName == "Legal Assistants")
+                } else if (this.user.RoleNames.Contains("Legal Assistants"))
                 {
                     serviceprovider.AsLegalAssistant?.Clear();
                     serviceprovider.AsLegalAssistant = ServiceProviders.Select(defenseCounselID => new LegalAssistants

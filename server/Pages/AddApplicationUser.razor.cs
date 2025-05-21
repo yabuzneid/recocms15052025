@@ -41,7 +41,7 @@ namespace RecoCms6.Pages
             }
         }
 
-        IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail> _getServiceProvidersList;
+        IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail> _getServiceProvidersList = [];
         protected IEnumerable<RecoCms6.Models.RecoDb.ServiceProviderDetail> getServiceProvidersList
         {
             get
@@ -59,12 +59,6 @@ namespace RecoCms6.Pages
                 }
             }
         }
-
-        public void ServiceProvidersChanged(List<int> args)
-        {
-            ServiceProviders = args;
-        }
-
 
         private List<int> _serviceProviders = new();
         public List<int> ServiceProviders
