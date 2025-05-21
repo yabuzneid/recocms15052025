@@ -376,9 +376,17 @@ namespace RecoCms6.Pages
                 return;
             }
             roleCounterpartLabel = hasDefenseCounselRole ? legalAssistantsRole : hasLegalAssistantsRole ? defenseCounselRole : string.Empty;
+
+            if(serviceprovider.FirmID != null)
+                FilterServiceProvidersList();
         }
 
         protected async System.Threading.Tasks.Task OnFirmChanged(dynamic args)
+        {
+            FilterServiceProvidersList();
+        }
+
+        private void FilterServiceProvidersList()
         {
             if (this.user.RoleNames.Contains("Defense Counsel"))
             {
@@ -456,18 +464,17 @@ namespace RecoCms6.Pages
 
             var recoDbGetFirmsResult = await RecoDb.GetFirms(new Query() { OrderBy = $"Name asc" });
             getFirmsResult = await recoDbGetFirmsResult.ToListAsync();
+            getServiceProvidersResult = await RecoDb.GetServiceProviderDetails(new Query
+            {
+                Filter = @"i => i.SystemRole == @0 || i.SystemRole == @1",
+                FilterParameters = new object[] { "Defense Counsel", "Legal Assistants" },
+                OrderBy = "NameandFirm asc"
+            });
+
 
             var allowedRoles = new[] { "Defense Counsel", "Legal Assistants" };
             if (this.user.RoleNames.Any(role => allowedRoles.Contains(role)))
             {
-                // Fetch all service providers ordered by Name and Firm
-                getServiceProvidersResult = await RecoDb.GetServiceProviderDetails(new Query
-                {
-                    Filter = @"i => i.SystemRole == @0 || i.SystemRole == @1",
-                    FilterParameters = new object[] { "Defense Counsel", "Legal Assistants" },
-                    OrderBy = "NameandFirm asc"
-                });
-
                 bool isDefense = this.user.RoleNames.Contains("Defense Counsel");
                 string counterpartRole = isDefense ? "Legal Assistants" : "Defense Counsel";
 
