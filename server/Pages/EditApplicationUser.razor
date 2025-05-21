@@ -139,7 +139,7 @@
                     </RadzenLabel>
                   </div>
                   <div class="col-md-6">
-                    <RadzenDropDown Data="@getFirmsResult" Placeholder="Choose Firm" style="display: block; width: 100%" TextProperty="Name" @bind-Value="@(serviceprovider.FirmID)" ValueProperty="FirmID" Change="@OnFirmChanged"  Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("System Admin"))" Name="FirmID">
+                    <RadzenDropDown Data="@getFirmsResult" Placeholder="Choose Firm" style="display: block; width: 100%" TextProperty="Name" @bind-Value="@(serviceprovider.FirmID)" ValueProperty="FirmID" Change="@OnFirmChanged" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("System Admin"))" Name="FirmID">
                     </RadzenDropDown>
                     <RadzenRequiredValidator Component="FirmID" DefaultValue="0" style="position: absolute" Text="Firm is required" Visible="@(Security.IsInRole("Program Manager") || Security.IsInRole("System Admin"))">
                     </RadzenRequiredValidator>
@@ -151,14 +151,14 @@
                 </div>
                 <div style="margin-bottom: 1rem" class="row">
                     <div class="col-md-2">
-                        <RadzenLabel Component="@roleCounterpartLabel" style="width: 100%" Text="@roleCounterpartLabel" Visible="@(RoleName=="Defense Counsel" || RoleName=="Legal Assistants")">
+                        <RadzenLabel Component="@roleCounterpartLabel" style="width: 100%" Text="@roleCounterpartLabel" Visible="@(user.RoleNames.Contains("Defense Counsel") || user.RoleNames.Contains("Legal Assistants"))">
                         </RadzenLabel>
                     </div>
                     <div class="col-md-9">
                         <RadzenDropDown Data="@getServiceProvidersList" Multiple="true" style="width: 100%" TextProperty="Name" @bind-Value="@(ServiceProviders)" 
                                         ValueProperty="ServiceProviderID" Name="ServiceProviders"
                                         Disabled="@(Security.IsInRole("Legal Assistants"))"
-                                        Visible="@(RoleName=="Defense Counsel" || RoleName=="Legal Assistants")">
+                                        Visible="@(user.RoleNames.Contains("Defense Counsel") || user.RoleNames.Contains("Legal Assistants"))" >
                         </RadzenDropDown>
                     </div>
                 </div>
