@@ -359,20 +359,22 @@ namespace RecoCms6.Pages
 
             if (hasDefenseCounselRole && hasLegalAssistantsRole)
             {
-                selected.Remove(legalAssistantsRole);
+                if(Security.IsInRole(defenseCounselRole))
+                    selected.Remove(legalAssistantsRole);
+                else
+                    selected.Remove(defenseCounselRole);
 
                 NotificationService.Notify(new NotificationMessage
                 {
                     Severity = NotificationSeverity.Warning,
                     Summary = "Invalid Role Selection",
-                    Detail = $"You cannot select both {defenseCounselRole} and {legalAssistantsRole}",
+                    Detail = $"The user cannot select both {defenseCounselRole} and {legalAssistantsRole} roles",
                     Duration = 3000
                 });
 
                 user.RoleNames = selected;
                 return;
             }
-
             roleCounterpartLabel = hasDefenseCounselRole ? legalAssistantsRole : hasLegalAssistantsRole ? defenseCounselRole : string.Empty;
         }
 
@@ -495,9 +497,10 @@ namespace RecoCms6.Pages
 
                 var securityUpdateUserResult = await Security.UpdateUser($"{selectedID}", args);
 
+                serviceprovider.AsDefenseCounsel?.Clear();
+                serviceprovider.AsLegalAssistant?.Clear();
                 if (this.user.RoleNames.Contains("Defense Counsel"))
                 {
-                    serviceprovider.AsDefenseCounsel?.Clear();
                     serviceprovider.AsDefenseCounsel = ServiceProviders.Select(legalAssistantId => new LegalAssistants
                     {
                         DefenseCounselID = serviceprovider.ServiceProviderID,
@@ -505,7 +508,6 @@ namespace RecoCms6.Pages
                     }).ToList();
                 } else if (this.user.RoleNames.Contains("Legal Assistants"))
                 {
-                    serviceprovider.AsLegalAssistant?.Clear();
                     serviceprovider.AsLegalAssistant = ServiceProviders.Select(defenseCounselID => new LegalAssistants
                     {
                         DefenseCounselID = defenseCounselID,
